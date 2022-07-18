@@ -59,7 +59,7 @@
     <!-- template for the conversations component -->
     <script type="text/x-template" id="conversations-template">
         <section class="conversation-list">
-            <div class="form-container">
+            <!--<div class="form-container">
                 <form @submit.prevent="filterCards">
                     <div class="conversation-list-filter">
                         <div class="date-picker">
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </form>
-            </div>
+            </div> -->
             <div class="conversations">
                 <div v-if="conv.id" v-for="conv in conversations"
                     class="card">
@@ -101,8 +101,11 @@
                             <h5>
                                 <a @click="viewInteraction(conv.id)">
                                     {{conv.customer.name}}
-                                    {{conv.attributes}}
+                                   
                                 </a>
+                                <a>
+                                    {{conv.attributes}}
+                                </a>   
                             </h5>
                         </button>
                         <p class="card-text mb-2 text-muted">
