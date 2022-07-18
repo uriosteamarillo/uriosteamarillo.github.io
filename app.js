@@ -289,7 +289,7 @@ new Vue({
                         if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
                     }
                     // CODIGO NUEVO DETALLES DE CONVERSATION
-                    conversationsApi.getAnalyticsConversationDetails(conversationId)
+                    conversationsApi.getAnalyticsConversationDetails(convId)
                     .then((data) => {
                      console.log(`getAnalyticsConversationDetails success! data: ${JSON.stringify(data, null, 2)}`);
                          })
