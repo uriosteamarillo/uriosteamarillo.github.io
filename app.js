@@ -236,6 +236,7 @@ new Vue({
                 //NUEVO
                 const attributes = await getCustomerAttributes(customerParticipant);
                 conv.customer = buildConversationCustomer(customerParticipant, name);
+                conv.attributes = attributes;
                 return conv;
             } catch(err){
                 console.log(`Failed to get conversation/customer: ${err}`);

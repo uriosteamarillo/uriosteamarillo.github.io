@@ -39,7 +39,7 @@
         </div>
     </script>
 
-    <!-- template for the profile component -->
+    <!-- template for the profile component --
     <script type="text/x-template" id="profile-template">
         <section class="user-profile">
             <div @click="profileLinkListener" class="profile-link">
@@ -101,6 +101,7 @@
                             <h5>
                                 <a @click="viewInteraction(conv.id)">
                                     {{conv.customer.name}}
+                                    {{conv.attributes}}
                                 </a>
                             </h5>
                         </button>
@@ -133,7 +134,7 @@
         </section>
     </script>
 
-    <!-- template for the conversations component -->
+    <!-- template for the conversations component --
     <script type="text/x-template" id="tester-template">
         <section class="manual-tester">
             <form @submit.prevent="getConversationOrEvaluation">
