@@ -288,7 +288,15 @@ new Vue({
                         this.conversationsData.conversations.push(conversations[convId].conv);
                         if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
                     }
-
+                    // CODIGO NUEVO DETALLES DE CONVERSATION
+                    conversationsApi.getAnalyticsConversationDetails(conversationId)
+                    .then((data) => {
+                     console.log(`getAnalyticsConversationDetails success! data: ${JSON.stringify(data, null, 2)}`);
+                         })
+                         .catch((err) => {
+                         console.log('There was a failure calling getAnalyticsConversationDetails');
+                      console.error(err);
+                              });
                     // Set this boolean to indicated loading complete
                     this.authenticated = true;
                 } catch(e) {
