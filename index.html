@@ -191,9 +191,9 @@
 <script>
     //TABLA DYNAMICA CON EL PARTICIPANT DATA DEL IVR
 var table = "<table class='participant-data'><tr><th>KEY</th><th>Value</th></tr>";
-    
+    for (conv in conversations){
     resData = JSON.parse(conv.attributes);
-    
+    }
     for(var k in resData ) {
     
                  table +="<tr><td>"+k+"</td><td>"+resData[k]+"</td></tr>";
