@@ -99,14 +99,18 @@
                     <div class="card-body">
                         <button class="btn btn-link">
                             <h5>
-                                <a @click="viewInteraction(conv.id)">
+                                <a>
                                     {{conv.customer.name}}
                                    
                                 </a>
-                                <a>
-                                    {{conv.attributes}}
-                                </a>   
+                                   
                             </h5>
+                            <h5>
+                                <a>
+                                {{conv.attributes}}
+                                 </a>
+                             </h5>
+
                         </button>
                         <p class="card-text mb-2 text-muted">
                             Start: {{moment(conv.startTime).format('MMM Do YYYY, h:mm:ss A')}}
