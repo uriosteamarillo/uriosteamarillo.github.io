@@ -194,6 +194,20 @@ new Vue({
             }) || null;
         }
 
+        function getCustomerAttributes(conv) {
+            // Function returns null if there is no valid participant found.
+            if (!conv || !conv.attributes) {
+                return null;
+            }
+            console.log(`data: ${JSON.stringify(conv.attributes, null, 2)}`);
+            return conv.attributes;
+        }
+
+
+
+
+
+
         async function getCustomerName(customer){
             if (customer === null){
                 return "Unknown";
@@ -219,6 +233,8 @@ new Vue({
                 const conv = await conversationsApi.getConversation(convId);
                 const customerParticipant = getCustomerParticipant(conv);
                 const name = await getCustomerName(customerParticipant);
+                //NUEVO
+                const attributes = await getCustomerAttributes(customerParticipant);
                 conv.customer = buildConversationCustomer(customerParticipant, name);
                 return conv;
             } catch(err){
@@ -288,15 +304,7 @@ new Vue({
                         this.conversationsData.conversations.push(conversations[convId].conv);
                         if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
                     }
-                    // CODIGO NUEVO DETALLES DE CONVERSATION
-                    conversationsApi.getAnalyticsConversationDetails(convId)
-                    .then((data) => {
-                     console.log(`getAnalyticsConversationDetails success! data: ${JSON.stringify(data, null, 2)}`);
-                         })
-                         .catch((err) => {
-                         console.log('There was a failure calling getAnalyticsConversationDetails');
-                      console.error(err);
-                              });
+                   
                     // Set this boolean to indicated loading complete
                     this.authenticated = true;
                 } catch(e) {
