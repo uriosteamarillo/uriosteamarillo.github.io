@@ -60,29 +60,6 @@
     <!-- template for the conversations component -->
     <script type="text/x-template" id="conversations-template">
         <section class="conversation-list">
-            <!--<div class="form-container">
-                <form @submit.prevent="filterCards">
-                    <div class="conversation-list-filter">
-                        <div class="date-picker">
-                            <div class="form-group row">
-                                <label for="starttime" class="col-2 col-form-label">From</label>
-                                <div class="col-10">
-                                    <input class="form-control" type="date" id="starttime" name="starttime">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="endtime" class="col-2 col-form-label">To</label>
-                                <div class="col-10">
-                                    <input class="form-control" type="date" id="endtime" name="endtime">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group submit">
-                            <input type="submit" class="btn btn-outline-dark" value="Filter" id="filter">
-                        </div>
-                    </div>
-                </form>
-            </div> -->
             <div class="conversations">
                 <div v-if="conv.id" v-for="conv in conversations"
                     class="card">
@@ -98,6 +75,22 @@
                         </span>
                     </div>
                     <div class="card-body">
+                        <p id="participantData"></p>
+                        <script>
+                            //TABLA DYNAMICA CON EL PARTICIPANT DATA DEL IVR
+                        var table = "<table class='participant-data'><tr><th>KEY</th><th>Value</th></tr>";
+                            
+                            resData = JSON.parse(conv.attributes);
+                            
+                            for(var k in resData ) {
+                            
+                                         table +="<tr><td>"+k+"</td><td>"+resData[k]+"</td></tr>";
+                                       };
+                            
+                            table +="</table>";
+                            document.getElementById("participantData").innerHTML = table;
+                         </script> 
+                        <!--   
                         <button class="btn btn-link">
                             <h5>
                                 <a>
@@ -113,6 +106,7 @@
                              </h5>
 
                         </button>
+                    -->
                         <p class="card-text mb-2 text-muted">
                             Start: {{moment(conv.startTime).format('MMM Do YYYY, h:mm:ss A')}}
                         </p>
