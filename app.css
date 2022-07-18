@@ -8,51 +8,14 @@ a:active {
     color: red;
 }
 
-.user-profile {
-    width: 420px;
-    margin-left: 30px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.user-profile .profile-link {
-    border: 0;
-    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
-    transition: 0.3s;
-    border-radius: 1%;
-    text-align: center;
-}
+.container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
 
-.user-profile .profile-link .profile-pic {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 150px;
-    max-height: 150px;
-    border-radius: 50%;
-}
-
-.user-profile .profile-link .placeholder-pic {
-    font-size: 150px;
-    line-height: 150px;
-    width: 150px;
-    text-align: center;
-    background-color: #C0C0C0;
-    border-radius: 50%;
-}
-
-.user-profile .base-info .name {
-    font-size: 1.5em;
-}
-
-.user-profile .base-info .email {
-    color: #8B8B8B;
-}
-
-.user-profile .base-info .department {
-    color: #8B8B8B;
-}
 
 .conversation-list .form-group {
     margin-bottom: 0.5rem;
@@ -64,27 +27,7 @@ a:active {
     align-items: center;
 }
 
-input[type="date"] {
-    padding: 0 6px;
-}
 
-
-
-
-
-
-
-.date-picker {
-    padding-left: 10px;
-}
-
-.submit {
-    padding-left: 20px;
-}
-
-.submit input {
-    padding: 1px 6px;
-}
 
 .card {
     position: absolute;
@@ -102,20 +45,6 @@ input[type="date"] {
    
 }
 
-.view-evaluations {
-    color: #FFF;
-}
-
-.live-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
 
 .hidden {
     display: none;
