@@ -67,18 +67,7 @@
             <div class="conversations">
                 <div v-if="conv.id" v-for="conv in conversations"
                     class="card">
-                    <div class="card-header">
-                        <span class="live-header" v-if="!conv.endTime">
-                            Live
-                        </span>
-                        <span class="evaluated-header" v-else-if="convEvalMap.has(conv.id)">
-                            Evaluated
-                        </span>
-                        <span class="finished-header" v-else>
-                            Finished
-                        </span>
-                    </div>
-                    <div class="card-body">
+                     <div class="card-body">
                         <h5>
                              {{conv.customer.name}}
                          
