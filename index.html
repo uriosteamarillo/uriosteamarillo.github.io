@@ -81,7 +81,7 @@
                     <div class="card-body">
                         <h5>
                              {{conv.customer.name}}
-                               
+                              
                                                         
                         </h5>
                     </li>
@@ -97,23 +97,7 @@
                         <p v-if="conv.endTime" class="card-text mb-2 text-muted">
                             End: &nbsp {{moment(conv.endTime).format('MMM Do YYYY, h:mm:ss A')}}
                         </p>
-                        <div class="dropdown dropright">
-                            <button v-if="convEvalMap.has(conv.id)"
-                                    class="view-evaluations btn btn-secondary dropdown-toggle"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false">
-                                View Evaluations
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuBtn">
-                                <a v-if="convEvalMap.has(conv.id)"
-                                    v-for="eval in convEvalMap.get(conv.id)"
-                                    @click="viewEvaluation(conv.id, eval.id)"
-                                    class="dropdown-item">
-                                    {{eval.evaluationForm.name}}
-                                </a>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
