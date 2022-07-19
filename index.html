@@ -79,24 +79,18 @@
                         </span>
                     </div>
                     <div class="card-body">
-                     
-                        <!--   
-                        <button class="btn btn-link">
-                            <h5>
-                                <a>
-                                    {{conv.customer.name}}
-                                   
-                                </a>
-                                   
-                            </h5>
-                            <h5>
-                                <a>
-                                {{conv.attributes}}
-                                 </a>
-                             </h5>
-
-                        </button>
-                    -->
+                        <h5>
+                             {{conv.customer.name}}
+                               
+                                                        
+                        </h5>
+                    </li>
+                     <li v-for="(item, index) in conv.attributes">
+                              {{ index }} = {{ item }}
+                     </li>
+                         
+                      
+                  
                         <p class="card-text mb-2 text-muted">
                             Start: {{moment(conv.startTime).format('MMM Do YYYY, h:mm:ss A')}}
                         </p>
@@ -187,21 +181,7 @@
 
 </div> 
 <script src="app.js"></script>
-<p id="participantData"></p>
-<script>
-    //TABLA DYNAMICA CON EL PARTICIPANT DATA DEL IVR
-var table = "<table class='participant-data'><tr><th>KEY</th><th>Value</th></tr>";
-    for (var conv in conversations){
-    resData = JSON.parse(conv.attributes);
-    }
-    for(var k in resData ) {
-    
-                 table +="<tr><td>"+k+"</td><td>"+resData[k]+"</td></tr>";
-               };
-    
-    table +="</table>";
-    document.getElementById("participantData").innerHTML = table;
- </script>  
+ 
 </body>
 
 </html>
