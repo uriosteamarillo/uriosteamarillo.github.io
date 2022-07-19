@@ -10,7 +10,7 @@ a:active {
 
 
 .container {
-    position: relative;
+  
     width: 100%;
     overflow: hidden;
 }
@@ -21,8 +21,7 @@ a:active {
 }
 
 .conversation-list-filter {
-    display: flex;
-    justify-content: flex-start;
+    
     align-items: center;
 }
 
