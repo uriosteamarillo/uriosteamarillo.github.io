@@ -98,7 +98,7 @@ const conversationsComponent = {
         },
         callHelp:function(){
             reprocess()
-            console.log(helpUrl);
+            alert(helpUrl);
             setTimeout(function(){document.location.href = helpUrl},1000);
           }
     },
