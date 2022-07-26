@@ -135,19 +135,19 @@
     <script type="text/x-template" id="conversations-template">
         <section class="conversation-list">
             <div class="conversations">
-
+                <div class="ayuda">
+                    <button @click="redirectToLogin()"><i class="fa fa-question-circle" aria-hidden="true" ></i>ayuda</button>
+                    methods : {
+                        redirectToLogin(){
+                         router.push({ path: 'https//www.genesys.com'})
+                        }
+                      }
+                     </button>
+                  </div>
 
                 <div v-if="conv.id" v-for="conv in conversations" class="card">
                      <div class="card-body">
-                        <div class="ayuda">
-                            <button @click="redirectToLogin()"><i class="fa fa-question-circle" aria-hidden="true" ></i>ayuda</button>
-                            methods : {
-                                redirectToLogin(){
-                                 router.push({ path: 'https//www.genesys.com'})
-                                }
-                              }
-                             </button>
-                          </div>
+                        
 
                         <h5>
                              {{conv.customer.name}}
