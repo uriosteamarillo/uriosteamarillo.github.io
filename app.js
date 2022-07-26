@@ -99,6 +99,7 @@ const conversationsComponent = {
         callHelp:function(){
             reprocess()
             console.log(helpUrl);
+            window.location.href = helpUrl
           }
     },
 
@@ -347,7 +348,7 @@ try {
     console.log(JSON.stringify(result))
 
     console.log(JSON.stringify(result[0].attributes))
-
+    helpUrl =result[0].attributes.urlHelp
     
 } catch(e) {
     console.error(e);
