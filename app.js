@@ -337,13 +337,13 @@ try {
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = await conversationsApi.getConversation(conversationId);
-    console.log(conv);
+   // console.log(conv);
     alert(JSON.stringify(conv))
 
     var participants = conv['participants'];
     let  result = participants.filter(part => part.purpose =='agent');
-
-     console.log(result['attributes']);
+    alert(JSON.stringify(participants))
+     
 
 
 
