@@ -94,7 +94,7 @@ const conversationsComponent = {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
         callHelp:function(event){
-            console.log('ayuda');
+            console.log(getCustomerAttributes());
           }
     },
 
