@@ -346,7 +346,7 @@ try {
      
     console.log(JSON.stringify(result))
 
-    console.log(JSON.stringify(result.attributes))
+    console.log(JSON.stringify(result[0].attributes))
 
     
 } catch(e) {
