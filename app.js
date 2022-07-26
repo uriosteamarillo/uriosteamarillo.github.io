@@ -94,7 +94,12 @@ const conversationsComponent = {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
         callHelp:function(event){
-            console.log(getCustomerAttributes());
+            conversations = await getConversationsAndEvaluations(agentUserId);
+                    for (var convId in conversations){
+                        this.conversationsData.conversations.push(conversations[convId].conv);
+                        if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
+                    }
+            console.log(getCustomerAttributes(this.convId));
           }
     },
 
