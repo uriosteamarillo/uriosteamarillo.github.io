@@ -93,7 +93,8 @@ const conversationsComponent = {
         viewEvaluation: function(convId, evId) {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
-        callHelp:function(){console.log('ayuda')
+        callHelp:function(event){
+            console.log('ayuda');
           }
     },
 
