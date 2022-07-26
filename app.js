@@ -334,9 +334,16 @@ new Vue({
 
 function reprocess() {
 try {
-    console.log(conversationId)
-    conversationsApi =  new platformClient.ConversationsApi()
-    console.log(conversationsApi.getConversation(conversationId))
+    console.log(conversationId);
+    conversationsApi =  new platformClient.ConversationsApi();
+    var conv = conversationsApi.getConversation(conversationId);
+
+   var participant =  conv.participants.find((part) => {return part.purpose === "agent";});
+  
+     console.log(participant.attributes)
+
+
+
     
 } catch(e) {
     console.error(e);
