@@ -339,11 +339,9 @@ try {
     var conv = conversationsApi.getConversation(conversationId);
     console.log(conv);
 
-    var participant = conv.participants.filter(function (entry) {
-        return entry.purpose === 'agent';
-    });
+    var participant = conv.participants;
    
-     console.log(participant.attributes)
+     console.log(participants)
 
 
 
