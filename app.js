@@ -338,7 +338,7 @@ try {
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = conversationsApi.getConversation(conversationId);
 
-   var participant =  conv.participants.find((conv) => {return part.purpose === "agent";});
+   let participant =  conv.participants.find(part => part.purpose === "agent");
   
      console.log(participant.attributes)
 
