@@ -92,7 +92,10 @@ const conversationsComponent = {
         },
         viewEvaluation: function(convId, evId) {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
-        }
+        },
+        redirectToLogin: function(convId){
+            router.push({ path: 'https://www.genesys.com'})
+           }
     },
 
     template: '#conversations-template'
