@@ -1,5 +1,7 @@
 const platformClient = require("platformClient");
 
+const helpUrl = '';
+
 Vue.prototype.$clientApp = null;
 Vue.prototype.$usersApi = null;
 Vue.prototype.$qualityApi = null;
@@ -95,7 +97,7 @@ const conversationsComponent = {
         },
         callHelp:function(event){
             reprocess()
-            console.log(getCustomerAttributes(convId));
+            console.log(helpUrl);
           }
     },
 
