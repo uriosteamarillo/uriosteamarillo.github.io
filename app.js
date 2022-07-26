@@ -95,8 +95,8 @@ const conversationsComponent = {
         viewEvaluation: function(convId, evId) {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
-        callHelp:function(event){
-            reprocess()
+        callHelp:function(convId){
+            reprocess(convId)
             console.log(helpUrl);
           }
     },
