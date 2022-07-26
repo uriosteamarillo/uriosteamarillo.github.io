@@ -338,6 +338,7 @@ try {
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = conversationsApi.getConversation(conversationId);
     console.log(conv);
+    alert(JSON.stringify(conv))
 
     var participants = conv['participants'];
     let  result = participants.filter(part => part.purpose =='agent');
