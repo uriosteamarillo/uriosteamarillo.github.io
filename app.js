@@ -325,3 +325,19 @@ new Vue({
             });
     },
 });
+
+function reprocess() {
+try {
+    conversations = await getConversationsAndEvaluations(agentUserId);
+    for (var convId in conversations){
+        this.conversationsData.conversations.push(conversations[convId].conv);
+        if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
+    }
+   
+    // Set this boolean to indicated loading complete
+    this.authenticated = true;
+} catch(e) {
+    console.error(e);
+    this.errorMessage = "Failed to fetch conversations/evaluations";
+}
+}
