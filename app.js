@@ -283,6 +283,8 @@ new Vue({
                 conversationsData.entities.filter(conv => !(conv.id in evalConversations))
                     .map(async conv => {
                         const newConv = await getConversationData(conv.id);
+
+                        conversationId =conv.id;
                         conversations[conv.id] = {
                             evals: [],
                             conv: newConv
@@ -330,7 +332,7 @@ new Vue({
     },
 });
 
-function reprocess(convId) {
+function reprocess() {
 try {
     console.log(conversationId)
     conversationsApi =  new platformClient.ConversationsApi()
