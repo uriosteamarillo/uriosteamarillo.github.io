@@ -332,7 +332,7 @@ new Vue({
     },
 });
 
-function reprocess() {
+async function  reprocess() {
 try {
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
