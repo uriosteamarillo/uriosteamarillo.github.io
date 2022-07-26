@@ -99,7 +99,7 @@ const conversationsComponent = {
         callHelp:function(){
             reprocess()
             console.log(helpUrl);
-            document.location.href = helpUrl,true
+            document.location.replace = helpUrl,true
           }
     },
 
