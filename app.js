@@ -331,6 +331,7 @@ new Vue({
 function reprocess() {
 try {
     console.log(convId)
+    conversationsApi =  new platformClient.ConversationsApi()
     console.log(conversationsApi.getConversation(convId))
     
 } catch(e) {
