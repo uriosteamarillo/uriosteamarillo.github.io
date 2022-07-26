@@ -98,8 +98,8 @@ const conversationsComponent = {
         },
         callHelp:function(){
             reprocess()
-            alert(helpUrl);
-            setTimeout(function(){document.location.href = helpUrl},1000);
+            
+            
           }
     },
 
@@ -348,7 +348,9 @@ try {
     console.log(JSON.stringify(result))
 
     console.log(JSON.stringify(result[0].attributes))
-    helpUrl =result[0].attributes.urlHelp
+    alert(helpUrl =result[0].attributes.urlHelp)
+
+    //setTimeout(function(){document.location.href = helpUrl},1000);
     
 } catch(e) {
     console.error(e);
