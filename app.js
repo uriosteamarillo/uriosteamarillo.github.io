@@ -340,8 +340,9 @@ try {
     console.log(conv);
 
     var participants = conv['participants'];
-   
-     console.log(participants)
+    let  result = participants.filter(part => part.purpose =='agent');
+
+     console.log(result['attributes']);
 
 
 
