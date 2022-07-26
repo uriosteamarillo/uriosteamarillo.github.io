@@ -1,7 +1,7 @@
 const platformClient = require("platformClient");
 
-const helpUrl = '';
-const conversationId='';
+var helpUrl = '';
+var conversationId='';
 
 Vue.prototype.$clientApp = null;
 Vue.prototype.$usersApi = null;
