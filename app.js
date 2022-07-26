@@ -1,6 +1,7 @@
 const platformClient = require("platformClient");
 
 const helpUrl = '';
+const conversationId='';
 
 Vue.prototype.$clientApp = null;
 Vue.prototype.$usersApi = null;
@@ -95,7 +96,7 @@ const conversationsComponent = {
         viewEvaluation: function(convId, evId) {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
-        callHelp:function(convId){
+        callHelp:function(){
             reprocess(convId)
             console.log(helpUrl);
           }
@@ -308,6 +309,7 @@ new Vue({
                     const conversations = await getConversationsAndEvaluations(agentUserId);
                     for (var convId in conversations){
                         this.conversationsData.conversations.push(conversations[convId].conv);
+                        conversationId = convId
                         if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
                     }
                    
@@ -330,9 +332,9 @@ new Vue({
 
 function reprocess(convId) {
 try {
-    console.log(convId)
+    console.log(conversationId)
     conversationsApi =  new platformClient.ConversationsApi()
-    console.log(conversationsApi.getConversation(convId))
+    console.log(conversationsApi.getConversation(conversationId))
     
 } catch(e) {
     console.error(e);
