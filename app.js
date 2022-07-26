@@ -92,7 +92,9 @@ const conversationsComponent = {
         },
         viewEvaluation: function(convId, evId) {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
-        }
+        },
+        callHelp:function(){console.log('ayuda')
+          }
     },
 
     template: '#conversations-template'
@@ -204,11 +206,7 @@ new Vue({
         }
 
 
-        function redirectToLogin(){
-            console.log('PRUEBA')
-            router.push({ path: 'https://genesys.com'})
-           }
-
+  
 
 
         async function getCustomerName(customer){
