@@ -336,7 +336,7 @@ function reprocess() {
 try {
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
-    var conv = conversationsApi.getConversation(conversationId);
+    var conv = await conversationsApi.getConversation(conversationId);
     console.log(conv);
     alert(JSON.stringify(conv))
 
