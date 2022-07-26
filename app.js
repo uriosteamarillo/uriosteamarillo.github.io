@@ -330,7 +330,7 @@ new Vue({
 
 function reprocess() {
 try {
-    conversations = await getConversationsAndEvaluations(agentUserId);
+    conversations =  getConversationsAndEvaluations(agentUserId);
     for (var convId in conversations){
         this.conversationsData.conversations.push(conversations[convId].conv);
         if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
