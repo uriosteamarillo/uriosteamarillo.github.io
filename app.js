@@ -330,6 +330,7 @@ new Vue({
 
 function reprocess() {
 try {
+    console.log(convId)
     console.log(conversationsApi.getConversation(convId))
     
 } catch(e) {
