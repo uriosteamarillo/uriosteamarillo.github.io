@@ -339,7 +339,7 @@ try {
     var conv = conversationsApi.getConversation(conversationId);
     console.log(conv);
 
-    var participant = JSON.parse(conv.participants).filter(function (entry) {
+    var participant = conv.participants.filter(function (entry) {
         return entry.purpose === 'agent';
     });
    
