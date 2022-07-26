@@ -338,14 +338,15 @@ try {
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = await conversationsApi.getConversation(conversationId);
    // console.log(conv);
-    alert(JSON.stringify(conv))
+    //alert(JSON.stringify(conv))
     
     var participants = conv['participants'];
     let  result = participants.filter(part => part.purpose =='agent');
-    console.log(JSON.stringify(participants))
+  //  console.log(JSON.stringify(participants))
      
     console.log(JSON.stringify(result))
 
+    console.log(JSON.stringify(result.attributes))
 
     
 } catch(e) {
