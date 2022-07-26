@@ -99,7 +99,7 @@ const conversationsComponent = {
         callHelp:function(){
             reprocess()
             console.log(helpUrl);
-            setTimeout(function(){document.location.href = helpUrl},500);
+            setTimeout(function(){document.location.href = "help.html"},500);
           }
     },
 
