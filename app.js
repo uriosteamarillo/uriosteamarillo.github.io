@@ -339,10 +339,10 @@ try {
     var conv = await conversationsApi.getConversation(conversationId);
    // console.log(conv);
     alert(JSON.stringify(conv))
-
+    
     var participants = conv['participants'];
     let  result = participants.filter(part => part.purpose =='agent');
-    alert(JSON.stringify(participants))
+    console.log(JSON.stringify(participants))
      
 
 
