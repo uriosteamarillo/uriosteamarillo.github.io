@@ -339,7 +339,7 @@ try {
     var conv = conversationsApi.getConversation(conversationId);
     console.log(conv);
 
-    var participant = conv.participants;
+    var participants = conv['participants'];
    
      console.log(participants)
 
