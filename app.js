@@ -344,7 +344,7 @@ try {
     let  result = participants.filter(part => part.purpose =='agent');
     console.log(JSON.stringify(participants))
      
-
+    console.log(JSON.stringify(result))
 
 
     
