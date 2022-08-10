@@ -102,7 +102,7 @@
         <div>
             <section class="authenticating"
                     v-bind:class="{'hidden':this.authenticated || this.errorMessage}">
-               Loading Call Information ...
+               Loading Whatsapp Tool ...
             </section>
             <section class="failure"
                     v-bind:class="{'hidden':!this.errorMessage}">
@@ -137,7 +137,7 @@
         <section class="conversation-list">
             <div class="conversations">
                 <div class="ayuda">
-                    <button v-on:click="callHelp()" class="btn"><i class="fa fa-whatsapp" aria-hidden="true" ></i></button>
+                    <button v-on:click="callHelp()" class="btn"><i class="fa fa-whatsapp" aria-hidden="true" ></i> Enviar Whatsapp</button>
                     
                      </button>
                   </div>
