@@ -101,8 +101,8 @@ const conversationsComponent = {
             
             
           },
-          sendWhatsapp:function(){
-            generarCallback()
+        sendWhatsapp:function(){
+            generarCallBack()
             
             
           }
