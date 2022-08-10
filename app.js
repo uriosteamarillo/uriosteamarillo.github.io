@@ -100,6 +100,11 @@ const conversationsComponent = {
             reprocess()
             
             
+          },
+          sendWhatsapp:function(){
+            generarCallback()
+            
+            
           }
     },
 
@@ -357,3 +362,40 @@ try {
     this.errorMessage = "Failed to fetch conversations/evaluations";
 }
 }
+async function  generarCallBack() {
+    try {
+        console.log(conversationId);
+        conversationsApi =  new platformClient.ConversationsApi();
+        var conv = await conversationsApi.getConversation(conversationId);
+       // console.log(conv);
+        //alert(JSON.stringify(conv))
+     
+		// Use your own IDs and data here
+		const callbackData = {
+			routingData: {
+				queueId: 'fafae145-607d-415d-b5e4-62ca06983dce'
+			},
+			scriptId: '29d5d6a0-6199-11e7-8dfd-3b02f841a302',
+			callbackUserName: 'Whatsapp Saliente',
+			callbackNumbers: [
+				'+541156015264'
+			],
+			data:{
+				customDataAttribute: 'custom value 1'
+			},
+			callerId: '',
+			callerIdName: ''
+		};
+
+
+		// Create callback
+		return conversationsApi.postConversationsCallbacks(callbackData);
+    
+        //setTimeout(function(){document.location.href = helpUrl},1000);
+        
+    } catch(e) {
+        console.error(e);
+        this.errorMessage = "Failed to fetch conversations/evaluations";
+    }
+    }
+    
