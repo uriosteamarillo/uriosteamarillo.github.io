@@ -375,7 +375,7 @@ async function  generarCallBack() {
 			routingData: {
 				queueId: 'fafae145-607d-415d-b5e4-62ca06983dce'
 			},
-			scriptId: '29d5d6a0-6199-11e7-8dfd-3b02f841a302',
+			scriptId: 'a9a7e8ae-ea88-41d9-a840-633c2a6b9931',
 			callbackUserName: 'Whatsapp Saliente',
 			callbackNumbers: [
 				'+541156015264'
