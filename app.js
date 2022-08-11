@@ -375,7 +375,8 @@ async function  generarCallBack(ani) {
 		// Use your own IDs and data here
 		const callbackData = {
 			routingData: {
-				queueId: 'fafae145-607d-415d-b5e4-62ca06983dce'
+				queueId: 'fafae145-607d-415d-b5e4-62ca06983dce',
+                preferredAgentIds: [agentUserId]
 			},
 			scriptId: 'a9a7e8ae-ea88-41d9-a840-633c2a6b9931',
 			callbackUserName: 'Whatsapp Saliente',
