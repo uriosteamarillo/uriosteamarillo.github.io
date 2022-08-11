@@ -44,6 +44,7 @@ const conversationsComponent = {
         return {
             startDate: moment('1997-01-01').toISOString(),
             endDate: moment().toISOString(),
+            message: "",
             titles: [
                 "Evaluation Id",
                 "Interaction Id",
