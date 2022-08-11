@@ -103,8 +103,8 @@ const conversationsComponent = {
             
           },
         sendWhatsapp:function(){
-            console.log(this.message)
-            generarCallBack()
+           
+            generarCallBack(this.message)
             
             
           }
@@ -364,13 +364,13 @@ try {
     this.errorMessage = "Failed to fetch conversations/evaluations";
 }
 }
-async function  generarCallBack() {
+async function  generarCallBack(ani) {
     try {
-        console.log(conversationId);
+        //console.log(conversationId);
         conversationsApi =  new platformClient.ConversationsApi();
         var conv = await conversationsApi.getConversation(conversationId);
        // console.log(conv);
-        //alert(JSON.stringify(conv))
+        alert(agentUserId)
      
 		// Use your own IDs and data here
 		const callbackData = {
@@ -380,7 +380,7 @@ async function  generarCallBack() {
 			scriptId: 'a9a7e8ae-ea88-41d9-a840-633c2a6b9931',
 			callbackUserName: 'Whatsapp Saliente',
 			callbackNumbers: [
-				'+541156015264'
+				ani
 			],
 			data:{
 				customDataAttribute: 'custom value 1'
