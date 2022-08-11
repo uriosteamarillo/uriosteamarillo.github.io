@@ -102,6 +102,7 @@ const conversationsComponent = {
             
           },
         sendWhatsapp:function(){
+            console.log(this.message)
             generarCallBack()
             
             
