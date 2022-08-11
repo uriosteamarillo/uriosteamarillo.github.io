@@ -9,7 +9,9 @@ function authenticate(client, pcEnvironment) {
     */
     const pcOAuthClientIds = {'mypurecloud.com': 'implicit-oauth-client-id-here'};
   //  const clientId = pcOAuthClientIds[platformEnvironment];
-    const clientId ='f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4'
+
+    const clientId= '07b3db2c-98af-460a-84fd-fb2ba29f6af9'    //LATAM CHILE                    '
+    //const clientId ='f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4'
     if (!clientId) {
         const defaultErr = platformEnvironment + ': Unknown/Unsupported Genesys Cloud Environment';
         const localErr = `
