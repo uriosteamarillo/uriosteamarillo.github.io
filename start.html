@@ -6,7 +6,8 @@
 
 <script>
 function myFunction() {
- window.open("genesyscloud://test");
+ const urlParams = new URLSearchParams(window.location.search);
+ window.open("genesyscloud://" + urlParams);
 
 }
 </script>
