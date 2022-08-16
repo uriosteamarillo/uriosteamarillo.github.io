@@ -378,7 +378,7 @@ async function  generarCallBack(ani) {
 				queueId: '723548df-b358-4330-b4b8-7362afb76078',
                 preferredAgentIds: [agentUserId]
 			},
-			scriptId: '1b2a3804-6949-426b-91c9-05fc4b3194a6',
+			scriptId: '673f19cf-071e-4139-bb4e-7980ecf528fc',
 			callbackUserName: 'Whatsapp Saliente',
 			callbackNumbers: [
 				ani
