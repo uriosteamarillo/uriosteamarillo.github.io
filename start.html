@@ -131,6 +131,14 @@
 				return;
 			}  else {
 				console.log(' notification: ', notification);
+				if (notification.participants[0].state =="disconnected")
+				  {
+
+					alert('EJECUTO PUENTE CONTROL');
+				  }
+
+
+
 			}
 
 			// Set current presence text in UI
