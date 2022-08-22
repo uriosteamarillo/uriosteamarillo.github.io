@@ -131,9 +131,9 @@
 				return;
 			}  else {
 				console.log(' notification: ', notification);
-				console.log(' notification: ', notification.eventBody.participants(0));
+				console.log(' notification: ', notification.eventBody.participants[0]);
 				
-				if (notification.eventBody.participants(0).state =="disconnected")
+				if (notification.eventBody.participants[0].state =="disconnected")
 				  {
 
 					alert('EJECUTO PUENTE CONTROL');
