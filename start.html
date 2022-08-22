@@ -128,12 +128,8 @@
 				// Heartbeat
 				console.info('Ignoring metadata: ', notification);
 				return;
-			} else if (notification.topicName.toLowerCase() !== userPresenceTopic.toLowerCase()) {
-				// Unexpected topic
-				console.warn('Unknown notification: ', notification);
-				return;
-			} else {
-				console.debug('Presence notification: ', notification);
+			}  else {
+				console.debug(' notification: ', notification);
 			}
 
 			// Set current presence text in UI
