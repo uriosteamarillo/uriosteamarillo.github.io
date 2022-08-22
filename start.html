@@ -46,6 +46,7 @@
 
 		// Local vars
 		let  conversationId = '';
+		let  puenteControlCerrado=False;
 		let presences = {};
 		let userPresenceTopic = '';
 		let webSocket = null;
@@ -133,10 +134,12 @@
 				console.log(' notification: ', notification);
 				console.log(' notification: ', notification.eventBody.participants[0]);
 				
-				if (notification.eventBody.participants[0].state =="disconnected")
+				if (notification.eventBody.participants[0].state =="disconnected" && puenteControlCerrado ==False)
 				  {
 
 					alert('EJECUTO PUENTE CONTROL');
+					puenteControlCerrado ==true;
+					window.open("genesyscloud://close" );
 				  }
 
 
