@@ -96,7 +96,7 @@
 
 					// Subscribe to authenticated user's presence
 					userPresenceTopic = `v2.users.${me.id}.conversations.calls`;
-					alert (userPresenceTopic);
+					//alert (userPresenceTopic);
 					const body = [ { id: userPresenceTopic } ];
 					return notificationsApi.putNotificationsChannelSubscriptions(notificationChannel.id, body);
 				})
