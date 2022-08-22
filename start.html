@@ -30,9 +30,9 @@
 
 <script> 
 // This client ID expects the redirect URL to be http://localhost:8080/
-       const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
+        const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
 		const redirectUri = window.location.href;
-
+       
 		// Set Genesys Cloud objects
 		const platformClient = require('platformClient');
 		const client = platformClient.ApiClient.instance;
@@ -45,6 +45,7 @@
 		client.setPersistSettings(true, 'test_app');
 
 		// Local vars
+		let  conversationId = '';
 		let presences = {};
 		let userPresenceTopic = '';
 		let webSocket = null;
@@ -94,7 +95,7 @@
 					webSocket.onmessage = handleNotification;
 
 					// Subscribe to authenticated user's presence
-					userPresenceTopic = `v2.users.${me.id}.presence`;
+					userPresenceTopic = `v2.users.${me.id}.conversations.calls`;
 					const body = [ { id: userPresenceTopic } ];
 					return notificationsApi.putNotificationsChannelSubscriptions(notificationChannel.id, body);
 				})
@@ -106,14 +107,14 @@
 		});
 
 		function setPresence(presenceId) {
-			console.log(`Setting presence to ${presences[presenceId].languageLabels.en_US} (${presenceId})`);
+			//console.log(`Setting presence to ${presences[presenceId].languageLabels.en_US} (${presenceId})`);
 
 			// Set presence
-			presenceApi.patchUserPresence(me.id, 'PURECLOUD', { presenceDefinition:{ id: presenceId } })
-				.then(() => {
-					console.log('Presence set successfully');
-				})
-				.catch((err) => console.error(err));
+			//presenceApi.patchUserPresence(me.id, 'PURECLOUD', { presenceDefinition:{ id: presenceId } })
+			//	.then(() => {
+			//		console.log('Presence set successfully');
+		//		})
+		//		.catch((err) => console.error(err));
 		}
 
 
@@ -143,7 +144,7 @@
 		}
 function myFunction() {
  const urlParams = new URLSearchParams(window.location.search);
- 
+ conversationId = urlParams;
  //window.open("genesyscloud://" + urlParams);
 
 }
