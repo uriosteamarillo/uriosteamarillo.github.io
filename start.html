@@ -133,7 +133,7 @@
 						if (notification.eventBody.participants[0].state =="disconnected" && puenteControlCerrado ==false)
 						  {
 		
-							alert('CIERRO PUENTE CONTROL');
+							//alert('CIERRO PUENTE CONTROL');
 							puenteControlCerrado ==true;
 							window.open("genesyscloud://closed" );
 						  }
@@ -151,7 +151,7 @@
 		function myFunction() {
 		 const urlParams = new URLSearchParams(window.location.search);
 		 conversationId = urlParams;
-		 alert('ABRO PUENTE CONTROL');
+		// alert('ABRO PUENTE CONTROL');
 		 window.open("genesyscloud://" + urlParams);
 		
 		}
