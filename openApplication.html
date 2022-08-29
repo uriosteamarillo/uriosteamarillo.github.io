@@ -17,8 +17,8 @@
 		 const urlParams = new URLSearchParams(window.location.search);
          //alert(urlParams)
          //console.log(urlParams);
-         //let encoded = encodeURIComponent(urlParams);
-		 let decoded = decodeURIComponent(urlParams)
+         let encoded = encodeURIComponent(urlParams);
+		 let decoded = decodeURIComponent(encoded)
 		// alert('ABRO PUENTE CONTROL');
         
 		 window.open("genesyscloud://" + decoded);
