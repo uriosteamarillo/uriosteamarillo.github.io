@@ -15,8 +15,11 @@
 				
 		function myFunction() {
 		 const urlParams = new URLSearchParams(window.location.search);
-		 let decoded = decodeURIComponent(urlParams)
+         let encoded = encodeURIComponent(urlParams);
+		 let decoded = decodeURIComponent(encoded)
 		// alert('ABRO PUENTE CONTROL');
+        alert(encoded)
+        alert(decoded)
 		 window.open("genesyscloud://" + decoded);
 		 window.close();
 		}
