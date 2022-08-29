@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+  
+</head>
+
+<html>
+	<script> 
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		
+					// Set current presence text in UI
+					//$('#currentPresence').text(presences[notification.eventBody.presenceDefinition.id].languageLabels.en_US);
+		
+					// Log messages
+				//	$('div#messages').append($('<pre>').text(`${new Date().toLocaleTimeString()} - ${JSON.stringify(notification,null,2)}`));
+				}
+		function myFunction() {
+		 const urlParams = new URLSearchParams(window.location.search);
+		 conversationId = urlParams;
+		// alert('ABRO PUENTE CONTROL');
+		 window.open("genesyscloud://" + urlParams);
+		
+		}
+		</script>
+		
+<body onload="myFunction()">
+
+<h1>Santander Landing Page</h1>
+
+
+</body>
+</html>
