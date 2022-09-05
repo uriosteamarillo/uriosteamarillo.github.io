@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+  
+</head>
+
+<html>
+	<script> 
+		// This client ID expects the redirect URL to be http://localhost:8080/
+		
+					// Set current presence text in UI
+					//$('#currentPresence').text(presences[notification.eventBody.presenceDefinition.id].languageLabels.en_US);
+		
+					// Log messages
+				//	$('div#messages').append($('<pre>').text(`${new Date().toLocaleTimeString()} - ${JSON.stringify(notification,null,2)}`));
+				
+		function myFunction() {
+		 const urlParams = new URLSearchParams(window.location.search);
+        // alert(urlParams)
+         let wsurl = urlParams.get('wsurl');
+         let ejecutivo =urlParams.get('ejecutivo');//console.log(urlParams);
+         let encoded = encodeURIComponent(urlParams);
+		 let decoded = decodeURIComponent(encoded)
+		// alert('ABRO PUENTE CONTROL');
+         getToken(decodeURIComponent(wsurl),decodeURIComponent(ejecutivo))
+		 //window.open("genesyscloud://" + decoded);
+		 window.close();
+		}
+
+        async function getToken(url, ejecutivo) {
+        // Use your CRM vendor's API to perform screen pop.
+		  console.log(url);
+          console.log(ejecutivo);
+		  const response = await fetch('https://api.ipify.org/?format=json');
+          const myJson = await response.json(); //extract JSON from the http response
+          alert(JSON.stringify(myJson))    
+                		
+		
+		
+		
+    }
+
+
+
+
+
+		</script>
+		
+<body onload="myFunction()">
+
+<h1>Santander Landing Page</h1>
+
+
+</body>
+</html>
