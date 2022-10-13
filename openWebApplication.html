@@ -12,21 +12,7 @@
 		
 					// Log messages
 				//	$('div#messages').append($('<pre>').text(`${new Date().toLocaleTimeString()} - ${JSON.stringify(notification,null,2)}`));
-				
-		function myFunction() {
-		 const urlParams = new URLSearchParams(window.location.search);
-        // alert(urlParams)
-         let wsurl = urlParams.get('wsurl');
-         let ejecutivo =urlParams.get('ejecutivo');//console.log(urlParams);
-         let encoded = encodeURIComponent(urlParams);
-		 let decoded = decodeURIComponent(encoded)
-		// alert('ABRO PUENTE CONTROL');
-        let salida = getToken(decodeURIComponent(wsurl),decodeURIComponent(ejecutivo))
-		window.open("https://es.wikipedia.org/" + salida );
-		//window.close();
-		}
-
-        async function getToken(url, ejecutivo) {
+		async function getToken(url, ejecutivo) {
         // Use your CRM vendor's API to perform screen pop.
 		  
 		  const response = await fetch(url);
@@ -38,7 +24,21 @@
 		
 		
     }
+	
+		async function myFunction() {
+		 const urlParams = new URLSearchParams(window.location.search);
+        // alert(urlParams)
+         let wsurl = urlParams.get('wsurl');
+         let ejecutivo =urlParams.get('ejecutivo');//console.log(urlParams);
+         let encoded = encodeURIComponent(urlParams);
+		 let decoded = decodeURIComponent(encoded)
+		// alert('ABRO PUENTE CONTROL');
+        const salida = await  getToken(decodeURIComponent(wsurl),decodeURIComponent(ejecutivo))
+		window.open("https://es.wikipedia.org/" + salida );
+		//window.close();
+		}
 
+        
 
 
 
