@@ -31,7 +31,7 @@
 		  
 		  const response = await fetch(url);
           const myJson = await response.json(); //extract JSON from the http response
-          alert(myJson);
+          alert(myJson.token);
 		  return (myJson.token);    
                 		
 		
