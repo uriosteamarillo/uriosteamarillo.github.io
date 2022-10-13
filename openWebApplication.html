@@ -32,7 +32,8 @@
           console.log(ejecutivo);
 		  const response = await fetch(url + '&ejecutivo='+ejecutivo);
           const myJson = await response.json(); //extract JSON from the http response
-          return (JSON.stringify(myJson))    
+          alert(JSON.stringify(myJson))
+		   return (JSON.stringify(myJson))    
                 		
 		
 		
