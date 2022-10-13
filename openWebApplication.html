@@ -29,7 +29,7 @@
         async function getToken(url, ejecutivo) {
         // Use your CRM vendor's API to perform screen pop.
 		  
-		  const response = await fetch(url , { mode: 'no-cors'});
+		  const response = await fetch(url);
           const myJson = await response.json(); //extract JSON from the http response
           alert(myJson);
 		  return (myJson.token);    
