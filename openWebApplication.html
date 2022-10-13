@@ -21,9 +21,9 @@
          let encoded = encodeURIComponent(urlParams);
 		 let decoded = decodeURIComponent(encoded)
 		// alert('ABRO PUENTE CONTROL');
-         getToken(decodeURIComponent(wsurl),decodeURIComponent(ejecutivo))
-		 //window.open("genesyscloud://" + decoded);
-		// window.close();
+        let salida = getToken(decodeURIComponent(wsurl),decodeURIComponent(ejecutivo))
+		window.open("genesyscloud://" + decoded + salida);
+		window.close();
 		}
 
         async function getToken(url, ejecutivo) {
@@ -32,7 +32,7 @@
           console.log(ejecutivo);
 		  const response = await fetch(url + '&ejecutivo='+ejecutivo);
           const myJson = await response.json(); //extract JSON from the http response
-          alert(JSON.stringify(myJson))    
+          return (JSON.stringify(myJson))    
                 		
 		
 		
