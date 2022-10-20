@@ -25,7 +25,7 @@
 
 <html>
 	<script> 
-		// This client ID expects the redirect URL to be http://localhost:8080/
+		
 				const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
 				const redirectUri = window.location.href;
 			   
@@ -77,8 +77,7 @@
 							me = userMe;
 		
 							
-							// Set current presence text in UI
-							$('#currentPresence').text(presences[me.presence.presenceDefinition.id].languageLabels.en_US);
+
 		
 							// Create notification channel
 							return notificationsApi.postNotificationsChannels();
@@ -91,7 +90,7 @@
 							webSocket = new WebSocket(notificationChannel.connectUri);
 							webSocket.onmessage = handleNotification;
 		
-							// Subscribe to authenticated user's presence
+							// Subscribe to  user's Calls
 							userPresenceTopic = `v2.users.${me.id}.conversations.calls`;
 							//alert (userPresenceTopic);
 							const body = [ { id: userPresenceTopic } ];
@@ -105,14 +104,7 @@
 				});
 		
 				function setPresence(presenceId) {
-					//console.log(`Setting presence to ${presences[presenceId].languageLabels.en_US} (${presenceId})`);
-		
-					// Set presence
-					//presenceApi.patchUserPresence(me.id, 'PURECLOUD', { presenceDefinition:{ id: presenceId } })
-					//	.then(() => {
-					//		console.log('Presence set successfully');
-				//		})
-				//		.catch((err) => console.error(err));
+					
 				}
 		
 		
@@ -143,17 +135,10 @@
 		
 					}
 		
-					// Set current presence text in UI
-					//$('#currentPresence').text(presences[notification.eventBody.presenceDefinition.id].languageLabels.en_US);
-		
-					// Log messages
-				//	$('div#messages').append($('<pre>').text(`${new Date().toLocaleTimeString()} - ${JSON.stringify(notification,null,2)}`));
 				}
 		function myFunction() {
 		 const urlParams = new URLSearchParams(window.location.search);
 		 conversationId = urlParams;
-		// alert('ABRO PUENTE CONTROL');
-		// window.open("genesyscloud://" + urlParams);
 		
 		}
 		</script>
