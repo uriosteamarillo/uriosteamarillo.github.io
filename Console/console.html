@@ -18,9 +18,8 @@
     <script src="../utils/oauth.js"></script>
     <script src="util.js"></script>
        
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/json-viewer/1.0.0/json-viewer.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/json-viewer/1.0.0/json-viewer.min.css" />
 </head>
 
 <html>
@@ -60,31 +59,7 @@
 
 				$(document).ready(() => {
 					// Authenticate with Genesys Cloud
-					var data = [
-    {
-      "text": "Node 1",
-      "children": [
-        {
-          "text": "Child 1",
-          "children": [
-            {
-              "text": "Grandchild 1"
-            },
-            {
-              "text": "Grandchild 2"
-            }
-          ]
-        },
-        {
-          "text": "Child 2"
-        }
-      ]
-    },
-    {
-      "text": "Node 2"
-    }
-  ];
-
+					var data = [    {    "text": "Root"   }  ];
   $('#jstree').jstree({
     'core': {
       'data': data
@@ -156,8 +131,12 @@
 				function handleNotification(message) {
 					// Parse notification string to a JSON object
 					const notification = JSON.parse(message.data);
-					var parentNode = $('#jstree').jstree().get_node("Node 1");
-					$('#jstree').jstree().create_node(parentNode, notification);
+					var options = {
+   					collapsed: false,
+    				rootCollapsable: false,
+   					 withQuotes: true
+ 					 };
+					document.getElementById("json-viewer").appendChild(JsonViewer.create(notification, options));
 					
 					
 					// Discard unwanted notifications
@@ -195,7 +174,7 @@
 
 <h2>Events</h2>
 
-<div id="jstree"></div>
+<div id="json-viewer"></div>
 </body>
 
 </script>
