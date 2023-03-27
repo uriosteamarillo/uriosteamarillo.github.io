@@ -120,7 +120,7 @@
 				function handleNotification(message) {
 					// Parse notification string to a JSON object
 					const notification = JSON.parse(message.data);
-		            printArray(notification.eventBody.body);
+		            printArray(JSON.stringify(notification));
 					// Discard unwanted notifications
 					if (notification.topicName.toLowerCase() === 'channel.metadata') {
 						// Heartbeat
