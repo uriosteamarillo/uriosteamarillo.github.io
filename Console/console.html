@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>Consola de Eventos</title>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -55,8 +56,14 @@ body {
 </style>	
 	
 </head>
+<body onload="myFunction()">
+<canvas id="canvas">
+<h2>Events</h2>
 
-<html>
+<pre id="json-viewer"></pre>
+</canvas>
+</body>
+
 	<script> 
 		
 
@@ -315,13 +322,7 @@ resizeReset();
 setup();
 </script>
 
-<body onload="myFunction()">
-<canvas id="canvas">
-<h2>Events</h2>
 
-<pre id="json-viewer"></pre>
-</canvas>
-</body>
 
 </html>
 
