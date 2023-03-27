@@ -139,7 +139,7 @@ body {
 							webSocket.onmessage = handleNotification;
 		
 							// Subscribe to  user's Calls
-							userPresenceTopic = `v2.users.${me.id}.conversations`;
+							userPresenceTopic = `v2.users.${me.id}.conversations.messages`;
 							//alert (userPresenceTopic);
 							const body = [ { id: userPresenceTopic } ];
 							return notificationsApi.putNotificationsChannelSubscriptions(notificationChannel.id, body);
@@ -176,7 +176,7 @@ body {
 						return;
 					}  else {
                         notificationBus.push(notification)
-						$('#json-viewer').jsonViewer(notificationBus, {collapsed:true});
+						$('#json-viewer').jsonViewer(notificationBus, {collapsed:false});
 
 
 
