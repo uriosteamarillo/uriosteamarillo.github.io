@@ -132,7 +132,8 @@
 					// Parse notification string to a JSON object
 					const notification = JSON.parse(message.data);
 					
-					jQuery('#json-viewer').append("HOla");
+					jQuery('#json-viewer').json_Viewer(notification);
+;
 
 					
 					// Discard unwanted notifications
