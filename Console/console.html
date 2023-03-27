@@ -57,7 +57,7 @@
 				let userPresenceTopic = '';
 				let webSocket = null;
 				let me, notificationChannel;
-		        let notificationBus = {};
+		        let notificationBus = [];
 			
   // Initialize the jsTree instance with some data
   
@@ -144,7 +144,7 @@
 						console.info('Ignoring metadata: ', notification);
 						return;
 					}  else {
-                        notificationBus = {notificationBus , notification}
+                        notificationBus.push(notification)
 						$('#json-viewer').jsonViewer(notificationBus, {collapsed:true});
 
 
