@@ -17,9 +17,10 @@
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
     <script src="../utils/oauth.js"></script>
     <script src="util.js"></script>
-       
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/json-viewer/1.0.0/json-viewer.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/json-viewer/1.0.0/json-viewer.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsTree/3.3.11/jstree.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsTree/3.3.11/themes/default/style.min.css" />
 </head>
 
 <html>
@@ -126,13 +127,8 @@
 				function handleNotification(message) {
 					// Parse notification string to a JSON object
 					const notification = JSON.parse(message.data);
-					var options = {
-   					collapsed: false,
-    				rootCollapsable: false,
-   					 withQuotes: true
- 					 };
-					document.getElementById("json-viewer").appendChild(JsonViewer.create(notification, options));
-					
+					var options = {    core: {   data: [notification]   }};
+					$('#json-viewer').jstree(options);
 					
 					// Discard unwanted notifications
 					if (notification.topicName.toLowerCase() === 'channel.metadata') {
