@@ -56,7 +56,11 @@
 		
 			
   // Initialize the jsTree instance with some data
-  var data = [
+  
+
+				$(document).ready(() => {
+					// Authenticate with Genesys Cloud
+					var data = [
     {
       "text": "Node 1",
       "children": [
@@ -87,8 +91,7 @@
     }
   });
 
-				$(document).ready(() => {
-					// Authenticate with Genesys Cloud
+
 					client.loginImplicitGrant(clientId, redirectUri)
 						.then(() => {
 							console.log('Logged in');
