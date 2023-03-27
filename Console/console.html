@@ -59,12 +59,7 @@
 
 				$(document).ready(() => {
 					// Authenticate with Genesys Cloud
-					var data = [    {    "text": "Root"   }  ];
-  $('#jstree').jstree({
-    'core': {
-      'data': data
-    }
-  });
+
 
 
 					client.loginImplicitGrant(clientId, redirectUri)
