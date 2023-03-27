@@ -131,8 +131,8 @@
 				function handleNotification(message) {
 					// Parse notification string to a JSON object
 					const notification = JSON.parse(message.data);
-					jQuery.noConflict();
-					$('#json-viewer').append("HOla");
+					
+					jQuery('#json-viewer').append("HOla");
 
 					
 					// Discard unwanted notifications
