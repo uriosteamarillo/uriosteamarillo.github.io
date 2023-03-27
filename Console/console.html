@@ -51,7 +51,7 @@ body {
 }
 #text h1 {
 	opacity: 0.9
-}	
+}
 </style>	
 	
 </head>
@@ -202,94 +202,117 @@ body {
 		}
 		</script>
 	<script>
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const cellSize = 30;
-const maxSize = 30;
-let mousePos = vec2.fromValues(innerWidth * 0.25, innerHeight * 0.5);
-let numThingsX;
-let numThingsY;
-let things;
-
-function drawThing(thing) {
-  const {pos, radius} = thing;
-  ctx.fillStyle = '#000057';
-  ctx.beginPath();
-  ctx.arc(pos[0], pos[1], radius, 0, Math.PI * 2);
-  ctx.fill();
+let resizeReset = function() {
+	w = canvasBody.width = window.innerWidth;
+	h = canvasBody.height = window.innerHeight;
 }
 
-function loop() {
-  ctx.clearRect(0, 0, innerWidth, innerHeight);
-  things.forEach(thing => {
-    const dist = vec2.dist(mousePos, thing.pos);
-    thing.radius = clamp(dist * dist * 0.0003 - 1, 0, maxSize);
-    drawThing(thing);
-  });
-  // For now I'm turning off the RAF loop because
-  // there are no ongoing animations.
-  // window.requestAnimationFrame(loop);
+const opts = { 
+	particleColor: "rgb(200,200,200)",
+	lineColor: "rgb(200,200,200)",
+	particleAmount: 30,
+	defaultSpeed: 1,
+	variantSpeed: 1,
+	defaultRadius: 2,
+	variantRadius: 2,
+	linkRadius: 200,
+};
+
+window.addEventListener("resize", function(){
+	deBouncer();
+});
+
+let deBouncer = function() {
+    clearTimeout(tid);
+    tid = setTimeout(function() {
+        resizeReset();
+    }, delay);
+};
+
+let checkDistance = function(x1, y1, x2, y2){ 
+	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+};
+
+let linkPoints = function(point1, hubs){ 
+	for (let i = 0; i < hubs.length; i++) {
+		let distance = checkDistance(point1.x, point1.y, hubs[i].x, hubs[i].y);
+		let opacity = 1 - distance / opts.linkRadius;
+		if (opacity > 0) { 
+			drawArea.lineWidth = 0.5;
+			drawArea.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${opacity})`;
+			drawArea.beginPath();
+			drawArea.moveTo(point1.x, point1.y);
+			drawArea.lineTo(hubs[i].x, hubs[i].y);
+			drawArea.closePath();
+			drawArea.stroke();
+		}
+	}
 }
 
-function makeThing(x, y) {
-  return {
-    pos: vec2.fromValues(x, y),
-    radius: 2,
-  };
+Particle = function(xPos, yPos){ 
+	this.x = Math.random() * w; 
+	this.y = Math.random() * h;
+	this.speed = opts.defaultSpeed + Math.random() * opts.variantSpeed; 
+	this.directionAngle = Math.floor(Math.random() * 360); 
+	this.color = opts.particleColor;
+	this.radius = opts.defaultRadius + Math.random() * opts. variantRadius; 
+	this.vector = {
+		x: Math.cos(this.directionAngle) * this.speed,
+		y: Math.sin(this.directionAngle) * this.speed
+	};
+	this.update = function(){ 
+		this.border(); 
+		this.x += this.vector.x; 
+		this.y += this.vector.y; 
+	};
+	this.border = function(){ 
+		if (this.x >= w || this.x <= 0) { 
+			this.vector.x *= -1;
+		}
+		if (this.y >= h || this.y <= 0) {
+			this.vector.y *= -1;
+		}
+		if (this.x > w) this.x = w;
+		if (this.y > h) this.y = h;
+		if (this.x < 0) this.x = 0;
+		if (this.y < 0) this.y = 0;	
+	};
+	this.draw = function(){ 
+		drawArea.beginPath();
+		drawArea.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+		drawArea.closePath();
+		drawArea.fillStyle = this.color;
+		drawArea.fill();
+	};
+};
+
+function setup(){ 
+	particles = [];
+	resizeReset();
+	for (let i = 0; i < opts.particleAmount; i++){
+		particles.push( new Particle() );
+	}
+	window.requestAnimationFrame(loop);
 }
 
-function makeThings() {
-  things = [];
-  for (let i = 0; i < numThingsY; i += 1) {
-    for (let j = 0; j < numThingsX; j += 1) {
-      const thing = makeThing(j * cellSize + cellSize * 0.5, i * cellSize + cellSize * 0.5);
-      things.push(thing);
-    }
-  }
+function loop(){ 
+	window.requestAnimationFrame(loop);
+	drawArea.clearRect(0,0,w,h);
+	for (let i = 0; i < particles.length; i++){
+		particles[i].update();
+		particles[i].draw();
+	}
+	for (let i = 0; i < particles.length; i++){
+		linkPoints(particles[i], particles);
+	}
 }
 
-function sizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  const canvasRect = canvas.getBoundingClientRect();
-  canvas.width = canvasRect.width * dpr;
-  canvas.height = canvasRect.height * dpr;
-  ctx.scale(dpr, dpr);
-}
-
-function handleResize() {
-  sizeCanvas();
-  numThingsX = Math.ceil(innerWidth / cellSize);
-  numThingsY = Math.ceil(innerHeight / cellSize);
-  makeThings();
-}
-window.addEventListener('resize', throttled(handleResize));
-
-function handleMouseMove(event) {
-  vec2.set(mousePos, event.clientX, event.clientY);
-  loop();
-}
-window.addEventListener('mousemove', throttled(handleMouseMove));
-
-// Kick it off
-handleResize();
-loop();
-
-// USEFUL FUNCTIONS ----------
-function throttled(fn) {
-  let didRequest = false;
-  return param => {
-    if (!didRequest) {
-      window.requestAnimationFrame(() => {
-        fn(param);
-        didRequest = false;
-      });
-      didRequest = true;
-    }
-  };
-}
-function clamp (value, min = 0, max = 1) {
-  return value <= min ? min : value >= max ? max : value;
-}
+const canvasBody = document.getElementById("canvas"),
+drawArea = canvasBody.getContext("2d");
+let delay = 200, tid,
+rgb = opts.lineColor.match(/\d+/g);
+resizeReset();
+setup();
 </script>
 
 <body onload="myFunction()">
