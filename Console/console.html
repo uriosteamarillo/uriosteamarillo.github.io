@@ -109,42 +109,7 @@
 						.catch((err) => console.error(err));
 				});
 		
-var text = document.getElementById('text');
-var greeting = ['Hello. I am a console wannabe.',
-                'All systems are functioning.',
-                'I like pie.'];
-text.innerHTML = '<i>▮</i>';
 
-function printer(line, callback){
-   var index = 0, 
-       delay = 50;
-
-   function character(){
-     
-     text.insertBefore((line[index]
-         ? document.createTextNode(line[index])
-         : document.createElement('br')
-     ), text.lastChild);
-     
-     index++;
-     
-     if(index === line.length + 1) callback();
-     else setTimeout(character, delay);
-     
-   }
-   character();
-}
-
-function printArray(array, startAtIndex){
-    startAtIndex = startAtIndex || 0;
-    printer(array[startAtIndex], function(){
-      startAtIndex++;
-      if(array[startAtIndex]) printArray(array, startAtIndex)
-    })
-}
-
-// This function can be called from anywhere. Because of delays, though, a better implementation would be a constructor.
-printArray(greeting);
 
 				function setPresence(presenceId) {
 					
@@ -192,4 +157,44 @@ printArray(greeting);
 
 <pre id="text"></pre>
 </body>
+<script>
+var text = document.getElementById('text');
+var greeting = ['Hello. I am a console wannabe.',
+                'All systems are functioning.',
+                'I like pie.'];
+text.innerHTML = '<i>▮</i>';
+
+function printer(line, callback){
+   var index = 0, 
+       delay = 50;
+
+   function character(){
+     
+     text.insertBefore((line[index]
+         ? document.createTextNode(line[index])
+         : document.createElement('br')
+     ), text.lastChild);
+     
+     index++;
+     
+     if(index === line.length + 1) callback();
+     else setTimeout(character, delay);
+     
+   }
+   character();
+}
+
+function printArray(array, startAtIndex){
+    startAtIndex = startAtIndex || 0;
+    printer(array[startAtIndex], function(){
+      startAtIndex++;
+      if(array[startAtIndex]) printArray(array, startAtIndex)
+    })
+}
+
+// This function can be called from anywhere. Because of delays, though, a better implementation would be a constructor.
+printArray(greeting);
+	
+</script>
 </html>
+
