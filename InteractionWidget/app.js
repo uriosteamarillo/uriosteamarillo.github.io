@@ -442,4 +442,4 @@ async function  reprocess() {
     },
 });
 
-        getInteractionHistory();
+await getInteractionHistory();
