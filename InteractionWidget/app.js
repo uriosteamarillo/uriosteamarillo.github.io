@@ -391,7 +391,7 @@ async function  reprocess() {
             ]
            }; // Object | query
     
-    apiInstance.postAnalyticsConversationsDetailsQuery(body)
+           analyticsApi.postAnalyticsConversationsDetailsQuery(body)
       .then((data) => {
         console.log(`postAnalyticsConversationsDetailsQuery success! data: ${JSON.stringify(data, null, 2)}`);
       })
