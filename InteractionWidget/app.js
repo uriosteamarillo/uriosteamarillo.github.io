@@ -261,6 +261,7 @@ new Vue({
         async function getConversationsAndEvaluations(agentUserId) {
             const startTime = moment('1997-01-01').toISOString();
             const endTime = moment().toISOString();
+            console.log(endTime);
             const data = await getEvaluations(qualityApi, startTime, endTime, agentUserId);
 
             const evaluations = data.entities;
