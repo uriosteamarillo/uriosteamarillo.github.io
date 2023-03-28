@@ -191,6 +191,7 @@ new Vue({
         const qualityApi = new platformClient.QualityApi();
         const conversationsApi = new platformClient.ConversationsApi();
         const externalContactsApi = new platformClient.ExternalContactsApi();
+        const analyticsApi = new platformClient.AnalyticsApi();
         Vue.prototype.$usersApi = usersApi;
         Vue.prototype.$qualityApi = qualityApi;
         Vue.prototype.$conversationsApi = conversationsApi;
@@ -305,8 +306,106 @@ new Vue({
 
             return Object.assign(conversations, evalConversations);
         }
+        
+async function  reprocess() {
+    try {
+        console.log(conversationId);
+        conversationsApi =  new platformClient.ConversationsApi();
+        var conv = await conversationsApi.getConversation(conversationId);
+        console.log(conv);
+       alert(JSON.stringify(conv))
+        
+        var participants = conv['participants'];
+        let  result = participants.filter(part => part.purpose =='agent');
+      //  console.log(JSON.stringify(participants))
+         
+        console.log(JSON.stringify(result))
+    
+        console.log(JSON.stringify(result[0].attributes))
+        alert(helpUrl =result[0].attributes.urlHelp)
+    
+        //setTimeout(function(){document.location.href = helpUrl},1000);
+        
+    } catch(e) {
+        console.error(e);
+        this.errorMessage = "Failed to fetch conversations/evaluations";
+    }
+    }
+    async function  generarCallBack(ani) {
+        try {
+            //console.log(conversationId);
+            conversationsApi =  new platformClient.ConversationsApi();
+            var conv = await conversationsApi.getConversation(conversationId);
+           // console.log(conv);
+           // alert(agentUserId)
+         
+            // Use your own IDs and data here
+            const callbackData = {
+                routingData: {
+                    queueId: '723548df-b358-4330-b4b8-7362afb76078',
+                    preferredAgentIds: [agentUserId]
+                },
+                scriptId: '673f19cf-071e-4139-bb4e-7980ecf528fc',
+                callbackUserName: 'Whatsapp Saliente',
+                callbackNumbers: [
+                    ani
+                ],
+                data:{
+                    numeroWhatsapp: ani
+                },
+                callerId: '',
+                callerIdName: ''
+            };
+    
+    
+            // Create callback
+    
+            return conversationsApi.postConversationsCallbacks(callbackData);
+                    
+            //setTimeout(function(){document.location.href = helpUrl},1000);
+            
+        } catch(e) {
+            console.error(e);
+            this.errorMessage = "Failed to fetch conversations/evaluations";
+        }
+        }
+        
+        async function  getInteractionHistory() {
+    
+        let body = {
+            "interval": "2023-03-28T03:00:00.000Z/2023-03-29T03:00:00.000Z",
+            "order": "asc",
+            "orderBy": "conversationStart",
+            "paging": {
+             "pageSize": 25,
+             "pageNumber": 1
+            },
+            "segmentFilters": [
+             {
+              "type": "or",
+              "predicates": [
+               {
+                "type": "dimension",
+                "dimension": "queueId",
+                "operator": "matches",
+                "value": "fafae145-607d-415d-b5e4-62ca06983dce"
+               }
+              ]
+             }
+            ]
+           }; // Object | query
+    
+    apiInstance.postAnalyticsConversationsDetailsQuery(body)
+      .then((data) => {
+        console.log(`postAnalyticsConversationsDetailsQuery success! data: ${JSON.stringify(data, null, 2)}`);
+      })
+      .catch((err) => {
+        console.log('There was a failure calling postAnalyticsConversationsDetailsQuery');
+        console.error(err);
+      });
+    }
 
-        // Authentication and main flow
+        // -------------MAIN Authentication and main flow
         authenticate(client, pcEnvironment)
             .then(() => {
                 authenticated = true;
@@ -343,66 +442,4 @@ new Vue({
     },
 });
 
-async function  reprocess() {
-try {
-    console.log(conversationId);
-    conversationsApi =  new platformClient.ConversationsApi();
-    var conv = await conversationsApi.getConversation(conversationId);
-    console.log(conv);
-   alert(JSON.stringify(conv))
-    
-    var participants = conv['participants'];
-    let  result = participants.filter(part => part.purpose =='agent');
-  //  console.log(JSON.stringify(participants))
-     
-    console.log(JSON.stringify(result))
-
-    console.log(JSON.stringify(result[0].attributes))
-    alert(helpUrl =result[0].attributes.urlHelp)
-
-    //setTimeout(function(){document.location.href = helpUrl},1000);
-    
-} catch(e) {
-    console.error(e);
-    this.errorMessage = "Failed to fetch conversations/evaluations";
-}
-}
-async function  generarCallBack(ani) {
-    try {
-        //console.log(conversationId);
-        conversationsApi =  new platformClient.ConversationsApi();
-        var conv = await conversationsApi.getConversation(conversationId);
-       // console.log(conv);
-       // alert(agentUserId)
-     
-		// Use your own IDs and data here
-		const callbackData = {
-			routingData: {
-				queueId: '723548df-b358-4330-b4b8-7362afb76078',
-                preferredAgentIds: [agentUserId]
-			},
-			scriptId: '673f19cf-071e-4139-bb4e-7980ecf528fc',
-			callbackUserName: 'Whatsapp Saliente',
-			callbackNumbers: [
-				ani
-			],
-			data:{
-				numeroWhatsapp: ani
-			},
-			callerId: '',
-			callerIdName: ''
-		};
-
-
-		// Create callback
-
-		return conversationsApi.postConversationsCallbacks(callbackData);
-                
-        //setTimeout(function(){document.location.href = helpUrl},1000);
-        
-    } catch(e) {
-        console.error(e);
-        this.errorMessage = "Failed to fetch conversations/evaluations";
-    }
-    }
-    
+        getInteractionHistory();
