@@ -370,7 +370,7 @@ async function  generarCallBack(ani) {
         //console.log(conversationId);
         conversationsApi =  new platformClient.ConversationsApi();
         var conv = await conversationsApi.getConversation(conversationId);
-       // console.log(conv);
+        console.log(conv);
        // alert(agentUserId)
      
 		// Use your own IDs and data here
