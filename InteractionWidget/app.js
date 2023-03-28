@@ -98,13 +98,7 @@ const conversationsComponent = {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
         callHelp:function(){
-           await  getInteractionHistory();
-            
-            
-          },
-        sendWhatsapp:function(){
-           
-            generarCallBack(this.message)
+           alert("Help");
             
             
           }
@@ -421,6 +415,7 @@ async function  reprocess() {
 
                 try {
                     const conversations = await getConversationsAndEvaluations(agentUserId);
+                    const historyConversations = await getInteractionHistory();
                     for (var convId in conversations){
                         this.conversationsData.conversations.push(conversations[convId].conv);
                         conversationId = convId
