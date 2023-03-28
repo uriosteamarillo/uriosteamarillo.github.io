@@ -316,12 +316,12 @@ new Vue({
 
 
                 try {
-                  //  const conversations = await getConversationsAndEvaluations(agentUserId);
-                  //  for (var convId in conversations){
-                  //      this.conversationsData.conversations.push(conversations[convId].conv);
-                  //      conversationId = convId
-                  //      if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
-                   // }
+                    const conversations = await getConversationsAndEvaluations(agentUserId);
+                    for (var convId in conversations){
+                        this.conversationsData.conversations.push(conversations[convId].conv);
+                        conversationId = convId
+                        if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
+                   }
                    
                     // Set this boolean to indicated loading complete
                     this.authenticated = true;
@@ -345,8 +345,8 @@ try {
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = await conversationsApi.getConversation(conversationId);
-   // console.log(conv);
-    //alert(JSON.stringify(conv))
+    console.log(conv);
+   alert(JSON.stringify(conv))
     
     var participants = conv['participants'];
     let  result = participants.filter(part => part.purpose =='agent');
