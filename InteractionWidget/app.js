@@ -331,6 +331,7 @@ async function  reprocess() {
         this.errorMessage = "Failed to fetch conversations/evaluations";
     }
     }
+
     async function  generarCallBack(ani) {
         try {
             //console.log(conversationId);
@@ -370,7 +371,7 @@ async function  reprocess() {
         }
         }
         
-        async function  getInteractionHistory() {
+ async function  getInteractionHistory() {
     
         let body = {
             "interval": "2023-03-28T03:00:00.000Z/2023-03-29T03:00:00.000Z",
