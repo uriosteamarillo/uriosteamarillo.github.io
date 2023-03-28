@@ -443,4 +443,4 @@ async function  reprocess() {
     },
 });
 
-await getInteractionHistory();
+ getInteractionHistory();
