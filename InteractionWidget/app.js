@@ -286,8 +286,10 @@ new Vue({
             );
 
             const conversationsData = await conversationsApi.getConversations();
+            console.log(conversationsData);
             const conversations = {};
             await Promise.allSettled(
+                
                 // Gets all active conversations
                 conversationsData.entities.filter(conv => !(conv.id in evalConversations))
                     .map(async conv => {
