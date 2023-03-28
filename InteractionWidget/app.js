@@ -98,7 +98,7 @@ const conversationsComponent = {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
         callHelp:function(){
-            reprocess()
+           await  getInteractionHistory();
             
             
           },
@@ -309,7 +309,7 @@ new Vue({
         
 async function  reprocess() {
     try {
-        getInteractionHistory();
+        
         console.log(conversationId);
         conversationsApi =  new platformClient.ConversationsApi();
         var conv = await conversationsApi.getConversation(conversationId);
