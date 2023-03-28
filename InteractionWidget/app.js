@@ -309,6 +309,7 @@ new Vue({
         
 async function  reprocess() {
     try {
+        getInteractionHistory();
         console.log(conversationId);
         conversationsApi =  new platformClient.ConversationsApi();
         var conv = await conversationsApi.getConversation(conversationId);
@@ -443,4 +444,4 @@ async function  reprocess() {
     },
 });
 
- await getInteractionHistory();
+ 
