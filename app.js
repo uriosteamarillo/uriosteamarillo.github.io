@@ -8,6 +8,9 @@ Vue.prototype.$usersApi = null;
 Vue.prototype.$qualityApi = null;
 Vue.prototype.$conversationsApi = null;
 
+
+console.log("APP.js");
+
 const authenticatingComponent = {
     props: ['errorMessage', 'authenticated'],
     template: '#authenticating-template'
