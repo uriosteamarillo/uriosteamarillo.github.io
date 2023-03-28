@@ -197,7 +197,7 @@ new Vue({
         Vue.prototype.$externalContactsApi = externalContactsApi;
 
         let authenticated = false;
-        
+       
 
         function getCustomerParticipant(conv) {
             // Function returns null if there is no valid participant found.
