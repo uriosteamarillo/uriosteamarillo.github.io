@@ -308,6 +308,7 @@ new Vue({
         authenticate(client, pcEnvironment)
             .then(() => {
                 authenticated = true;
+                console.log("Autenticado");
                 return usersApi.getUsersMe({ "expand": ["presence"] });
             })
             .then(async (profileData) => {
