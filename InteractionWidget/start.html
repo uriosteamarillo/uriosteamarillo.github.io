@@ -107,11 +107,25 @@ body {
 				
                     });//DOCUMENT READY
 		
-				
+const conversationElement = document.getElementById("conversation");
+
+const formattedContent = `
+  <div>
+    <h2>Person Information:</h2>
+    <ul>
+      <li><strong>Id:</strong> ${currentConversation.id}</li>
+      <li><strong>Purpose:</strong> ${currentConversationparticipants[0].purpose}</li>
+      <li><strong>atributos:</strong> ${JSON.stringify(currentConversationparticipants[0].attributes)}</li>
+    </ul>
+  </div>
+`;
+
+personElement.innerHTML = formattedContent;		
 		</script>
 
 
 
 </body>
+<div id="conversation"></div>
 </html>
 
