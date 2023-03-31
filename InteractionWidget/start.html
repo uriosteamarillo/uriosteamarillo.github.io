@@ -19,10 +19,7 @@
     <script src="../utils/oauth.js"></script>
     <script src="util.js"></script>
 
-	<link href="jquery.json-viewer.css" rel="stylesheet">
 
-	
-    <script src="jquery.json-viewer.js"></script>
 
 <style>
 body {
@@ -55,7 +52,6 @@ body {
 
 <h2>Events</h2>
 
-<pre id="json-viewer"></pre>
 
 
 
@@ -73,10 +69,8 @@ body {
 				// Set Genesys Cloud objects
 				const platformClient = require('platformClient');
 				const client = platformClient.ApiClient.instance;
-				const notificationsApi = new platformClient.NotificationsApi();
-				const presenceApi = new platformClient.PresenceApi();
 				const usersApi = new platformClient.UsersApi();
-		
+		        const conversationsApi = new platformClient.ConversationsApi();
 				// Set Genesys Cloud settings
 				client.setEnvironment('mypurecloud.com');
 				client.setPersistSettings(true, 'test_app');
