@@ -92,7 +92,7 @@ conversationElement.innerHTML = formattedContent;
     const conversationsApi = new platformClient.ConversationsApi();
     // Set Genesys Cloud settings
     client.setEnvironment('mypurecloud.com');
-    client.setPersistSettings(true, 'test_app');
+    
 
     const urlParams = new URLSearchParams(window.location.search);
     let conversationId = urlParams.get('conversationId');
