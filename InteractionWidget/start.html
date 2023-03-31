@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consola de Eventos</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/142.0.0/purecloud-platform-client-v2.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.4.0/purecloud-client-app-sdk-bb974a18.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@v2-latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+    <script src="../utils/oauth.js"></script>
+    <script src="util.js"></script>
+
+	<link href="jquery.json-viewer.css" rel="stylesheet">
+
+	
+    <script src="jquery.json-viewer.js"></script>
+
+<style>
+body {
+	background: #222;
+	margin: 0rem;
+	color:#fff;
+	min-height: 100vh;
+	font-family: Futura, sans-serif;
+}
+
+#text {
+  min-height: 100vh;
+  width: 100vw;
+  z-index: 1;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 8vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#text h1 {
+	opacity: 0.9
+}
+</style>	
+	
+</head>
+<body>
+
+<h2>Events</h2>
+
+<pre id="json-viewer"></pre>
+
+
+
+	<script> 
+		
+
+
+
+
+
+
+				const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
+				const redirectUri = window.location.href;
+			   
+				// Set Genesys Cloud objects
+				const platformClient = require('platformClient');
+				const client = platformClient.ApiClient.instance;
+				const notificationsApi = new platformClient.NotificationsApi();
+				const presenceApi = new platformClient.PresenceApi();
+				const usersApi = new platformClient.UsersApi();
+		
+				// Set Genesys Cloud settings
+				client.setEnvironment('mypurecloud.com');
+				client.setPersistSettings(true, 'test_app');
+		    
+                const urlParams = new URLSearchParams(window.location.search);
+                let ConversationId = urlParams.get('conversationid');
+
+				// Local vars
+				
+				let currentConversation = {};
+			
+  // Initialize the jsTree instance with some data
+  
+
+				$(document).ready(() => {
+					// Authenticate with Genesys Cloud
+
+
+
+					client.loginImplicitGrant(clientId, redirectUri)
+						.then(() => {
+							console.log('Logged in');
+		
+							// Get presences
+                            // Get current conversation
+                            return conversationsApi.getConversation(ConversationId);
+							
+						}).then((conv) => { 
+                        currentConversation = conv;
+                                            // Error Handling
+                     }).catch(e => console.log(e));
+
+					});
+		
+
+
+				
+		
+		
+				
+		</script>
+
+
+
+</body>
+</html>
+
