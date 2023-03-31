@@ -92,8 +92,8 @@ body {
 		
 							// Get presences
                             // Get current conversation
-                            console.log( conversationsApi.getConversation(ConversationId));
-							return;
+                            return conversationsApi.getConversation(ConversationId);
+						
 						}).then((conv) => { 
                         currentConversation = conv;
                         console.log(currentConversation);                    // Error Handling
