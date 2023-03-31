@@ -60,7 +60,24 @@ body {
 <script> 
 		
 
+function displayInteraction()
+{
+var conversationElement = document.getElementById("conversation");
 
+var formattedContent = `
+<div>
+<h2>Interacción:</h2>
+<ul>
+<li><strong>Id:</strong> ${currentConversation.id}</li>
+<li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants)}</li>
+</ul>
+</div>
+`;
+
+conversationElement.innerHTML = formattedContent;	
+
+
+}
 
 
 
@@ -98,7 +115,8 @@ body {
                 conversationsApi.getConversation(conversationId)
                          .then(conv => {
                           currentConversation = conv;
-                          console.log("Hola");           // Handle the successful result
+                          console.log(currentConversation); 
+                          displayInteraction()          // Handle the successful result
                         })
                            .catch(error => {
                            console.log("ERROR"); // Handle the error
@@ -113,19 +131,7 @@ body {
     
         });//DOCUMENT READY
 
-const conversationElement = document.getElementById("conversation");
-
-const formattedContent = `
-<div>
-<h2>Interacción:</h2>
-<ul>
-<li><strong>Id:</strong> ${currentConversation.id}</li>
-<li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants)}</li>
-</ul>
-</div>
-`;
-
-conversationElement.innerHTML = formattedContent;		
+	
 </script>
 </html>
 
