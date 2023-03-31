@@ -51,80 +51,81 @@ body {
 <body>
 
 
-	<script> 
-		
-
-
-
-
-
-
-				const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
-				const redirectUri = window.location.href;
-			   
-				// Set Genesys Cloud objects
-				const platformClient = require('platformClient');
-				const client = platformClient.ApiClient.instance;
-				const usersApi = new platformClient.UsersApi();
-		        const conversationsApi = new platformClient.ConversationsApi();
-				// Set Genesys Cloud settings
-				client.setEnvironment('mypurecloud.com');
-				client.setPersistSettings(true, 'test_app');
-		    
-                const urlParams = new URLSearchParams(window.location.search);
-                let conversationId = urlParams.get('conversationId');
-
-				// Local vars
-				
-				let currentConversation = {};
-			
-  // Initialize the jsTree instance with some data
-  
-
-				$(document).ready(() => {
-					// Authenticate with Genesys Cloud
-
-
-
-					client.loginImplicitGrant(clientId, redirectUri)
-						.then(() => {
-							console.log('Logged in');
-                            conversationsApi.getConversation(conversationId)
-                                     .then(conv => {
-                                      currentConversation = conv;
-                                      console.log(currentConversation);           // Handle the successful result
-                                    })
-                                       .catch(error => {
-                                       console.log("ERROR"); // Handle the error
-                                      });
-							  
-						               // Error Handling
-                       }).catch(e => console.log(e));
-
-					    		
-                          
-
-				
-                    });//DOCUMENT READY
-		
-const conversationElement = document.getElementById("conversation");
-
-const formattedContent = `
-  <div>
-    <h2>Person Information:</h2>
-    <ul>
-      <li><strong>Id:</strong> ${currentConversation.id}</li>
-      <li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants)}</li>
-    </ul>
-  </div>
-`;
-
-conversationElement.innerHTML = formattedContent;		
-		</script>
 
 
 
 </body>
 <div id="conversation"></div>
+
+<script> 
+		
+
+
+
+
+
+
+    const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
+    const redirectUri = window.location.href;
+   
+    // Set Genesys Cloud objects
+    const platformClient = require('platformClient');
+    const client = platformClient.ApiClient.instance;
+    const usersApi = new platformClient.UsersApi();
+    const conversationsApi = new platformClient.ConversationsApi();
+    // Set Genesys Cloud settings
+    client.setEnvironment('mypurecloud.com');
+    client.setPersistSettings(true, 'test_app');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let conversationId = urlParams.get('conversationId');
+
+    // Local vars
+    
+    let currentConversation = {};
+
+// Initialize the jsTree instance with some data
+
+
+    $(document).ready(() => {
+        // Authenticate with Genesys Cloud
+
+
+
+        client.loginImplicitGrant(clientId, redirectUri)
+            .then(() => {
+                console.log('Logged in');
+                conversationsApi.getConversation(conversationId)
+                         .then(conv => {
+                          currentConversation = conv;
+                          console.log(currentConversation);           // Handle the successful result
+                        })
+                           .catch(error => {
+                           console.log("ERROR"); // Handle the error
+                          });
+                  
+                           // Error Handling
+           }).catch(e => console.log(e));
+
+                    
+              
+
+    
+        });//DOCUMENT READY
+
+const conversationElement = document.getElementById("conversation");
+
+const formattedContent = `
+<div>
+<h2>Person Information:</h2>
+<ul>
+<li><strong>Id:</strong> ${currentConversation.id}</li>
+<li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants)}</li>
+</ul>
+</div>
+`;
+
+conversationElement.innerHTML = formattedContent;		
+</script>
 </html>
 
