@@ -89,13 +89,7 @@ body {
 					client.loginImplicitGrant(clientId, redirectUri)
 						.then(() => {
 							console.log('Logged in');
-		
-							
-						               // Error Handling
-                       }).catch(e => console.log(e));
-
-					    		
-                          conversationsApi.getConversation(conversationId)
+                            conversationsApi.getConversation(conversationId)
                                      .then(conv => {
                                       currentConversation = conv;
                                       console.log(currentConversation);           // Handle the successful result
@@ -103,6 +97,12 @@ body {
                                        .catch(error => {
                                        console.log("ERROR"); // Handle the error
                                       });
+							  
+						               // Error Handling
+                       }).catch(e => console.log(e));
+
+					    		
+                          
 
 				
                     });//DOCUMENT READY
