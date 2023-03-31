@@ -72,7 +72,7 @@ body {
 				client.setPersistSettings(true, 'test_app');
 		    
                 const urlParams = new URLSearchParams(window.location.search);
-                let ConversationId = urlParams.get('conversationId');
+                let conversationId = urlParams.get('conversationId');
 
 				// Local vars
 				
@@ -95,7 +95,7 @@ body {
                        }).catch(e => console.log(e));
 
 					    		
-                          conversationsApi.getConversation(ConversationId)
+                          conversationsApi.getConversation(conversationId)
                                      .then(conv => {
                                       currentConversation = conv;
                                       console.log(currentConversation);           // Handle the successful result
