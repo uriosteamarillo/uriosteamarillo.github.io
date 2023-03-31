@@ -95,10 +95,7 @@ conversationElement.innerHTML = formattedContent;
     
 
     const urlParams = new URLSearchParams(window.location.search);
-    alert(urlParams);
-    let conversationId = urlParams.get('conversationId');
-
-   
+    let  conversationId = urlParams.get('conversationid');
     
     let currentConversation = {};
 
@@ -109,10 +106,13 @@ conversationElement.innerHTML = formattedContent;
         // Authenticate with Genesys Cloud
 
 
+    // Assign conversation id
+    
 
-        client.loginImplicitGrant(clientId, redirectUri)
-            .then(() => {
+        client.loginImplicitGrant(clientId, redirectUri,{ state: conversationId })
+            .then(data => {
                 console.log('Logged in');
+                conversationId = data.state;
                 conversationsApi.getConversation(conversationId)
                          .then(conv => {
                           currentConversation = conv;
