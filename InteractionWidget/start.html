@@ -80,7 +80,7 @@ body {
     const urlParams = new URLSearchParams(window.location.search);
     let conversationId = urlParams.get('conversationId');
 
-    // Local vars
+   
     
     let currentConversation = {};
 
@@ -98,7 +98,7 @@ body {
                 conversationsApi.getConversation(conversationId)
                          .then(conv => {
                           currentConversation = conv;
-                          console.log(currentConversation);           // Handle the successful result
+                          console.log("Hola");           // Handle the successful result
                         })
                            .catch(error => {
                            console.log("ERROR"); // Handle the error
@@ -117,7 +117,7 @@ const conversationElement = document.getElementById("conversation");
 
 const formattedContent = `
 <div>
-<h2>Person Information:</h2>
+<h2>Interacción:</h2>
 <ul>
 <li><strong>Id:</strong> ${currentConversation.id}</li>
 <li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants)}</li>
