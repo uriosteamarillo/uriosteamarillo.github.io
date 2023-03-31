@@ -90,18 +90,19 @@ body {
 						.then(() => {
 							console.log('Logged in');
 		
-							// Get presences
-                            // Get current conversation
-                            return conversationsApi.getConversation(ConversationId);
-						
-						}).then((conv) => { 
-                        currentConversation = conv;
-                        console.log(currentConversation);                    // Error Handling
-                     }).catch(e => console.log(e));
+							
+						               // Error Handling
+                       }).catch(e => console.log(e));
 
-					});
-		
-
+					    		
+                          conversationsApi.getConversation(ConversationId)
+                                     .then(conv => {
+                                      currentConversation = conv;
+                                      console.log(currentConversation);           // Handle the successful result
+                                    })
+                                       .catch(error => {
+                                       console.log("ERROR"); // Handle the error
+                                      });
 
 				
 		
