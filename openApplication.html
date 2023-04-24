@@ -10,10 +10,8 @@
 		function myFunction() {
 		 const urlParams = new URLSearchParams(window.location.search);
       
-               // let encoded = encodeURIComponent(urlParams);
-		 let decoded = decodeURIComponent(urlParams)
-		 alert(urlparams)
-		 alert(decoded)
+                 let decoded = decodeURIComponent(urlParams)
+		
 		 window.open("genesyscloud://" + decoded);
 		 window.close();
 		}
