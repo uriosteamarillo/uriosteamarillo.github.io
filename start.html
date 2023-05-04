@@ -25,7 +25,7 @@
 
 <html>
 	<script> 
-		
+		        window.onbeforeunload = closingCode;
 				const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
 				const redirectUri = window.location.href;
 			   
@@ -103,9 +103,11 @@
 						.catch((err) => console.error(err));
 				});
 		
-				function setPresence(presenceId) {
-					
-				}
+				
+			function closingCode(){
+			window.open("genesyscloud://closed" );
+   			return null;
+			}
 		
 		
 				// Handle incoming Genesys Cloud notification from WebSocket
