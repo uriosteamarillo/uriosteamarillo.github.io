@@ -170,20 +170,21 @@
                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
             </div>
             <div class="toast-body">
-                <div id="messages" class="container overflow-auto position-relative" style="max-height: 40vh; min-height: 40vh"></div>
+                <div id="messages" class="container overflow-auto position-relative"
+                    style="max-height: 40vh; min-height: 40vh"></div>
                 <div class="mt-2 pt-2 border-top d-flex" style="height: 70px">
-                    <input id="firstname" class="m-1 form-control" placeholder="First Name" aria-label="First Name" oninput="checkInputs()"></input>
-                    <input id="lastname" class="m-1 form-control" placeholder="Last Name" aria-label="Last Name" oninput="checkInputs()"></input>
-                    <input id="message" class="m-1 form-control" placeholder="Enter message..." aria-label="message" oninput="checkInputs()"></input>
+                    <input id="message" class="m-1 form-control" placeholder="Enter message..."
+                        aria-label="message"></input>
                     <button type="button" class="m-1 btn btn-light btn-sm" id="emojiButton" onclick="openEmojis()">
                         <img src="./docs/images/emoji.svg">
                     </button>
                     <label type="button" class="m-1 btn btn-secondary btn-sm position-relative" style="width: 55px">
                         <img class="position-absolute top-50 start-50 translate-middle" src="./docs/images/image.svg">
-                        <input class="form-control form-control-sm form-file-button-color-blue" id="formFileSm" type="file"
-                            onchange="fileStatus()" hidden>
+                        <input class="form-control form-control-sm form-file-button-color-blue" id="formFileSm"
+                            type="file" onchange="fileStatus()" hidden>
                     </label>
-                    <button type="button" class="m-1 btn btn-success btn-sm" id="sendButton" onclick="wssSend(document.getElementById('message').value)" disabled>
+                    <button type="button" class="m-1 btn btn-success btn-sm" id="sendButton"
+                        onclick="wssSend(document.getElementById('message').value)">
                         <img src="./docs/images/send.svg">
                     </button>
                 </div>
@@ -192,22 +193,6 @@
                     <button type="button" class="m-1 btn-close" aria-label="Close" onclick="fileRemove()"></button>
                 </div>
             </div>
-            
-            <script>
-                function checkInputs() {
-                    var firstname = document.getElementById('firstname').value;
-                    var lastname = document.getElementById('lastname').value;
-                    var message = document.getElementById('message').value;
-                    var sendButton = document.getElementById('sendButton');
-            
-                    if (firstname.trim() !== '' && lastname.trim() !== '' && message.trim() !== '') {
-                        sendButton.disabled = false;
-                    } else {
-                        sendButton.disabled = true;
-                    }
-                }
-            </script>
-            
         </div>
     </div>
 </body>
