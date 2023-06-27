@@ -169,23 +169,39 @@
                 <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressbar" role="progressbar"
                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
             </div>
+          
             <div class="toast-body">
                 <div id="messages" class="container overflow-auto position-relative" style="max-height: 40vh; min-height: 40vh"></div>
-                <div class="mt-2 pt-2 border-top d-flex" style="height: 70px">
-                    <input id="firstname" class="m-1 form-control" placeholder="First Name" aria-label="First Name" oninput="checkInputs()"></input>
-                    <input id="lastname" class="m-1 form-control" placeholder="Last Name" aria-label="Last Name" oninput="checkInputs()"></input>
-                    <input id="message" class="m-1 form-control" placeholder="Enter message..." aria-label="message" oninput="checkInputs()"></input>
-                    <button type="button" class="m-1 btn btn-light btn-sm" id="emojiButton" onclick="openEmojis()">
-                        <img src="./docs/images/emoji.svg">
-                    </button>
-                    <label type="button" class="m-1 btn btn-secondary btn-sm position-relative" style="width: 55px">
-                        <img class="position-absolute top-50 start-50 translate-middle" src="./docs/images/image.svg">
-                        <input class="form-control form-control-sm form-file-button-color-blue" id="formFileSm" type="file"
-                            onchange="fileStatus()" hidden>
-                    </label>
-                    <button type="button" class="m-1 btn btn-success btn-sm" id="sendButton" onclick="wssSend(document.getElementById('message').value)" disabled>
-                        <img src="./docs/images/send.svg">
-                    </button>
+                <div class="mt-2 pt-2 border-top">
+                    <div class="row">
+                        <div class="col">
+                            <input id="firstname" class="form-control" placeholder="First Name" aria-label="First Name" oninput="checkInputs()">
+                        </div>
+                        <div class="col">
+                            <input id="lastname" class="form-control" placeholder="Last Name" aria-label="Last Name" oninput="checkInputs()">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <input id="message" class="form-control" placeholder="Enter message..." aria-label="message" oninput="checkInputs()">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-light btn-sm" id="emojiButton" onclick="openEmojis()">
+                                <img src="./docs/images/emoji.svg">
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <label type="button" class="btn btn-secondary btn-sm position-relative" style="width: 55px">
+                                <img class="position-absolute top-50 start-50 translate-middle" src="./docs/images/image.svg">
+                                <input class="form-control form-control-sm form-file-button-color-blue" id="formFileSm" type="file" onchange="fileStatus()" hidden>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-success btn-sm" id="sendButton" onclick="sendMessage()" disabled>
+                                <img src="./docs/images/send.svg">
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div id="imageAttached" hidden>
                     <label id="imageAttachedName" class="m-1"></label>
@@ -205,6 +221,19 @@
                     } else {
                         sendButton.disabled = true;
                     }
+                }
+            
+                function sendMessage() {
+                    var firstname = document.getElementById('firstname').value;
+                    var lastname = document.getElementById('lastname').value;
+                    var message = document.getElementById('message').value;
+                    var inputContainer = document.getElementById('inputContainer');
+            
+                    // Perform the sending of the message
+                    // ...
+            
+                    // Hide the input fields after sending the message
+                    inputContainer.style.display = 'none';
                 }
             </script>
             
