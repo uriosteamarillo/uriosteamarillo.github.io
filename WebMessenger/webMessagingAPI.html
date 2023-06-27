@@ -173,7 +173,7 @@
             <div class="toast-body">
                 <div id="messages" class="container overflow-auto position-relative" style="max-height: 40vh; min-height: 40vh"></div>
                 <div class="mt-2 pt-2 border-top">
-                    <div class="row mt-1">
+                    <div id = "inputContainer" class="row mt-2">
                         <div class="col">
                             <input id="firstname" class="form-control" placeholder="First Name" aria-label="First Name" oninput="checkInputs()">
                         </div>
@@ -227,7 +227,7 @@
                     var firstname = document.getElementById('firstname').value;
                     var lastname = document.getElementById('lastname').value;
                     var message = document.getElementById('message').value;
-                    var inputContainer = document.getElementById('row mt-1');
+                    var inputContainer = document.getElementById('inputContainer');
             
                     // Perform the sending of the message
                     // ...
