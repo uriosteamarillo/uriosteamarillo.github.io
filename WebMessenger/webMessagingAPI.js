@@ -2,8 +2,8 @@
 //connects to the Genesys Cloud WebMessaging API
 //https://developer.genesys.cloud/api/digital/webmessaging/websocketapi
 
-const gc_region = getParameterByName('gc_region')
-const gc_deploymentId = getParameterByName('gc_deploymentId')
+const gc_region = 'prod-usw2';
+const gc_deploymentId = '88fc5a82-29b9-4e4e-a2c4-d7d2e65ff460';
 
 //Getting and setting the GC details from dynamic URL
 if (gc_region) {
