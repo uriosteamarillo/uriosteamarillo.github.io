@@ -2,7 +2,7 @@ window.Framework = {
     config: {
         name: "gabrielAmarillo",
         clientIds: {
-            'mypurecloud.com': '562db312-99ab-4afe-8189-1fc9b011c49d'
+            'usw2.pure.cloud': '65bddbb5-72f8-45f3-b507-dc68cbf5a938'
         },
         settings: {
             embedWebRTCByDefault: true,
