@@ -101,7 +101,7 @@ const conversationsComponent = {
             Vue.prototype.$clientApp.myConversations.showEvaluationDetails(convId, evId);
         },
         callHelp:function(){
-            alert("reprocess")
+           // alert("reprocess")
             reprocess()
             
             
