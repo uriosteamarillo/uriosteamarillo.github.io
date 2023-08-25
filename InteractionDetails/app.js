@@ -171,7 +171,7 @@ new Vue({
     },
 
     beforeMount() {
-        let pcEnvironment = getEmbeddingPCEnv();
+        let pcEnvironment ='usw2.pure.cloud';
         if (!pcEnvironment) {
             this.errorMessage = 'Cannot identify App Embeddding context.  Did you forget to add pcEnvironment={{pcEnvironment}} to your app\'s query string?';
             return;
