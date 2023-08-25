@@ -1,7 +1,78 @@
 <!DOCTYPE html>
 <html>
+    <style>
+ .btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+        a:link,
+        a:visited {
+            color: #2258f9;
+        }
+        
+        h5:hover,
+        h5:active {
+            color: red;
+            background-color: #f0f0f0;
+        }
+        li:hover,
+        li:active {
+            color: #ec0000;
+            background-color: #f0f0f0;
+        }
+        
+        .conversation-list .form-group {
+            margin-bottom: 0.5rem;
+        }
+        
+        .conversation-list-filter {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        input[type="date"] {
+            padding: 0 6px;
+        }
+        
+        .card {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .card .card-body .btn-link {
+            padding: 0;
+        }
+        
+        .view-evaluations {
+            color: #FFF;
+        }
+        
+        .live-header {
+            color: green;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        section {
+            margin: 20px 10px;
+        }
+        
+        </style>
+
 <head>
-    <title>Consola de Eventos</title>
+    <title>UriosteAmarilloWidget</title>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -18,121 +89,150 @@
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
     <script src="../utils/oauth.js"></script>
     <script src="util.js"></script>
-
-
-
-<style>
-body {
-	background: #222;
-	margin: 0rem;
-	color:#fff;
-	min-height: 100vh;
-	font-family: Futura, sans-serif;
-}
-
-#text {
-  min-height: 100vh;
-  width: 100vw;
-  z-index: 1;
-  color: #fff;
-  text-transform: uppercase;
-  font-size: 8vmin;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-#text h1 {
-	opacity: 0.9
-}
-</style>	
-	
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
+<div class="container"> 
+    <!-- template for the authenticating component -->
+    <script type="text/x-template" id="authenticating-template">
+        <div>
+            <section class="authenticating"
+                    v-bind:class="{'hidden':this.authenticated || this.errorMessage}">
+               Loading Call Information ...
+            </section>
+            <section class="failure"
+                    v-bind:class="{'hidden':!this.errorMessage}">
+                {{this.errorMessage}}
+            </section>
+        </div>
+    </script>
 
+    <!-- template for the profile component --
+    <script type="text/x-template" id="profile-template">
+        <section class="user-profile">
+            <div @click="profileLinkListener" class="profile-link">
+                <a href="#" aria-label="Click to view user's profile in Genesys Cloud">
+                    <div v-bind:class="{'placeholder-pic':true, hidden:imageUri}" aria-label="User profile picture missing">?</div>
+                    <img v-bind:class="{'profile-pic':true, hidden:!imageUri}" v-bind:src="imageUri" aria-label="Profile picture for User">
+                </a>
+            </div>
+            <div class="base-info">
+                <div class="name">{{ profileData.name }}</div>
+                <div class="email">{{ profileData.email }}</div>
+                <div class="department">{{ profileData.department }}</div>
+            </div>
+        </section>
+    </script>
+    
+    <!-- template for the conversations component -->
 
-
-
-
-</body>
-<div id="conversation"></div>
-
-<script> 
-		
-
-function displayInteraction()
-{
-var conversationElement = document.getElementById("conversation");
-
-var formattedContent = `
-<div>
-<h2>Interacción:</h2>
-<ul>
-<li><strong>Id:</strong> ${currentConversation.id}</li>
-<li><strong>atributos:</strong> ${JSON.stringify(currentConversation.participants[0].attributes)}</li>
-</ul>
-</div>
-`;
-
-conversationElement.innerHTML = formattedContent;	
-
-
-}
-
-
-
-
-    const clientId = '65bddbb5-72f8-45f3-b507-dc68cbf5a938';
-    const redirectUri = window.location.href;
    
-    // Set Genesys Cloud objects
-    const platformClient = require('platformClient');
-    const client = platformClient.ApiClient.instance;
-    const usersApi = new platformClient.UsersApi();
-    const conversationsApi = new platformClient.ConversationsApi();
-    // Set Genesys Cloud settings
-    client.setEnvironment('usw2.pure.cloud');
-    
-
-    const urlParams = new URLSearchParams(window.location.search);
-    let  conversationId = urlParams.get('conversationid');
-    
-    let currentConversation = {};
-
-// Initialize the jsTree instance with some data
 
 
-    $(document).ready(() => {
-        // Authenticate with Genesys Cloud
-
-
-    // Assign conversation id
-    
-
-        client.loginImplicitGrant(clientId, redirectUri,{ state: conversationId })
-            .then(data => {
-                console.log('Logged in');
-                conversationId = data.state;
-                conversationsApi.getConversation(conversationId)
-                         .then(conv => {
-                          currentConversation = conv;
-                          console.log(currentConversation); 
-                          displayInteraction()          // Handle the successful result
-                        })
-                           .catch(error => {
-                           console.log("ERROR"); // Handle the error
-                          });
-                  
-                           // Error Handling
-           }).catch(e => console.log(e));
-
+    <script type="text/x-template" id="conversations-template">
+        <section class="conversation-list">
+            <div class="conversations">
+                <div class="ayuda">
+                    <button v-on:click="callHelp()" class="btn"><i class="fa fa-question-circle" aria-hidden="true" ></i></button>
                     
-              
+                     </button>
+                  </div>
 
-    
-        });//DOCUMENT READY
+                <div v-if="conv.id" v-for="conv in conversations" class="card">
+                     <div class="card-body">
+                        
 
-	
-</script>
+                        <h5>
+                             {{conv.customer.name}}
+                         
+                                                        
+                        </h5>
+                    </li>
+                     <li v-for="(item, index) in conv.attributes">
+                              {{ index }} ► {{ item }}
+                     </li>
+                         
+                      
+                  
+                        <p class="card-text mb-2 text-muted">
+                            Start: {{moment(conv.startTime).format('MMM Do YYYY, h:mm:ss A')}}
+                        </p>
+                        <p v-if="conv.endTime" class="card-text mb-2 text-muted">
+                            End: &nbsp {{moment(conv.endTime).format('MMM Do YYYY, h:mm:ss A')}}
+                        </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </script>
+
+    <!-- template for the conversations component --
+    <script type="text/x-template" id="tester-template">
+        <section class="manual-tester">
+            <form @submit.prevent="getConversationOrEvaluation">
+                <h2>Manual Tester</h2>
+                <div class="form-group conversation-id">
+                    <label for="conversation-id">Conversation ID:</label>
+                    <input type="text"
+                        class="form-control"
+                        id="conversation-id"
+                        v-model="convId">
+                </div>
+                <div class="form-group evaluation-id">
+                    <label for="evaluation-id">Evaluation ID:</label>
+                    <input type="text"
+                        class="form-control"
+                        id="evaluation-id"
+                        v-model="evalId">
+                </div>
+                <div class="form-group">
+                    <button type="submit"
+                        class="btn btn-primary"
+                        v-bind:class="{'disabled':!this.convId}">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </script>
+
+    <!-- app -->
+    <div id="app">
+        <!-- authenticating placeholder-->
+        <authenticating :error-message="errorMessage"
+                        :authenticated="authenticated">
+
+        </authenticating>
+
+        <!-- user profile -->
+        <profile :profile-data="profileData"
+                v-bind:class="{'hidden':!this.authenticated}">
+
+        </profile>
+
+        <!-- evaluation list -->
+        <conversations :conversations-data="conversationsData"
+                    v-bind:class="{'hidden':!this.authenticated}">
+
+        </conversations>
+
+        <!-- manual tester -->
+        <tester v-bind:class="{'hidden':!this.authenticated}">
+
+        </tester>
+    </div>
+
+
+
+
+</div> 
+<script src="app.js"></script>
+ 
+</body>
+
 </html>
-
