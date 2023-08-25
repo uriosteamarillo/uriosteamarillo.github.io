@@ -323,6 +323,10 @@ new Vue({
         }
 
         // Authentication and main flow
+        var button = document.getElementById("refresh");
+
+        // Attach the function to the button's click event
+        button.onclick = reprocess();
         authenticate(client, pcEnvironment)
             .then(() => {
                 authenticated = true;
