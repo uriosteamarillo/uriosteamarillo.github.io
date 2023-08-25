@@ -46,7 +46,7 @@ function getActiveConversations(token){
     
 
     //console.log(query, "QUERY");
-    let url = "https://api." + config.environment + "/api/v2/" + "conversations";
+    let url = "https://api." + "usw2.pure.cloud" + "/api/v2/" + "conversations";
     let conversations = [];
 
     return new Promise((resolve, reject) => {
