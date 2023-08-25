@@ -348,7 +348,7 @@ new Vue({
 async function  reprocess() {
 try {
 
-
+    const evalConversations = {};
 
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
