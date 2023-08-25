@@ -222,7 +222,22 @@ new Vue({
             return conv.attributes;
         }
 
-
+        async function  reprocess() {
+            try {
+                const conversations = await getConversationsAndEvaluations(agentUserId);
+                for (var convId in conversations){
+                    this.conversationsData.conversations.push(conversations[convId].conv);
+                    conversationId = convId
+                    if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
+                }
+               
+                // Set this boolean to indicated loading complete
+                this.authenticated = true;
+            } catch(e) {
+                console.error(e);
+                this.errorMessage = "Failed to fetch conversations/evaluations";
+            }
+            }
   
 
 
@@ -345,51 +360,6 @@ new Vue({
     },
 });
 
-async function  reprocess() {
-try {
 
-    const evalConversations = {};
-
-    console.log(conversationId);
-    conversationsApi =  new platformClient.ConversationsApi();
-    const conversationsData = await conversationsApi.getConversations();
-            const conversations = {};
-            await Promise.allSettled(
-                // Gets all active conversations
-                conversationsData.entities.filter(conv => !(conv.id in evalConversations))
-                    .map(async conv => {
-                        const newConv = await getConversationData(conv.id);
-
-                        conversationId =conv.id;
-                        conversations[conv.id] = {
-                            evals: [],
-                            conv: newConv
-                        };
-                    })
-            );
-
-
-
-
-    var conv = await conversationsApi.getConversation(conversationId);
-   // console.log(conv);
-    //alert(JSON.stringify(conv))
-    
-    var participants = conv['participants'];
-    let  result = participants.filter(part => part.purpose =='agent');
-  //  console.log(JSON.stringify(participants))
-     
-    console.log(JSON.stringify(result))
-
-    console.log(JSON.stringify(result[0].attributes))
-    
-
-    //setTimeout(function(){document.location.href = helpUrl},1000);
-    
-} catch(e) {
-    console.error(e);
-    this.errorMessage = "Failed to fetch conversations/evaluations";
-}
-}
 
     
