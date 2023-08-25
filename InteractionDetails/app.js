@@ -265,28 +265,28 @@ new Vue({
         async function getConversationsAndEvaluations(agentUserId) {
             const startTime = moment('1997-01-01').toISOString();
             const endTime = moment().toISOString();
-            const data = await getEvaluations(qualityApi, startTime, endTime, agentUserId);
+            //const data = await getEvaluations(qualityApi, startTime, endTime, agentUserId);
 
-            const evaluations = data.entities;
+            //const evaluations = data.entities;
             const evalConversations = {};
 
-            await Promise.allSettled(
+            //await Promise.allSettled(
                 // Gets conversations with evaluations
-                evaluations.map(async eval => {
-                    const evalConvId = eval.conversation.id;
-                    const evalConv = await getConversationData(evalConvId);
+              //  evaluations.map(async eval => {
+                //    const evalConvId = eval.conversation.id;
+                 //   const evalConv = await getConversationData(evalConvId);
 
-                    if(evalConv !== undefined) {
-                        if (!(evalConvId in evalConversations)){
-                            evalConversations[evalConvId] = {
-                                conv: evalConv,
-                                evals: []
-                            };
-                        }
-                        evalConversations[evalConvId].evals.push(eval);
-                    }
-                })
-            );
+                //    if(evalConv !== undefined) {
+                  //      if (!(evalConvId in evalConversations)){
+                 //           evalConversations[evalConvId] = {
+                  //              conv: evalConv,
+                   //             evals: []
+                    //        };
+                    //    }
+                    //    evalConversations[evalConvId].evals.push(eval);
+                   // }
+               // })
+            //);
 
             const conversationsData = await conversationsApi.getConversations();
             const conversations = {};
@@ -347,6 +347,22 @@ new Vue({
 
 async function  reprocess() {
 try {
+
+    try {
+        const conversations = await getConversationsAndEvaluations(agentUserId);
+        for (var convId in conversations){
+            this.conversationsData.conversations.push(conversations[convId].conv);
+            conversationId = convId
+            if(conversations[convId].evals.length > 0) this.conversationsData.convEvalMap.set(convId, conversations[convId].evals);
+        }
+       
+        // Set this boolean to indicated loading complete
+        this.authenticated = true;
+    } catch(e) {
+        console.error(e);
+        this.errorMessage = "Failed to fetch conversations/evaluations";
+    }
+
     console.log(conversationId);
     conversationsApi =  new platformClient.ConversationsApi();
     var conv = await conversationsApi.getConversation(conversationId);
@@ -369,42 +385,5 @@ try {
     this.errorMessage = "Failed to fetch conversations/evaluations";
 }
 }
-async function  generarCallBack(ani) {
-    try {
-        //console.log(conversationId);
-        conversationsApi =  new platformClient.ConversationsApi();
-        var conv = await conversationsApi.getConversation(conversationId);
-        console.log(conv);
-       // alert(agentUserId)
-     
-		// Use your own IDs and data here
-		const callbackData = {
-			routingData: {
-				queueId: '723548df-b358-4330-b4b8-7362afb76078',
-                preferredAgentIds: [agentUserId]
-			},
-			scriptId: '673f19cf-071e-4139-bb4e-7980ecf528fc',
-			callbackUserName: 'Whatsapp Saliente',
-			callbackNumbers: [
-				ani
-			],
-			data:{
-				numeroWhatsapp: ani
-			},
-			callerId: '',
-			callerIdName: ''
-		};
 
-
-		// Create callback
-
-		return conversationsApi.postConversationsCallbacks(callbackData);
-                
-        //setTimeout(function(){document.location.href = helpUrl},1000);
-        
-    } catch(e) {
-        console.error(e);
-        this.errorMessage = "Failed to fetch conversations/evaluations";
-    }
-    }
     
