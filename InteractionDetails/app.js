@@ -60,7 +60,7 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
-                document.getElementById("jsonContainer").textContent = jsonString;
+                document.getElementById("jsonContainer").textContent = JSON.stringify(result);
                 //console.log(result.conversations, "getWaitingConversations - page: " + pageNumber);
                 if (result && result.conversations) {                  
                     $.each(result.conversations, function (index, conversation) {
