@@ -1,5 +1,5 @@
 var config = {};
-const pollingTime = 30000;//milliseconds
+const pollingTime = 300000;//milliseconds
 var token;
 
 $(document).ready(function(){
@@ -45,7 +45,7 @@ function getParameterByName(name, data) {
 function getActiveConversations(token){
     
 
-    //console.log(query, "QUERY");
+    console.log(token);
     let url = "https://api." + "usw2.pure.cloud" + "/api/v2/" + "conversations";
     let conversations = [];
 
