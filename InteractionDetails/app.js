@@ -58,7 +58,7 @@ function getActiveConversations(token){
             dataType: 'json',	
             success: function (result) {  
                 
-                console.log(result)
+                console.log(JSON.stringify(result))
                 //console.log(result.conversations, "getWaitingConversations - page: " + pageNumber);
                 if (result && result.conversations) {                  
                     $.each(result.conversations, function (index, conversation) {
