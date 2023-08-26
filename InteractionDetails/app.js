@@ -1,6 +1,7 @@
 var config = {};
 const pollingTime = 300000;//milliseconds
 var token;
+var jsonString
 
 $(document).ready(function(){
 	$("#errorMessage").hide();
@@ -59,6 +60,7 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
+                document.getElementById("jsonContainer").textContent = jsonString;
                 //console.log(result.conversations, "getWaitingConversations - page: " + pageNumber);
                 if (result && result.conversations) {                  
                     $.each(result.conversations, function (index, conversation) {
