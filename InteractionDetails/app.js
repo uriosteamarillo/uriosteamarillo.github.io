@@ -7,7 +7,7 @@ $(document).ready(function(){
     
     if(window.location.hash) 
     {	
-        //config.environment = getParameterByName('environment', window.location.search);               
+        config.environment = "usw2.pure.cloud",              
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
         
