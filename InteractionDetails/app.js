@@ -60,51 +60,14 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
-                document.getElementById("jsonContainer").textContent = JSON.stringify(result);
+                const participant = results.participants[0]; // Assuming you want data from the first participant
+                const accountCode = participant.attributes.AccountCode;
+                const remoteName = participant.attributes.RemoteName;
+                const jsonContainer = document.getElementById("jsonContainer");
+                jsonContainer.textContent = `AccountCode: ${accountCode}, RemoteName: ${remoteName}`;
+              
                 //console.log(result.conversations, "getWaitingConversations - page: " + pageNumber);
-                if (result && result.conversations) {                  
-                    $.each(result.conversations, function (index, conversation) {
-                        const acdParticipant = conversation.participants.find(p => p.purpose == "acd");                    
-                        if(acdParticipant){                        
-                            const session = acdParticipant.sessions.find(s => s.mediaType == "voice");
-                            if(session){
-                                if(session.segments && session.segments.length > 0){
-                                    
-                                    const segment = session.segments[0];
-                                    conversation.queueId = segment.queueId;                                    
-                                    const queue = queues.find(function (r) { return r.id === conversation.queueId });
-
-                                    if(queue){
-                                        conversation.queueName = queue.name;                                       
-                                    }                                    
-
-                                }                                                           
-                            }
-                        }
-                        const ivrParticipant = conversation.participants.find(p => p.purpose == "ivr");                    
-                        if(ivrParticipant){ 
-                            const session = ivrParticipant.sessions.find(s => s.mediaType == "voice");
-                            if(session){                               
-                                if(session.flow && session.flow.outcomes) {
-                                    conversation.flowOutcomes = []; 
-                                    $.each(session.flow.outcomes, function (index, flowOutcome) {
-                                        const outcome = outcomes.find(function (o) { return o.id === flowOutcome.flowOutcomeId });                                        
-                                        if(outcome){
-                                            
-                                            conversation.flowOutcomes.push(outcome.name);                                                   
-                                        }
-                                        
-                                    });
-
-                                }                              
-                            }
-
-                        } 
-                        
-                        conversations.push(conversation);                            
-                    });
-                    
-                }
+                
                 resolve(conversations);                
             },
             error: function (request) {
