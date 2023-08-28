@@ -121,13 +121,7 @@ var button = document.getElementById("myButton");
         });
         
      
-        function onWidgetDisplay() {
-            // Your code here
-            alert('Widget is displayed!');
-        }
-
-        // Add an event listener to trigger the code when needed
-        window.addEventListener('DOMContentLoaded', onWidgetDisplay);   
+         
         
         const widgetFrame = document.getElementById('widgetFrame');
 
