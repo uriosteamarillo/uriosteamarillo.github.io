@@ -127,5 +127,28 @@ var button = document.getElementById("myButton");
         }
 
         // Add an event listener to trigger the code when needed
-        window.addEventListener('DOMContentLoaded', onWidgetDisplay);      
+        window.addEventListener('DOMContentLoaded', onWidgetDisplay);   
+        
+        const widgetFrame = document.getElementById('widgetFrame');
+
+        // Function to check if the iframe is in the viewport
+        function isFrameInViewport() {
+            const frameRect = widgetFrame.getBoundingClientRect();
+
+            return (
+                frameRect.top >= 0 &&
+                frameRect.left >= 0 &&
+                frameRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                frameRect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        // Check if the iframe is in the viewport
+        const isWidgetDisplayed = isFrameInViewport();
+
+        if (isWidgetDisplayed) {
+            console.log('Widget is displayed.');
+        } else {
+            console.log('Widget is not displayed.');
+        }
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
