@@ -119,33 +119,8 @@ var button = document.getElementById("myButton");
                 console.error("Error:", error);
             }
         });
-        window.addEventListener("focus", async function () {
-            try {
-                // Call getActiveConversations and await the result
-                const conversations = await getActiveConversations(token);
-                // Do something with the result, e.g., display it on the page or perform any other actions you need.
-                console.log(conversations);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        });
-
-        async function fetchActiveConversations() {
-            try {
-                const conversations = await getActiveConversations(token);
-                // Do something with the result, e.g., display it on the page or perform any other actions you need.
-                console.log(conversations);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
         
-        // Call the function immediately when the page loads
-        fetchActiveConversations();
-        
-        // Schedule the function to run every 10 seconds
-        const interval = 10000; // 10 seconds in milliseconds
-        setInterval(fetchActiveConversations, interval);
+     
         function onWidgetDisplay() {
             // Your code here
             alert('Widget is displayed!');
