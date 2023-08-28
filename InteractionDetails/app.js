@@ -60,12 +60,28 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
-                const participant = result.entities[0].participants[0]; // Assuming you want data from the first participant
-                const accountCode = participant.attributes.AccountCode;
-                const remoteName = participant.attributes.RemoteName;
-                const jsonContainer = document.getElementById("jsonContainer");
-                jsonContainer.textContent = `AccountCode: ${accountCode}, RemoteName: ${remoteName}`;
-              
+                
+                if (conversationData.entities && conversationData.entities[0] && conversationData.entities[0].participants) {
+                    // Accessing AccountCode and RemoteName from the first participant
+                    const participant = conversationData.entities[0].participants[0]; // Assuming you want data from the first participant
+                    const accountCode = participant.attributes && participant.attributes.AccountCode;
+                    const remoteName = participant.attributes && participant.attributes.RemoteName;
+                  
+                    // Check if 'accountCode' and 'remoteName' are defined before displaying them
+                    if (accountCode !== undefined && remoteName !== undefined) {
+                      // Display the values in the HTML element with id "jsonContainer"
+                      const jsonContainer = document.getElementById("jsonContainer");
+                      jsonContainer.textContent = `AccountCode: ${accountCode}, RemoteName: ${remoteName}`;
+                    } else {
+                      // Handle the case where 'accountCode' or 'remoteName' is undefined
+                      console.log("AccountCode or RemoteName is undefined.");
+                      jsonContainer.textContent = ''
+                    }
+                  } else {
+                    // Handle the case where 'entities' or 'participants' is undefined
+                    console.log("Entities or participants are undefined.");
+                    jsonContainer.textContent = ''
+                  }
                 //console.log(result.conversations, "getWaitingConversations - page: " + pageNumber);
                 
                 resolve(conversations);                
