@@ -119,4 +119,14 @@ var button = document.getElementById("myButton");
                 console.error("Error:", error);
             }
         });
+        window.addEventListener("focus", async function () {
+            try {
+                // Call getActiveConversations and await the result
+                const conversations = await getActiveConversations(token);
+                // Do something with the result, e.g., display it on the page or perform any other actions you need.
+                console.log(conversations);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
