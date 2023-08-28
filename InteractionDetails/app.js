@@ -60,7 +60,7 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
-                const conversationData = result
+                const conversationData = result;
                 if (conversationData.entities && conversationData.entities[0] && conversationData.entities[0].participants) {
                     // Accessing AccountCode and RemoteName from the first participant
                     const participant = conversationData.entities[0].participants[0]; // Assuming you want data from the first participant
