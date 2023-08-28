@@ -19,7 +19,7 @@ $(document).ready(function(){
         //Config Genesys Cloud
         config = {
             "environment": "usw2.pure.cloud",
-            "clientId": "65bddbb5-72f8-45f3-b507-dc68cbf5a938",
+            "clientId": getParameterByName('clientId', window.location.search),
             "redirectUri": "https://uriosteamarillo.github.io/InteractionDetails/index.html"
 
         };
