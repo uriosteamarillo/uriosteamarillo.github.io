@@ -60,7 +60,7 @@ function getActiveConversations(token){
             success: function (result) {  
                 
                 console.log(JSON.stringify(result))
-                const participant = result.participants[0]; // Assuming you want data from the first participant
+                const participant = result.entities[0].participants[0]; // Assuming you want data from the first participant
                 const accountCode = participant.attributes.AccountCode;
                 const remoteName = participant.attributes.RemoteName;
                 const jsonContainer = document.getElementById("jsonContainer");
