@@ -129,4 +129,22 @@ var button = document.getElementById("myButton");
                 console.error("Error:", error);
             }
         });
+
+        async function fetchActiveConversations() {
+            try {
+                const conversations = await getActiveConversations(token);
+                // Do something with the result, e.g., display it on the page or perform any other actions you need.
+                console.log(conversations);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        
+        // Call the function immediately when the page loads
+        fetchActiveConversations();
+        
+        // Schedule the function to run every 10 seconds
+        const interval = 10000; // 10 seconds in milliseconds
+        setInterval(fetchActiveConversations, interval);
+               
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
