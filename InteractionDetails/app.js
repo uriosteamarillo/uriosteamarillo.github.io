@@ -109,7 +109,7 @@ function sleep(ms) {
 var button = document.getElementById("myButton");
 
         // Attach an event listener to the button
-        button.addEventListener("click", async function () {
+button.addEventListener("click", async function () {
             try {
                 // Call getActiveConversations and await the result
                 const conversations = await getActiveConversations(token);
