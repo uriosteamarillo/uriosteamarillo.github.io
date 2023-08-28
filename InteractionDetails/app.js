@@ -103,9 +103,7 @@ function getActiveConversations(token){
 
 
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-};
+
 var button = document.getElementById("myButton");
 
         // Attach an event listener to the button
@@ -138,11 +136,18 @@ button.addEventListener("click", async function () {
         }
 
         // Check if the iframe is in the viewport
-        const isWidgetDisplayed = isFrameInViewport();
+    
 
-        if (isWidgetDisplayed) {
-            console.log('Widget is displayed.');
-        } else {
-            console.log('Widget is not displayed.');
+        function checkWidgetDisplayStatus() {
+            const isWidgetDisplayed = isFrameInViewport();
+        
+            if (isWidgetDisplayed) {
+                console.log('Widget is displayed.');
+            } else {
+                console.log('Widget is not displayed.');
+            }
         }
+        
+        // Check the widget status every 10 seconds
+        setInterval(checkWidgetDisplayStatus, 10000);
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
