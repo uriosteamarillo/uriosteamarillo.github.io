@@ -36,8 +36,8 @@
                     console.log('Settings OK')
                     const onFocus = async evt => { await alert("onFocus") }
                     const onBlur = async evt => { await alert("onBlur") }
-                     myclientApp.lifecycle.addBlurListener(onBlur);
-                    myclientApp.lifecycle.addFocusListener(onFocus);
+                     myClientApp.lifecycle.addBlurListener(onBlur);
+                    myClientApp.lifecycle.addFocusListener(onFocus);
                 } else if (queryParams.get(envQueryParamName)) {
                     // Compute Genesys Cloud region from pcEnvironment
                     myClientApp = new window.purecloud.apps.ClientApp({ pcEnvironmentQueryParam: envQueryParamName });
