@@ -149,5 +149,5 @@ button.addEventListener("click", async function () {
         }
         
         // Check the widget status every 10 seconds
-        setInterval(checkWidgetDisplayStatus, 10000);
+        //setInterval(checkWidgetDisplayStatus, 10000);
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com

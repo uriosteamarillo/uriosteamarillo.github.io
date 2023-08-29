@@ -34,8 +34,8 @@
                         gcTargetEnvQueryParam: targetEnvQueryParamName
                     });
                     console.log('Settings OK')
-                    const onFocus = async evt => { await alert("onFocus") }
-                    const onBlur = async evt => { await alert("onBlur") }
+                    const onFocus = async evt => {console.log('On Focus')}
+                    const onBlur = async evt => { console.log('On Blur') }
                      myClientApp.lifecycle.addBlurListener(onBlur);
                     myClientApp.lifecycle.addFocusListener(onFocus);
                 } else if (queryParams.get(envQueryParamName)) {
