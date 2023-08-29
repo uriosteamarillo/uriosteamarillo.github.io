@@ -4,7 +4,46 @@ var token;
 var jsonString
 
 $(document).ready(function(){
+
 	$("#errorMessage").hide();
+
+        let myClientApp = null;
+    
+        // Note: This manual check for query string is for backwards compatibility of this
+        // deployed example.  In your own apps, you can assume the query param will be
+        // provided by Genesys Cloud if you have configured it in your app's config.
+        console.log('Starting OK')
+        const envQueryParamName = 'pcEnvironment';
+        const hostQueryParamName = 'gcHostOrigin';
+        const targetEnvQueryParamName = 'gcTargetEnv';
+        const locationSearch = (window && window.location && typeof window.location.search === 'string') ? window.location.search : '';
+        const queryParams = new URLSearchParams(locationSearch);
+        if (queryParams.get(hostQueryParamName) || queryParams.get(targetEnvQueryParamName)) {
+            // Compute Genesys Cloud region from host origin
+            myClientApp = new window.purecloud.apps.ClientApp({
+                gcHostOriginQueryParam: hostQueryParamName,
+                gcTargetEnvQueryParam: targetEnvQueryParamName
+            });
+            console.log('Settings OK')
+            const onFocus = async evt => {
+                console.log('On Focus')
+                await getActiveConversations2();
+                }
+            const onBlur = async evt => { console.log('On Blur') }
+            myClientApp.lifecycle.addBlurListener(onBlur);
+            myClientApp.lifecycle.addFocusListener(onFocus);
+        } else if (queryParams.get(envQueryParamName)) {
+            // Compute Genesys Cloud region from pcEnvironment
+            myClientApp = new window.purecloud.apps.ClientApp({ pcEnvironmentQueryParam: envQueryParamName });
+        } else {
+            // Use default Genesys Cloud region
+            myClientApp = new window.purecloud.apps.ClientApp();
+        }
+      
+        
+    
+    
+
     
     if(window.location.hash) 
     {	
