@@ -97,17 +97,8 @@ function getActiveConversations(token){
 }
 
 
-
-
-
-
-
-
-
-var button = document.getElementById("myButton");
-
-        // Attach an event listener to the button
-button.addEventListener("click", async function () {
+       
+ async function getActiveConversations2() {
             try {
                 // Call getActiveConversations and await the result
                 const conversations = await getActiveConversations(token);
@@ -116,37 +107,17 @@ button.addEventListener("click", async function () {
             } catch (error) {
                 console.error("Error:", error);
             }
-        });
+        };
         
      
          
         
-        const widgetFrame = document.getElementById('widgetFrame');
-
-        // Function to check if the iframe is in the viewport
-        function isFrameInViewport() {
-            const frameRect = widgetFrame.getBoundingClientRect();
-
-            return (
-                frameRect.top >= 0 &&
-                frameRect.left >= 0 &&
-                frameRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                frameRect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
-        }
+        
 
         // Check if the iframe is in the viewport
     
 
-        function checkWidgetDisplayStatus() {
-            const isWidgetDisplayed = isFrameInViewport();
-        
-            if (isWidgetDisplayed) {
-                console.log('Widget is displayed.');
-            } else {
-                console.log('Widget is not displayed.');
-            }
-        }
+     
         
         // Check the widget status every 10 seconds
         //setInterval(checkWidgetDisplayStatus, 10000);
