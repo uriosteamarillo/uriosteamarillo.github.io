@@ -170,15 +170,7 @@
                         console.log('Settings OK')
                         const onFocus = async evt => {
                                  console.log('-----On Focus-----')
-                                let apiInstance = new platformClient.ConversationsApi();
-                                    apiInstance.getConversationsCalls()
-                                          .then((data) => {
-                                                 console.log(`getConversationsCalls success! data: ${JSON.stringify(data, null, 2)}`);
-                                               })
-                                          .catch((err) => {
-                                                   console.log('There was a failure calling getConversationsCalls');
-                                                  console.error(err);  
-                                                          })
+                                
                                                         }         
                         const onBlur = async evt => { console.log('------On Blur------') }
                          clientApp.lifecycle.addBlurListener(onBlur);
