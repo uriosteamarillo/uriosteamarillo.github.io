@@ -207,6 +207,10 @@
                     .then(() => {
                         authenticated = true;
                         return new platformClient.UsersApi().getUsersMe({ 'expand': ['authorization'] })
+
+
+
+
                     })
                     .then(profileData => {
                         userDataAcquired = true;
@@ -240,52 +244,21 @@
                         interactionsHeaderEl.querySelector('.interaction-detail-access').appendChild(document.createTextNode(' ' + (canViewInteraction ? 'Yes' : 'No')));
 
                         function reloadInteractions() {
-                            if (reloadButtonEl.disabled) {
-                                // Poor man's debounce: A click event snuck through before js could disable; ignore it
-                                return;
-                            }
+                            
+                            
 
-                            reloadButtonEl.disabled = true;
+                            let apiInstance = new platformClient.ConversationsApi();
 
-                            // Set base state for reload op
-                            setErrorState(null);
-                            setHidden(reloadingEl, false);
-                            setHidden(conversationsTable, true);
-                            // Remove all rows of table
-                            while (conversationsTableBody.firstChild) {
-                                conversationsTableBody.removeChild(conversationsTableBody.firstChild);
-                            }
-
-                            getUserConversationHistory(profileData.id, 30, canViewWrapUpCodes).then(function (conversations) {
-                                setHidden(reloadingEl, true);
-
-                                if (conversations.length === 0) {
-                                    setErrorState('No conversations were found for you in the past 30 days');
-                                    reloadButtonEl.disabled = false;
-                                    return;
-                                }
-
-                                conversations.forEach(function (currConvo) {
-                                    // Build listener
-                                    let currClickListener = function () {
-                                        if (canViewInteraction) {
-                                            clientApp.conversations.showInteractionDetails(currConvo.conversationId);
-                                        } else {
-                                            // Note: Normally, we wouldn't show a user an action they can't perform;
-                                            // however, this is a dev tool and missing permissions is valuable information to convey
-                                            setErrorState('You do not have the proper permissions to view interactions.');
-                                        }
-                                    }
-                                    conversationsTableBody.appendChild(buildTrFromConversation(currConvo, canViewWrapUpCodes, currClickListener));
+                            apiInstance.getConversationsCalls()
+                                .then((data) => {
+                             console.log(`getConversationsCalls success! data: ${JSON.stringify(data, null, 2)}`);
+                                     })
+                                    .catch((err) => {
+                             console.log('There was a failure calling getConversationsCalls');
+                                    console.error(err);
                                 });
 
-                                setHidden(conversationsTable, false);
-                                reloadButtonEl.disabled = false;
-                            }).catch(function (reason) {
-                                setHidden(reloadingEl, true);
-                                setErrorState('Failed to fetch your conversations');
-                                reloadButtonEl.disabled = false;
-                            });
+
                         }
 
                         reloadButtonEl.addEventListener('click', reloadInteractions);
