@@ -169,9 +169,20 @@
                         });
                         console.log('Settings OK')
                         const onFocus = async evt => {
-                                 console.log('-----On Focus-----')
-                                
-                                                        }         
+                                console.log('-----On Focus-----');
+    
+    // Your existing code
+                                let apiInstance = new platformClient.ConversationsApi();
+
+                                 try {
+                                     const data = await apiInstance.getConversationsCalls();
+                                        console.log(`getConversationsCalls success! data: ${JSON.stringify(data, null, 2)}`);
+                                     } catch (err) {
+                                     console.log('There was a failure calling getConversationsCalls');
+                                    console.error(err);
+                                     }
+                            }
+        
                         const onBlur = async evt => { console.log('------On Blur------') }
                          clientApp.lifecycle.addBlurListener(onBlur);
                          clientApp.lifecycle.addFocusListener(onFocus);
