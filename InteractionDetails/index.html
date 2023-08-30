@@ -167,6 +167,11 @@
                             gcHostOrigin: queryParameters.gcHostOrigin,
                             gcTargetEnv: queryParameters.gcTargetEnv
                         });
+                        console.log('Settings OK')
+                        const onFocus = async evt => {console.log('On Focus')}
+                        const onBlur = async evt => { console.log('On Blur') }
+                         clientApp.lifecycle.addBlurListener(onBlur);
+                         clientApp.lifecycle.addFocusListener(onFocus);
                     
                         pcEnvironment = clientApp.pcEnvironment;
                     } else if (pcEnvironment) {
