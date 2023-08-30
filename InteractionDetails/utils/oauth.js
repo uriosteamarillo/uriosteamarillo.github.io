@@ -32,3 +32,69 @@ function authenticate(client, pcEnvironment) {
             window.history.replaceState(null, '', `${pathname}?${data.state}`);
         });
 }
+
+function getQueryParameters() {
+    const result = {
+      gcHostOrigin: null,
+      gcTargetEnv: null,
+      pcEnvironment: null
+    };
+    if (window.location.hash && window.location.hash.indexOf('access_token') >= 0) {
+      let oauthParams = extractParams(window.location.hash.substring(1));
+      if (oauthParams && oauthParams.access_token && oauthParams.state) {
+        // OAuth2 spec dictates this encoding
+        // See: https://tools.ietf.org/html/rfc6749#appendix-B
+        const queryParams = extractParams(unescape(oauthParams.state));
+        result.gcHostOrigin = queryParams.gcHostOrigin;
+        result.gcTargetEnv = queryParams.gcTargetEnv;
+        result.pcEnvironment = queryParams.pcEnvironment;
+      }
+    }
+    const queryParams = extractParams(window.location.search.substring(1));
+    if (!result.gcHostOrigin) {
+      result.gcHostOrigin = queryParams.gcHostOrigin;
+    }
+    if (!result.gcTargetEnv) {
+      result.gcTargetEnv = queryParams.gcTargetEnv;
+    }
+    if (!result.pcEnvironment) {
+      result.pcEnvironment = queryParams.pcEnvironment;
+    }
+    return result;
+}
+function computeState({ gcHostOrigin, gcTargetEnv, pcEnvironment }) {
+    if (gcHostOrigin && gcTargetEnv) {
+        return `gcHostOrigin=${gcHostOrigin}&gcTargetEnv=${gcTargetEnv}`;
+    } else {
+        return `pcEnvironment=${pcEnvironment}`;
+    }
+}
+
+function extractParams(paramStr) {
+    let result = {};
+
+    if (paramStr) {
+        let params = paramStr.split('&');
+        params.forEach(function(currParam) {
+          if (currParam) {
+              let paramTokens = currParam.split('=');
+              let paramName = paramTokens[0];
+              let paramValue = paramTokens[1];
+              if (paramName) {
+                  paramName = decodeURIComponent(paramName);
+                  paramValue = paramValue ? decodeURIComponent(paramValue) : null;
+
+                  if (!result.hasOwnProperty(paramName)) {
+                      result[paramName] = paramValue;
+                  } else if (Array.isArray(result[paramName])) {
+                      result[paramName].push(paramValue);
+                  } else {
+                      result[paramName] = [result[paramName], paramValue];
+                  }
+              }
+          }
+        });
+    }
+
+    return result;
+}
