@@ -168,8 +168,8 @@
                             gcTargetEnv: queryParameters.gcTargetEnv
                         });
                         console.log('Settings OK')
-                        const onFocus = async evt => {console.log('On Focus')}
-                        const onBlur = async evt => { console.log('On Blur') }
+                        const onFocus = async evt => {console.log('-----On Focus-----')}
+                        const onBlur = async evt => { console.log('------On Blur------') }
                          clientApp.lifecycle.addBlurListener(onBlur);
                          clientApp.lifecycle.addFocusListener(onFocus);
                     
@@ -193,12 +193,10 @@
                  *  It purposefully ignores the fact that a user may not be authorized to view interactions.
                  */
                 document.querySelector('.manual-example button').addEventListener('click', function() {
-                    let conversationId = document.querySelector('#conversation-id').value.trim();
-                    if (conversationId) {
-                        clientApp.conversations.showInteractionDetails(conversationId);
-                    }
+                    console.log("submit")
                 });
-
+                  
+                console.log("Autenticando")
                 // Authenticate with Genesys Cloud
                 let authenticatingEl = document.querySelector('.authenticating');
                 setHidden(authenticatingEl, false);
