@@ -1,5 +1,7 @@
 // Authenticate with Genesys Cloud
 function authenticate(client, pcEnvironment) {
+    
+    console.log("Authenticating...")
     // Allow targeting a different environment when host app is running locally
     const platformEnvironment = pcEnvironment === 'localhost' ? 'mypurecloud.com' : pcEnvironment;
     /*
