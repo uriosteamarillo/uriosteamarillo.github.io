@@ -1,1 +1,61 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Phone Number and Date-Time Input</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- Include moment.js library for date formatting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+  <h1>Phone Number and Date-Time Input</h1>
+  <form onsubmit="handleSubmit(); return false;">
+    <!-- Phone Number Input -->
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" required>
+    <br><br>
+
+    <!-- Date-Time Picker -->
+    <label for="datetime">Date and Time (UTC ISO 8601 JSON Format):</label>
+    <input type="text" id="datetime" name="datetime" required>
+    <br><br>
+
+    <!-- Submit Button -->
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    $(function () {
+      // Initialize the date-time picker
+      $("#datetime").datepicker({
+        dateFormat: "yy-mm-dd",
+        timeFormat: "HH:mm:ss",
+        showTimezone: true,
+        timezone: "UTC",
+        onSelect: function (dateText, inst) {
+          // Format the selected date and time in UTC ISO 8601 JSON format
+          const formattedDateTime = moment.utc(dateText + " " + inst.input.val()).toJSON();
+          $("#datetime").val(formattedDateTime);
+        },
+      });
+    });
+
+    function handleSubmit() {
+      // Get the phone number and date-time values from the form
+      const phoneNumber = document.getElementById("phone").value;
+      const dateTime = document.getElementById("datetime").value;
+
+      // You can perform further actions with the phoneNumber and dateTime values here
+      // For example, you can send them to a server using AJAX or perform client-side validation.
+
+      // For now, let's just display them in the console.
+      console.log("Phone Number:", phoneNumber);
+      console.log("Date-Time (UTC ISO 8601 JSON Format):", dateTime);
+    }  
+  </script>
+</body>
+</html>
