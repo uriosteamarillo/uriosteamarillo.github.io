@@ -20,8 +20,9 @@
     <br><br>
 
     <!-- Date-Time Picker -->
-    <label for="datetime">Date and Time (UTC ISO 8601 JSON Format):</label>
-    <input type="text" id="datetime" name="datetime" required>
+    <label for="datepicker">Select a Date:</label>
+    <input type="date" id="datepicker" name="datepicker" required>
+    
     <br><br>
 
     <!-- Submit Button -->
@@ -29,33 +30,23 @@
   </form>
 
   <script>
-    $(function () {
-      // Initialize the date-time picker
-      $("#datetime").datepicker({
-        dateFormat: "yy-mm-dd",
-        timeFormat: "HH:mm:ss",
-        showTimezone: true,
-        timezone: "UTC",
-        onSelect: function (dateText, inst) {
-          // Format the selected date and time in UTC ISO 8601 JSON format
-          const formattedDateTime = moment.utc(dateText + " " + inst.input.val()).toJSON();
-          $("#datetime").val(formattedDateTime);
-        },
-      });
+   document.getElementById('dateForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+        
+        // Get the selected date value from the input field
+        const selectedDate = document.getElementById('datepicker').value;
+       const dateObject = new Date(selectedDate);  
+        const utcTimestamp = dateObject.toISOString();
+
+        // Display the selected date in ISO format with UTC timestamp using an alert
+        alert(`Selected Date (ISO format with UTC timestamp): ${utcTimestamp}`);
+
+      
     });
 
-    function handleSubmit() {
-      // Get the phone number and date-time values from the form
-      const phoneNumber = document.getElementById("phone").value;
-      const dateTime = document.getElementById("datetime").value;
 
-      // You can perform further actions with the phoneNumber and dateTime values here
-      // For example, you can send them to a server using AJAX or perform client-side validation.
 
-      // For now, let's just display them in the console.
-      console.log("Phone Number:", phoneNumber);
-      console.log("Date-Time (UTC ISO 8601 JSON Format):", dateTime);
-    }  
+  
   </script>
 </body>
 </html>
