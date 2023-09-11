@@ -8,7 +8,7 @@ $(document).ready(function(){
 	$("#errorMessage").hide();
     config = {
         "environment": "usw2.pure.cloud",
-        "clientId": "65bddbb5-72f8-45f3-b507-dc68cbf5a938",
+        "clientId":   getParameterByName('clientId', window.location.search),
         "redirectUri": "https://uriosteamarillo.github.io/DNC/index.html"
 
     };
@@ -46,7 +46,7 @@ function getParameterByName(name, data) {
 
 
 function addNumberToDNC( phoneNumberToAdd) {
-    let dnclist = '1ea5c5a9-76f2-451f-9798-7ba8b5be179c';
+    let dnclist = '4ad47570-8427-458d-857a-5356fd055d6f';
     document.getElementById('result').text =" submitting"
     console.log(config)
     let url = "https://api." + config.environment + "/api/v2/outbound/dnclists/" + dnclist + "/phonenumbers";
