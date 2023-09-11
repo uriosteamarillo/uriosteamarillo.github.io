@@ -10,7 +10,7 @@ $(document).ready(function(){
         config.environment = getParameterByName('environment', window.location.search);               
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
-        
+        console.log(config.environment)
         
     }
     else
