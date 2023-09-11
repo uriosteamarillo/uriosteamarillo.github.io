@@ -10,12 +10,13 @@ $(document).ready(function(){
         config.environment = getParameterByName('environment', window.location.search);               
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
+        console.log("location hash")
         console.log(config.environment)
         
     }
     else
     {	
-        //Config Genesys Cloud
+        console.log("Config Genesys Cloud")
         config = {
             "environment": "usw2.pure.cloud",
             "clientId": "65bddbb5-72f8-45f3-b507-dc68cbf5a938",
