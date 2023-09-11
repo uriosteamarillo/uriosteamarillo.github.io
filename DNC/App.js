@@ -119,6 +119,7 @@ function getActiveConversations(token){
 
 function addNumberToDNC( phoneNumberToAdd) {
     let dnclist = '1ea5c5a9-76f2-451f-9798-7ba8b5be179c';
+    console.log(config)
     let url = "https://api." + config.environment + "/api/v2/outbound/dnclists/" + dnclist + "/phonenumbers";
 
     // Create the request body as an object
