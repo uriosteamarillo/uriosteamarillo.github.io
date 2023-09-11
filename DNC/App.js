@@ -68,14 +68,14 @@ function addNumberToDNC( phoneNumberToAdd) {
             dataType: 'json',
             data: JSON.stringify(requestBody), // Convert the object to JSON
             success: function (result) {
-                document.getElementById('result').text =" Number Submitted Correctly"
+                document.getElementById('result').innerText  =" Number Submitted Correctly"
                 console.log(result);
                 // Handle success here
                 resolve(result);
             },
             error: function (request) {
                 console.log("addNumberToDNC-error", request);
-                document.getElementById('result').text ="Error Number not Submitted"
+                document.getElementById('result').innerText  ="Error Number not Submitted"
                 // Handle errors here
                 reject("addNumberToDNC -> " + JSON.stringify(request));
             }
