@@ -117,7 +117,38 @@ function getActiveConversations(token){
 
 
 
+function addNumberToDNC( phoneNumberToAdd) {
+    let dnclist = '1ea5c5a9-76f2-451f-9798-7ba8b5be179c';
+    let url = "https://api." + config.environment + "/api/v2/outbound/dnclists/" + dnclist + "/phonenumbers";
 
+    // Create the request body as an object
+    const requestBody = {
+        action:"add",
+        phoneNumbers: [phoneNumberToAdd],
+        "expirationDateTime": "" // Replace 'phoneNumberToAdd' with the actual phone number you want to add
+    };
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            type: "PATCH",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'bearer ' + token); },
+            contentType: "application/json",
+            dataType: 'json',
+            data: JSON.stringify(requestBody), // Convert the object to JSON
+            success: function (result) {
+                console.log(result);
+                // Handle success here
+                resolve(result);
+            },
+            error: function (request) {
+                console.log("addNumberToDNC-error", request);
+                // Handle errors here
+                reject("addNumberToDNC -> " + JSON.stringify(request));
+            }
+        });
+    });
+}
 
 
 
