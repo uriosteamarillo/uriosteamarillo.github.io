@@ -29,6 +29,7 @@ $(document).ready(function(){
             redirect_uri: config.redirectUri
         }        
         
+        console.log(config.environment)
         window.location.replace("https://login." + config.environment + "/authorize?" + jQuery.param(queryStringData));
     }
 
