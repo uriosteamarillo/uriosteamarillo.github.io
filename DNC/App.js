@@ -47,7 +47,7 @@ function getParameterByName(name, data) {
 
 function addNumberToDNC( phoneNumberToAdd) {
     let dnclist = '1ea5c5a9-76f2-451f-9798-7ba8b5be179c';
-    
+    document.getElementById('result').text =" submitting"
     console.log(config)
     let url = "https://api." + config.environment + "/api/v2/outbound/dnclists/" + dnclist + "/phonenumbers";
 
@@ -60,6 +60,7 @@ function addNumberToDNC( phoneNumberToAdd) {
 
     return new Promise((resolve, reject) => {
         $.ajax({
+            
             url: url,
             type: "PATCH",
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'bearer ' + token); },
@@ -67,12 +68,14 @@ function addNumberToDNC( phoneNumberToAdd) {
             dataType: 'json',
             data: JSON.stringify(requestBody), // Convert the object to JSON
             success: function (result) {
+                document.getElementById('result').text =" Number Submitted Correctly"
                 console.log(result);
                 // Handle success here
                 resolve(result);
             },
             error: function (request) {
                 console.log("addNumberToDNC-error", request);
+                document.getElementById('result').text ="Error Number not Submitted"
                 // Handle errors here
                 reject("addNumberToDNC -> " + JSON.stringify(request));
             }
