@@ -1,28 +1,28 @@
-var config = {};
+var config = {
+    
+};
 const pollingTime = 30000;//milliseconds
 var token;
 
 $(document).ready(function(){
 	$("#errorMessage").hide();
-    
+    config = {
+        "environment": "usw2.pure.cloud",
+        "clientId": "65bddbb5-72f8-45f3-b507-dc68cbf5a938",
+        "redirectUri": "https://uriosteamarillo.github.io/DNC/index.html"
+
+    };
     if(window.location.hash) 
     {	
         //config.environment = getParameterByName('environment', window.location.search);               
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
-        console.log("location hash")
-        console.log(token)
+      
         
     }
     else
     {	
-        console.log("Config Genesys Cloud")
-        config = {
-            "environment": "usw2.pure.cloud",
-            "clientId": "65bddbb5-72f8-45f3-b507-dc68cbf5a938",
-            "redirectUri": "https://uriosteamarillo.github.io/DNC/index.html"
-
-        };
+                
         
         var queryStringData = {
             response_type: "token",
@@ -47,6 +47,7 @@ function getParameterByName(name, data) {
 
 function addNumberToDNC( phoneNumberToAdd) {
     let dnclist = '1ea5c5a9-76f2-451f-9798-7ba8b5be179c';
+    
     console.log(config)
     let url = "https://api." + config.environment + "/api/v2/outbound/dnclists/" + dnclist + "/phonenumbers";
 
