@@ -76,6 +76,7 @@ body {
 				const notificationsApi = new platformClient.NotificationsApi();
 				const presenceApi = new platformClient.PresenceApi();
 				const usersApi = new platformClient.UsersApi();
+				const conversationApi = new platformClient.ConversationsApi();
 		
 				// Set Genesys Cloud settings
 				client.setEnvironment('usw2.pure.cloud');
@@ -129,6 +130,9 @@ body {
 		
 							// Create notification channel
 							return notificationsApi.postNotificationsChannels();
+
+
+							
 						})
 						.then((channel) => {
 							console.log('channel: ', channel);
@@ -139,9 +143,9 @@ body {
 							webSocket.onmessage = handleNotification;
 		
 							// Subscribe to  user's Calls
-							userPresenceTopic = `v2.users.${me.id}.conversations.calls`;
+							conversationTopic = `v2.users.${me.id}.conversations.calls`;
 							//alert (userPresenceTopic);
-							const body = [ { id: userPresenceTopic } ];
+							const body = [ { id: conversationTopic } ];
 							return notificationsApi.putNotificationsChannelSubscriptions(notificationChannel.id, body);
 						})
 						.then((channel) => {
@@ -183,11 +187,19 @@ body {
 						
 						if (notification.eventBody.participants[0].state =="disconnected" && puenteControlCerrado ==false)
 						  {
-		
-							//alert('CIERRO PUENTE CONTROL');
-							puenteControlCerrado ==true;
-							//window.open("genesyscloud://closed" );
-							//window.close();
+							let conversationId = "conversationId_example"; // String | conversation ID
+							let participantId = me; // String | participant ID
+							let body = {}; // Object | Update request
+
+							apiInstance.patchConversationParticipant(conversationId, participantId, body)
+  								.then(() => {
+    						console.log('patchConversationParticipant returned successfully.');
+ 							 })
+  							.catch((err) => {
+    						console.log('There was a failure calling patchConversationParticipant');
+    						console.error(err);
+  							});
+							
 						  }
 		
 		
