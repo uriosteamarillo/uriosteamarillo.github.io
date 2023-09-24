@@ -192,7 +192,7 @@ body {
 								"state":"DISCONNECTED"
 							}; // Object | Update request
 
-							apiInstance.patchConversationParticipant(conversationId, participantId, body)
+							conversationApi.patchConversationParticipant(conversationId, participantId, body)
   								.then(() => {
     						console.log('patchConversationParticipant returned successfully.');
  							 })
