@@ -182,11 +182,12 @@ body {
                         notificationBus.push(notification)
 						
 
-						console.log(' notification: ', notification);
+						//console.log(' notification: ', notification);
 						console.log(' notification: ', notification.eventBody.participants[0]);
 						
 						if (notification.eventBody.participants[0].attributes.CallBlocked =="True")
 						  {
+							console.log('CALL BLOCKED');
 							let conversationId = notification.eventBody.id; // String | conversation ID
 							let participantId = me; // String | participant ID
 							let body = {
