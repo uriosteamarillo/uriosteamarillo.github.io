@@ -67,7 +67,7 @@ body {
 
 
 
-				const clientId = '';
+				const clientId = 'f6cd8f0d-3c1f-441b-a2ff-3c920a8bcca4';
 				const redirectUri = window.location.href;
 			   
 				// Set Genesys Cloud objects
@@ -176,9 +176,7 @@ body {
 						return;
 					}  else {
                         notificationBus.push(notification)
-						$('#json-viewer').jsonViewer(notificationBus, {collapsed:false});
-
-
+						
 
 						console.log(' notification: ', notification);
 						console.log(' notification: ', notification.eventBody.participants[0]);
@@ -197,11 +195,7 @@ body {
 					}
 		
 				}
-		function myFunction() {
-		 const urlParams = new URLSearchParams(window.location.search);
-		 conversationId = urlParams;
-		
-		}
+	
 		</script>
 
 
