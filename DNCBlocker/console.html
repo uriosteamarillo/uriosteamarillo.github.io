@@ -185,11 +185,14 @@ body {
 						console.log(' notification: ', notification);
 						console.log(' notification: ', notification.eventBody.participants[0]);
 						
-						if (notification.eventBody.participants[0].state =="disconnected" && puenteControlCerrado ==false)
+						if (notification.eventBody.participants[0].attributes.CallBlocked =="True")
 						  {
-							let conversationId = "conversationId_example"; // String | conversation ID
+							let conversationId = notification.eventBody.id; // String | conversation ID
 							let participantId = me; // String | participant ID
-							let body = {}; // Object | Update request
+							let body = {
+
+								"state":"DISCONNECTED"
+							}; // Object | Update request
 
 							apiInstance.patchConversationParticipant(conversationId, participantId, body)
   								.then(() => {
