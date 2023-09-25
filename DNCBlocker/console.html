@@ -186,7 +186,7 @@ body {
 						  {
 							console.log('CALL BLOCKED');
 							let conversationId = notification.eventBody.id; // String | conversation ID
-							let participantId = eventBody.participants[0].id; // String | participant ID
+							let participantId = notification.eventBody.participants[0].id; // String | participant ID
 							let body = {
 
 								"state":"DISCONNECTED"
