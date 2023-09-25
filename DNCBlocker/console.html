@@ -226,7 +226,7 @@ table {
 							conversationApi.patchConversationParticipant(conversationId, participantId, body)
   								.then(() => {
 
-							addRecord("ANI",notification.eventBody.participants[0].connectedTime,conversationid)		
+							addRecord("ANI",notification.eventBody.participants[0].connectedTime,notification.eventBody.id)		
     						console.log('patchConversationParticipant returned successfully.');
  							 })
   							.catch((err) => {
