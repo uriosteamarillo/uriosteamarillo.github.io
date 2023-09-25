@@ -45,6 +45,20 @@ body {
 #text h1 {
 	opacity: 0.9
 }
+
+/* Styles for the table */
+table {
+      width: 80%; /* Make the table 80% of the viewport width */
+      margin: 0 auto; /* Center the table horizontally */
+      border-collapse: collapse;
+      border: 1px solid #fff; /* Add a white border to the table */
+    }
+
+    th, td {
+      border: 1px solid #fff; /* Add a white border to table cells */
+      padding: 8px;
+      text-align: left;
+    }
 </style>	
 	
 </head>
@@ -98,7 +112,8 @@ body {
 				let webSocket = null;
 				let me, notificationChannel;
 		        let notificationBus = [];
-			
+			   
+				const blockedIdsCollection = [];
   // Initialize the jsTree instance with some data
   
 
@@ -195,9 +210,12 @@ body {
 						
 						if (notification.eventBody.participants[0].attributes.CallBlocked =="True"  &&  
 						notification.eventBody.participants[0].state=="dialing" &&
-						   notification.eventBody.participants[0].initialState=="contacting")
+						   notification.eventBody.participants[0].initialState=="contacting" &&
+						   blockedIdsCollection.includes(id) ==false)
 						  {
 							console.log('CALL BLOCKED');
+
+							blockedIdsCollection.push(conversationId);
 							let conversationId = notification.eventBody.id; // String | conversation ID
 							let participantId = notification.eventBody.participants[0].id; // String | participant ID
 							let body = {
@@ -208,7 +226,7 @@ body {
 							conversationApi.patchConversationParticipant(conversationId, participantId, body)
   								.then(() => {
 
-							addRecord("ANI",notification.eventBody.participants[0].connectedTime,notification.eventBody.participants[0].id)		
+							addRecord("ANI",notification.eventBody.participants[0].connectedTime,conversationid)		
     						console.log('patchConversationParticipant returned successfully.');
  							 })
   							.catch((err) => {
