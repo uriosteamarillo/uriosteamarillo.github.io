@@ -207,7 +207,7 @@ table {
 
 						//console.log(' notification: ', notification);
 						console.log(' notification: ', notification.eventBody.participants[0]);
-						
+						let conversationId = notification.eventBody.id
 						if (notification.eventBody.participants[0].attributes.CallBlocked =="True"  &&  
 						notification.eventBody.participants[0].state=="dialing" &&
 						   notification.eventBody.participants[0].initialState=="contacting" &&
@@ -216,7 +216,7 @@ table {
 							console.log('CALL BLOCKED');
 
 							blockedIdsCollection.push(conversationId);
-							let conversationId = notification.eventBody.id; // String | conversation ID
+							; // String | conversation ID
 							let participantId = notification.eventBody.participants[0].id; // String | participant ID
 							let body = {
 
