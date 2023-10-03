@@ -12,7 +12,7 @@
   <script type="text/javascript" src="App.js"></script>
 </head>
 <body>
-  <h1>Number Blocking Toolbar</h1>
+  <h1>Sample Toolbar</h1>
   <form id="dateForm">
     <!-- Phone Number Input -->
     <label for="phone">Phone Number:</label>
@@ -26,13 +26,17 @@
     <br><br>
 
     <!-- Submit Button -->
-    <input type="submit" value="Submit">
+    <input type="submit" value="Add To DNC">
+    <input type="submit" value="Call Number">
   </form>
 
   <script>
    document.getElementById('dateForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from submitting normally
-        
+        // Check which submit button was clicked
+    const submitButton = event.submitter;
+
+    if (submitButton.name === 'Add To DNC') {
         // Get the selected date value from the input field
         const selectedDate = document.getElementById('datepicker').value;
        const dateObject = new Date(selectedDate);  
@@ -40,7 +44,11 @@
         addNumberToDNC(document.getElementById('phone').value)
         // Display the selected date in ISO format with UTC timestamp using an alert
         console.log(`Selected Date (ISO format with UTC timestamp): ${utcTimestamp}`);
-
+     }
+     else
+     {
+      CallNumber(document.getElementById('phone').value)
+     } 
       
     });
 

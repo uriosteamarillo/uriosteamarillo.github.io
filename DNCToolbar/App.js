@@ -85,5 +85,42 @@ function addNumberToDNC( phoneNumberToAdd) {
 
 
 
+function callNumber( phoneNumberToAdd) {
+   
+    document.getElementById('result').text =" calling"
+    console.log(config)
+    let url = "https://api." + config.environment + "/api/v2/conversations/calls";
+
+    // Create the request body as an object
+    const requestBody = {
+        
+        "callQueueId": "",
+        "phoneNumber": phoneNumberToAdd,
+        };
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            
+            url: url,
+            type: "POST",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'bearer ' + token); },
+            contentType: "application/json",
+            dataType: 'json',
+            data: JSON.stringify(requestBody), // Convert the object to JSON
+            success: function (result) {
+                document.getElementById('result').innerText  =" Call in Progress"
+                console.log(result);
+                // Handle success here
+                resolve(result);
+            },
+            error: function (request) {
+                console.log("addNumberToDNC-error", request);
+                document.getElementById('result').innerText  ="CALL Error"
+                // Handle errors here
+                reject("addNumberToDNC -> " + JSON.stringify(request));
+            }
+        });
+    });
+}
 
 
