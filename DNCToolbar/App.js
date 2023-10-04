@@ -83,9 +83,53 @@ function addNumberToDNC( phoneNumberToAdd) {
     });
 }
 
+function checkNumber( phoneNumberToAdd) {
+    document.getElementById('result').text =" submitting"
+    console.log(config)
+    let url = "https://api." + config.environment + "/api/v2/flows/datatables/bfe8790a-d894-498c-8d0b-72a9914a10f6/rows/" + phoneNumberToAdd;
+    
+       // Create the request body as an object
+  
 
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            
+            url: url,
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'bearer ' + token); },
+            contentType: "application/json",
+            dataType: 'json',
+            success: function (result) {
+                document.getElementById('result').innerText  =" Number Blocked"
+                console.log(result);
+                // Handle success here
+                resolve(true);
+            },
+            error: function (request) {
+                console.log("addNumberToDNC-error", request);
+                document.getElementById('result').innerText  ="Number not Blocked"
+                // Handle errors here
+                reject("addNumberToDNC -> " + JSON.stringify(request));
+            }
+        });
+    });
+}
 
 function callNumber( phoneNumberToAdd) {
+
+
+    checkNumber(phoneNumberToAdd)
+                .then(function (success) {
+                    // Handle success (success is a boolean value)
+                    if (success) {
+                        // The number is blocked
+                        console.log("Number is blocked.");
+                        return(null)
+                    } else {
+                        // The number is not blocked
+                        console.log("Number is not blocked.");
+                    }
+                })
    
     document.getElementById('result').text =" calling"
     console.log(config)
