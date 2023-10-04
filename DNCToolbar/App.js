@@ -119,18 +119,29 @@ function callNumber( phoneNumberToAdd) {
 
 
     checkNumber(phoneNumberToAdd)
-                .then(function (success) {
-                    // Handle success (success is a boolean value)
-                    if (success) {
-                        // The number is blocked
-                        console.log("Number is blocked.");
-                        return;
-                    } else {
-                        // The number is not blocked
-                        console.log("Number is not blocked.");
-                    }
-                })
-   
+        .then(function (success) {
+            // Handle success (success is a boolean value)
+            if (success) {
+                // The number is blocked
+                console.log("Number is blocked.");
+                return;
+            } else {
+                // The number is not blocked
+                console.log("Number is not blocked.");
+                
+                // Proceed with making the call
+                initiateCall(phoneNumberToAdd);
+            }
+        })
+        .catch(function (error) {
+            console.error("Error checking number:", error);
+        });
+}
+    
+
+
+function initiateCall(phoneNumberToAdd)
+{
     document.getElementById('result').text =" calling"
     console.log(config)
     let url = "https://api." + config.environment + "/api/v2/conversations/calls";
@@ -165,6 +176,8 @@ function callNumber( phoneNumberToAdd) {
             }
         });
     });
-}
 
+
+
+}
 
