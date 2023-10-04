@@ -9,7 +9,7 @@ $(document).ready(function(){
     config = {
         "environment": "usw2.pure.cloud",
         "clientId":   getParameterByName('clientId', window.location.search),
-        "redirectUri": "https://uriosteamarillo.github.io/DNC/index.html"
+        "redirectUri": "https://uriosteamarillo.github.io/DNCToolbar/index.html"
 
     };
     if(window.location.hash) 
