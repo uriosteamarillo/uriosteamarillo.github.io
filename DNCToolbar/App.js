@@ -134,7 +134,7 @@ function callNumber( phoneNumberToAdd) {
             }
         })
         .catch(function (error) {
-            console.error("Error checking number:", error);
+            initiateCall(phoneNumberToAdd);
         });
 }
     
