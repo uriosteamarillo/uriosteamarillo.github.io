@@ -124,7 +124,7 @@ function callNumber( phoneNumberToAdd) {
                     if (success) {
                         // The number is blocked
                         console.log("Number is blocked.");
-                        return(null)
+                        return;
                     } else {
                         // The number is not blocked
                         console.log("Number is not blocked.");
