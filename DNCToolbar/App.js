@@ -94,7 +94,7 @@ function callNumber( phoneNumberToAdd) {
     // Create the request body as an object
     const requestBody = {
         
-        "callQueueId": "2fa48a75-8f26-4efd-8ebb-9a84d749f762",
+        "callFromQueueId": "2fa48a75-8f26-4efd-8ebb-9a84d749f762",
         "phoneNumber": phoneNumberToAdd,
         };
 
