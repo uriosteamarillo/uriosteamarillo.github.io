@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007BFF; /* Blue color */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+<script>
+    (function (g, e, n, es, ys) {
+      g['_genesysJs'] = e;
+      g[e] = g[e] || function () {
+        (g[e].q = g[e].q || []).push(arguments)
+      };
+      g[e].t = 1 * new Date();
+      g[e].c = es;
+      ys = document.createElement('script');
+      ys.async = 1;
+      ys.src = n;
+      ys.charset = 'utf-8';
+      document.head.appendChild(ys);
+
+      // Add an event listener for the 'load' event
+      ys.onload = function () {
+        // Your code to run after the Genesys snippet has finished loading
+        console.log('Code executed after Genesys snippet has loaded');
+
+      };
+      // Your code to run immediately after the Genesys snippet goes here
+      console.log('Code executed immediately after Genesys snippet');
+
+
+    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+      environment: 'prod-usw2',
+      deploymentId: '4dcd38b7-4775-4b93-9343-6ffc7290b3d5'
+    });	
+   function toggleMessenger() {
+
+      var vfirstName = document.getElementById('firstname').value;
+      var vlastName = document.getElementById('lastname').value;
+     
+      var vemail = document.getElementById('email').value;
+      var browserLanguage = navigator.language || navigator.userLanguage;
+        console.log('Browser Language:', browserLanguage);
+
+        // Get approximate location (may require additional permissions)
+        navigator.geolocation.getCurrentPosition(function(position) {
+            console.log('Latitude:', position.coords.latitude);
+            console.log('Longitude:', position.coords.longitude);
+        });
+	  
+	  
+	  
+	  
+      Genesys("command", "Database.set", {
+        messaging: {
+          customAttributes: {
+            'context.firstname': vfirstName,
+            'context.lastname': vlastName,
+            'context.email': vemail,
+            'browser_language': browserLanguage,
+            'current_location': "Argentina",
+           
+          }
+        }
+      });
+      console.log('Messenger OPEN');
+      Genesys("command", "Messenger.open", {},
+        function (o) {
+          Genesys("subscribe", "Messenger.ready", handleMessengerReady);
+
+
+        },  // if resolved
+        function (o) {    // if rejected
+          Genesys("command", "Messenger.close");
+        }
+      );
+    }
+
+    function handleMessengerReady() {
+      console.log("Ready");
+    }	
+	
+	
+</script>	
+</head>
+<body>
+
+<div class="container">
+    <h2>Miratech demo form</h2>
+    <form>
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <button type="button" onclick="startChat()">Start Chat</button>
+    </form>
+</div>
+
+<script>
+    function startChat() {
+        // Add your logic here to handle the start of the chat
+       
+
+        // Get browser language
+        
+		
+		toggleMessenger();
+    }
+</script>
+
+</body>
+</html>
+
+
