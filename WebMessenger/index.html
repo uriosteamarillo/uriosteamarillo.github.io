@@ -81,11 +81,14 @@
 
 	//localStorage.clear()      
         console.log('Code executed after Genesys snippet has loaded');
-
+       Genesys("subscribe", "Messenger.closed", function(){
+        console.log('Messenfer Closed');
+	       
+       });
       };
       // Your code to run immediately after the Genesys snippet goes here
       console.log('Code executed immediately after Genesys snippet');
-
+    
 
     })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
       environment: 'prod-usw2',
