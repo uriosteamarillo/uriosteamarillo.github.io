@@ -141,8 +141,31 @@
     function handleMessengerReady() {
       console.log("Ready");
     }	
+
 	
-	
+   function endconversation(){
+Genesys("command", "MessagingService.clearConversation", 
+    {}, 
+    function() {
+    /*fulfilled callback*/
+    },
+    function() {
+    /*rejected callback*/
+    });
+
+	   
+   }
+
+window.addEventListener('beforeunload', function (e) {
+    // Cancel the event
+    e.preventDefault();
+    // Chrome requires returnValue to be set
+    e.returnValue = '';
+    
+    // Your custom code here, for example:
+	endconversation()
+    alert("Do you really want to leave?");
+});	
 </script>	
 </head>
 <body>
