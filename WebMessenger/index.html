@@ -83,6 +83,7 @@
         console.log('Code executed after Genesys snippet has loaded');
        Genesys("subscribe", "Messenger.closed", function(){
         console.log('Messenfer Closed');
+	endconversation();
 	       
        });
       };
@@ -148,9 +149,11 @@ Genesys("command", "MessagingService.clearConversation",
     {}, 
     function() {
     /*fulfilled callback*/
+	console.log("Conversation Cleared")
     },
     function() {
     /*rejected callback*/
+	    console.log("Conversation NOT Cleared")
     });
 
 	   
