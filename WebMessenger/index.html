@@ -82,10 +82,19 @@
 	//localStorage.clear()      
         console.log('Code executed after Genesys snippet has loaded');
        Genesys("subscribe", "Messenger.closed", function(){
-        console.log('Messenfer Closed');
-	endconversation();
+        console.log('Messenger Closed');
+	       endconversation();
 	       
        });
+
+       Genesys("subscribe", "Conversations.closed", function(){
+
+        console.log('Conversation Closed..... <YOUR CODE HERE>');
+
+       });
+
+
+
       };
       // Your code to run immediately after the Genesys snippet goes here
       console.log('Code executed immediately after Genesys snippet');
@@ -130,7 +139,7 @@
       Genesys("command", "Messenger.open", {},
         function (o) {
           Genesys("subscribe", "Messenger.ready", handleMessengerReady);
-
+          
 
         },  // if resolved
         function (o) {    // if rejected
@@ -158,6 +167,7 @@ Genesys("command", "MessagingService.clearConversation",
 
 	   
    }
+
 
 window.addEventListener('beforeunload', function (e) {
     // Cancel the event
