@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Form V 07-10</title>
+    <title>Chat Form V 07-10-2</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -87,11 +87,7 @@
 	       
        });
 
-       Genesys("subscribe", "Conversations.closed", function(){
-
-        console.log('Conversation Closed..... <YOUR CODE HERE>');
-
-       });
+      
 
 
 
@@ -150,6 +146,17 @@
 
     function handleMessengerReady() {
       console.log("Ready");
+
+//SUBSCRIPTION TO EVENTS
+
+Genesys("subscribe", "Conversations.closed", function(){
+
+console.log('Conversation Closed..... <YOUR CODE HERE>');
+
+});
+
+
+
     }	
 
 	
