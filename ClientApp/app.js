@@ -17,7 +17,7 @@ $(document).ready(function(){
         config = {
             "environment": "usw2.pure.cloud",
             "clientId": getParameterByName('clientId', window.location.search),
-            "redirectUri": getParameterByName('redirectUri', window.location.search)
+            "redirectUri": "https://uriosteamarillo.github.io/ClientApp/newInteraction.html"
 
         };
         
