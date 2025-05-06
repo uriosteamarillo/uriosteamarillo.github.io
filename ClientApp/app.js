@@ -15,7 +15,7 @@ $(document).ready(function(){
 
         // Wait 5 seconds
         
-        return getFlowExecutionStatus(token, flowExecutionId);
+        return getFlowExecutionDetails(token, flowExecutionId);
     })
     .then(status => {
         console.log('Flow Status:', status);
@@ -24,14 +24,7 @@ $(document).ready(function(){
         console.error('Error during flow execution:', error);
     });
 	    
-        makeOutboundCall(token, phoneNumber, queueId)
-            .then(response => {
-                console.log('Call initiated successfully:', response);
-            })
-            .catch(error => {
-                console.error('Error initiating call:', error);
-            });
-    });
+    } ;   
 
 	
     
