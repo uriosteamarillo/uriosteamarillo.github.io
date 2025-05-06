@@ -17,7 +17,7 @@ $(document).ready(function(){
         config = {
             "environment": "usw2.pure.cloud",
             "clientId": "35a67a68-4cdb-4fff-a3ba-17a589e070a8",
-            "redirectUri": "https://uriosteamarillo.github.io/ClientApp/newInteraction.html"
+            "redirectUri": "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
 
         };
         
@@ -42,3 +42,4 @@ function getParameterByName(name, data) {
 
 
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
+envir
