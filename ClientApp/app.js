@@ -6,10 +6,15 @@ $(document).ready(function(){
 
     $('#callBtn').on('click', function () {
         // Replace with real values or dynamically get them
-        const phoneNumber = '+541112345678';  // E.164 format
         const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
+        const phoneNumber = $('#phoneInput').val(); // Get number from input
+        const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
 
-        checkPhoneNumber(token, '96ef0374-31c8-45b1-b814-2472f46cac74', phoneNumber)
+        if (!phoneNumber || !phoneNumber.startsWith('+')) {
+        alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
+        return;
+       }
+        checkPhoneNumber(token, flowid, phoneNumber)
           .then(flowExecutionId => {
         console.log('Flow Execution ID:', flowExecutionId);
 
