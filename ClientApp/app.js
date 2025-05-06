@@ -15,7 +15,7 @@ $(document).ready(function(){
     {	
         //Config Genesys Cloud
         config = {
-            "environment": getParameterByName('environment', window.location.search),
+            "environment": "usw2.pure.cloud",
             "clientId": getParameterByName('clientId', window.location.search),
             "redirectUri": getParameterByName('redirectUri', window.location.search)
 
