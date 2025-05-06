@@ -1,8 +1,24 @@
 var config = {};
-
+var token;
 
 $(document).ready(function(){
-	$("#errorMessage").hide();
+     $("#errorMessage").hide();
+
+    $('#callBtn').on('click', function () {
+        // Replace with real values or dynamically get them
+        const phoneNumber = '+541112345678';  // E.164 format
+        const queueId = 'your-queue-id';      // Optional
+       
+        makeOutboundCall(token, phoneNumber, queueId)
+            .then(response => {
+                console.log('Call initiated successfully:', response);
+            })
+            .catch(error => {
+                console.error('Error initiating call:', error);
+            });
+    });
+
+	
     
     if(window.location.hash) 
     {	
