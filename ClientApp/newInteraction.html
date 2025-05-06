@@ -237,7 +237,26 @@
                         // Update user data markup
                         interactionsHeaderEl.querySelector('.user-name').appendChild(document.createTextNode(' ' + profileData.name));
                         interactionsHeaderEl.querySelector('.interaction-detail-access').appendChild(document.createTextNode(' ' + (canViewInteraction ? 'Yes' : 'No')));
+                         let conversationsApi = new platformClient.ConversationsApi();
+                         try {
+                            const requestBody = {
+                              phoneNumber: '+15555555555',    // Destination number
+                                  queueId: 'YOUR_QUEUE_ID',       // Replace with your Queue ID
+                                  callFromQueueId: true,
+                                callerId: '+18885551234',       // Optional
+                                  callerIdName: 'Support Team'    // Optional
+                                    };
 
+                            const response = await conversationsApi.postConversationsCalls(requestBody);
+                            console.log('Call started:', response);
+                            
+                              } catch (error) {
+                        console.error('Error making call:', error);
+                        alert('Failed to start call. Check console for details.');
+                          }
+                        }
+
+                          
                         function reloadInteractions() {
                             if (reloadButtonEl.disabled) {
                                 // Poor man's debounce: A click event snuck through before js could disable; ignore it
