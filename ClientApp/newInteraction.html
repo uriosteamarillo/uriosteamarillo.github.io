@@ -1,46 +1,94 @@
 <!DOCTYPE html>
 <html>
+    <!--
+        Demo to illustrate fetching Genesys Cloud data and the showInteractionDetails(...) SDK method
+
+        Note:  Although this example is hosted with the others here on github; it won't work without
+          configuring an OAuth Client and hosting it elsewhere. See js code below for details.
+
+        Reminder: This example is using CDNs and simple javascript to illustrate the SDK. Both the
+          Genesys Cloud SDK and Apps SDK can be obtained via npm and support many build tools
+          and javascript libraries to fit within your development environment.
+    -->
     <head>
-        <title>Collaborate Toast Demo</title>
+        <meta charset="utf-8">
+        <title>Genesys Cloud client-app-sdk Interactions Demo</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+            crossorigin="anonymous">
+        <script src="https://sdk-cdn.mypurecloud.com/javascript/157.0.0/purecloud-platform-client-v2.min.js"></script>
         <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.6.3/purecloud-client-app-sdk-de77761d.min.js"></script>
+        <script src="utils/oauth.js"></script>
+
         <style>
             body {
                 margin-left: 20px;
+                max-width: 450px;
             }
 
-            .msg-group {
-                position: relative;
+            .failure {
+                color: red;
             }
 
-            .msg-group .checkbox {
-                position: absolute;
-                height: 1em;
-                font-size: 1em;
-                right: 15px;
+            section.interactions-example .header {
+                display: flex;
+                justify-content: space-between;
             }
 
-            @media (max-width: 768px) {
-                .msg-group .checkbox {
-                    top: -20px;
-                    right: 15px;
-                    padding: 0;
+            button.reload-interactions {
+                align-self: center;
+            }
+
+            .reloading {
+                margin: 10px;
+                text-align: center;
+                width: 100%;
+            }
+
+            table.interactions tbody tr {
+                cursor: pointer;
+            }
+
+            table.interactions tr td.media-type {
+                padding-left: 15px;
+                color: #337ab7;
+                display: table-cell;
+            }
+
+            table.interactions tr td.media-type.text-only {
+                padding-left: 0;
+                color: inherit;
+            }
+
+            table.interactions tbody tr.in-progress td.conversation-id::before {
+                content: "";
+                margin-right: 5px;
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: red;
+                box-shadow: 0 0 0 rgba(204, 44, 44, 0.4);
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+                }
+                70% {
+                    box-shadow: 0 0 0 10px rgba(204, 44, 44, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(204, 44, 44, 0);
                 }
             }
 
-            @media (min-width: 768px) {
-                .msg-group .checkbox {
-                    bottom: 0;
-                    margin-left: 15px;
-                    padding-top: 0;
-                }
-            }
-
-            fieldset {
-                margin-top: 30px;
+            .tester-note {
+                font-size: .75em;
+                text-align: center;
             }
         </style>
     </head>
@@ -50,202 +98,499 @@
             For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank">instructions how to enable JavaScript in your web browser</a>.
         </noscript>
 
-        <h1>Send a Toast</h1>
+        <h1 class="sr-only">Test UIs for Interaction SDK</h1>
 
-        <form class="form-horizontal container-fluid">
-            <div class="form-group">
-                <label for="title" class="col-sm-1 control-label">Title</label>
-                <div class="col-sm-11">
-                    <input type="text" class="form-control" id="title" placeholder="Message Title">
-                </div>
-            </div>
-            <div class="form-group msg-group">
-                <label for="message" class="col-sm-1 control-label">Message</label>
-                <div class="col-sm-11">
-                    <textarea name="textarea" rows="3" class="form-control" id="message" placeholder="Message Text"></textarea>
-                    <div class="help-block">
-                        <p>
-                            <span class="label label-info">Note:</span>
-                            Supports Emoticons, Unicode Emojis, and Emoji Shortcodes
-                        </p>
-                    </div>
-                    <div class="checkbox">
-                        <label title="Interpret Message Text as Markdown" aria-label="Interpret Message Text as Markdown">
-                            <input type="checkbox" id="markdownMessage" checked="true" tabindex="1"> Markdown
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="type" class="col-sm-1 control-label">Type</label>
-                <div class="col-sm-11">
-                    <select class="form-control" id="toastType">
-                        <option value="info" selected="true">Info</option>
-                        <option value="success">Success</option>
-                        <option value="error">Error</option>
-                    </select>
-                </div>
-            </div>
-            <fieldset>
-                <legend>More Options:</legend>
-                <div class="form-group">
-                    <label for="msgId" class="col-sm-1 control-label">ID</label>
-                    <div class="col-sm-11">
-                        <input type="text" class="form-control" id="msgId" placeholder="Message ID">
-                        <div class="help-block">
-                            <p>
-                                <span class="label label-info">Note:</span>
-                                Messages with same ID are replaced
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="timeout" class="col-sm-1 control-label">Timeout</label>
-                    <div class="col-sm-11">
-                        <input type="number" class="form-control" id="timeout" min="0" value="5"></input>
-                        <div class="help-block">
-                            <p><span class="label label-info">Note:</span> Set to 0 for no timeout</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-1 col-sm-11">
-                        <div class="checkbox">
-                            <label>
-                                <input id="showCloseButton" type="checkbox"> Show Close Button
-                            </label>
-                        </div>
-                        <div class="help-block">
-                            <p>
-                                <span class="label label-danger">Required:</span>
-                                Failure Toasts and no timeouts
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-11">
-                    <button type="submit" class="btn btn-primary send-toast">Send Toast</button>
-                </div>
-            </div>
-        </form>
+        <section class="authenticating hidden">
+            Authenticating to Genesys Cloud <span class="fas fa-spinner fa-spin"></span>
+        </section>
+        <section class="failure hidden">
+            Sorry, an error has occurred.
+        </section>
 
-        <h1>Request Attention</h1>
-        <div class="attention-controls">
-            <button class="btn btn-primary increase-attn-btn">Increase Attention Count</button>
-            <button class="btn btn-primary clear-attn-btn">Clear Attention Count</button>
-        </div>
-
-        <h1>Open Window Handler</h1>
-
-        <form class="form-horizontal container-fluid">
-            <div class="form-group target-url-group">
-                <label for="targetURL" class="col-sm-1 control-label">URL</label>
-                <div class="col-sm-11">
-                    <input type="text" class="form-control" id="targetURL" placeholder="https://en.wikipedia.org/wiki/Main_Page">
+        <section class="interactions-example hidden">
+            <h2>Recent Interactions</h2>
+            <div class="header">
+                <div>
+                    <h4 class="user-name">Name:</h4>
+                    <h5 class="interaction-detail-access">Interaction Detail Access:</h5>
                 </div>
+                <button type="button" class="reload-interactions btn btn-primary fas fa-sync-alt" aria-label="reload"></button>
+            </div>
+
+            <table class="interactions table table-hover hidden">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Wrap Up</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <section class="reloading fas fa-spinner fa-spin fa-3x hidden">
+            </section>
+        </section>
+
+        <section class="manual-example">
+            <h2>Manual Tester</h2>
+            <div class="form-group conversation-id">
+                <label for="conversation-id">Conversation ID:</label>
+                <input type="text" class="form-control" id="conversation-id">
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-11">
-                    <button type="submit" class="btn btn-primary" id="openWindow">Open Window</button>
-                </div>
+                <button type="button" class="btn btn-primary">Submit</button>
             </div>
-        </form>
+            <div class="form-group">
+                <div class="tester-note">[Note:] This tester intentionally bypasses client-side permission checks.</div>
+            </div>
+        </section>
 
-        <script>$(function () {
-                let myClientApp = null;
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                /*
+                * The Client Apps SDK can interpolate the current PC Environment into your app's URL
+                * EX: https://mypurecloud.github.io/client-app-sdk/directoryNavigationDemo.html?gcHostOrigin={{gcHostOrigin}}&gcTargetEnv={{gcTargetEnv}}
+                *
+                * Reading the PC Environment from the query string or state param returned from OAuth2 response
+                */
+                const queryParameters = getQueryParameters();
+                const state = computeState(queryParameters);
+                let pcEnvironment = queryParameters.pcEnvironment;
 
-                // Note: This manual check for query string is for backwards compatibility of this
-                // deployed example.  In your own apps, you can assume the query param will be
-                // provided by Genesys Cloud if you have configured it in your app's config.
-                const envQueryParamName = 'pcEnvironment';
-                const hostQueryParamName = 'gcHostOrigin';
-                const targetEnvQueryParamName = 'gcTargetEnv';
-                const locationSearch = (window && window.location && typeof window.location.search === 'string') ? window.location.search : '';
-                const queryParams = new URLSearchParams(locationSearch);
-                if (queryParams.get(hostQueryParamName) || queryParams.get(targetEnvQueryParamName)) {
-                    // Compute Genesys Cloud region from host origin
-                    myClientApp = new window.purecloud.apps.ClientApp({
-                        gcHostOriginQueryParam: hostQueryParamName,
-                        gcTargetEnvQueryParam: targetEnvQueryParamName
+                let platformClient = window.require('platformClient');
+                let client = platformClient.ApiClient.instance;
+                let clientApp = null;
+                try {
+                    if (queryParameters.gcHostOrigin && queryParameters.gcTargetEnv) {
+                        clientApp = new window.purecloud.apps.ClientApp({
+                            gcHostOrigin: queryParameters.gcHostOrigin,
+                            gcTargetEnv: queryParameters.gcTargetEnv
+                        });
+                        pcEnvironment = clientApp.pcEnvironment;
+                    } else if (pcEnvironment) {
+                        clientApp = new window.purecloud.apps.ClientApp({ pcEnvironment });
+                    } else {
+                        setErrorState('Cannot identify App Embedding context.  Did you forget to add gcHostOrigin={{gcHostOrigin}}&gcTargetEnv={{gcTargetEnv}} to your app\'s query string?');
+                        return;
+                    }
+                } catch (e) {
+                    let errorStr = pcEnvironment || queryParameters.gcHostOrigin;
+                    setErrorState(errorStr + ': Unknown/Unsupported Genesys Cloud Embed Context');
+                    return;
+                }
+
+                /*
+                 *  Set up manual tester now; no PC Auth required
+                 *
+                 *  This UI is used for testing purposes to manually navigate to a conversation by ID.
+                 *  It purposefully ignores the fact that a user may not be authorized to view interactions.
+                 */
+                document.querySelector('.manual-example button').addEventListener('click', function() {
+                    let conversationId = document.querySelector('#conversation-id').value.trim();
+                    if (conversationId) {
+                        clientApp.conversations.showInteractionDetails(conversationId);
+                    }
+                });
+
+                // Authenticate with Genesys Cloud
+                let authenticatingEl = document.querySelector('.authenticating');
+                setHidden(authenticatingEl, false);
+
+                let authenticated = false;
+                let userDataAcquired = false;
+                let canViewInteraction = false;
+                let canViewWrapUpCodes = false;
+
+                authenticate(client, pcEnvironment, state)
+                    .then(() => {
+                        authenticated = true;
+                        return new platformClient.UsersApi().getUsersMe({ 'expand': ['authorization'] })
+                    })
+                    .then(profileData => {
+                        userDataAcquired = true;
+
+                        // Check if the current user will be able to view interaction details
+                        let permissions = profileData.authorization.permissions;
+                        if (checkPermission(permissions, 'analytics:conversationDetail:view') &&
+                            checkPermission(permissions, 'analytics:conversationAggregate:view') &&
+                            (checkPermission(permissions, 'conversation:communication:view') ||
+                             checkPermission(permissions, 'quality:evaluation:add') ||
+                             checkPermission(permissions, 'quality:calibration:view') ||
+                             checkPermission(permissions, 'quality:evaluation:editScore'))) {
+                            canViewInteraction = true;
+                        }
+
+                        if (checkPermission(permissions, 'routing:wrapupCode:view')) {
+                            canViewWrapUpCodes = true;
+                        }
+
+                        let interactionExampleEl = document.querySelector('section.interactions-example');
+                        let interactionsHeaderEl = document.querySelector('section.interactions-example .header');
+                        let reloadButtonEl = document.querySelector('button.reload-interactions');
+                        let reloadingEl = document.querySelector('.reloading');
+                        let conversationsTable = document.querySelector('table.interactions');
+                        let conversationsTableBody = conversationsTable.querySelector('tbody');
+
+                        setHidden(authenticatingEl, true);
+
+                        // Update user data markup
+                        interactionsHeaderEl.querySelector('.user-name').appendChild(document.createTextNode(' ' + profileData.name));
+                        interactionsHeaderEl.querySelector('.interaction-detail-access').appendChild(document.createTextNode(' ' + (canViewInteraction ? 'Yes' : 'No')));
+
+                        function reloadInteractions() {
+                            if (reloadButtonEl.disabled) {
+                                // Poor man's debounce: A click event snuck through before js could disable; ignore it
+                                return;
+                            }
+
+                            reloadButtonEl.disabled = true;
+
+                            // Set base state for reload op
+                            setErrorState(null);
+                            setHidden(reloadingEl, false);
+                            setHidden(conversationsTable, true);
+                            // Remove all rows of table
+                            while (conversationsTableBody.firstChild) {
+                                conversationsTableBody.removeChild(conversationsTableBody.firstChild);
+                            }
+
+                            getUserConversationHistory(profileData.id, 30, canViewWrapUpCodes).then(function (conversations) {
+                                setHidden(reloadingEl, true);
+
+                                if (conversations.length === 0) {
+                                    setErrorState('No conversations were found for you in the past 30 days');
+                                    reloadButtonEl.disabled = false;
+                                    return;
+                                }
+
+                                conversations.forEach(function (currConvo) {
+                                    // Build listener
+                                    let currClickListener = function () {
+                                        if (canViewInteraction) {
+                                            clientApp.conversations.showInteractionDetails(currConvo.conversationId);
+                                        } else {
+                                            // Note: Normally, we wouldn't show a user an action they can't perform;
+                                            // however, this is a dev tool and missing permissions is valuable information to convey
+                                            setErrorState('You do not have the proper permissions to view interactions.');
+                                        }
+                                    }
+                                    conversationsTableBody.appendChild(buildTrFromConversation(currConvo, canViewWrapUpCodes, currClickListener));
+                                });
+
+                                setHidden(conversationsTable, false);
+                                reloadButtonEl.disabled = false;
+                            }).catch(function (reason) {
+                                setHidden(reloadingEl, true);
+                                setErrorState('Failed to fetch your conversations');
+                                reloadButtonEl.disabled = false;
+                            });
+                        }
+
+                        reloadButtonEl.addEventListener('click', reloadInteractions);
+
+                        // Trigger initial fetch of interactions, will set state accordingly (i.e. disable the button)
+                        reloadInteractions();
+
+                        // Now, safe to show the interactions example
+                        setHidden(interactionExampleEl, false);
+                    })
+                    .catch(function (err) {
+                        setHidden(authenticatingEl, true);
+
+                        if (!authenticated) {
+                            setErrorState('Failed to Authenticate with Genesys Cloud - ' + err.message);
+                        } else if (!userDataAcquired) {
+                            setErrorState('Failed to locate user in Genesys Cloud');
+                        }
                     });
-                } else if (queryParams.get(envQueryParamName)) {
-                    // Compute Genesys Cloud region from pcEnvironment
-                    myClientApp = new window.purecloud.apps.ClientApp({ pcEnvironmentQueryParam: envQueryParamName });
-                } else {
-                    // Use default Genesys Cloud region
-                    myClientApp = new window.purecloud.apps.ClientApp();
+
+                // -- Utility Functions
+
+                function setHidden(el, hidden) {
+                    if (hidden) {
+                        el.classList.add('hidden');
+                    } else {
+                        el.classList.remove('hidden');
+                    }
                 }
 
-                // Toast
-                var $titleField = $('input#title');
-                var $msgField = $('textarea#message');
-
-                function canSubmitForm () {
-                    return !!($titleField.val() && $msgField.val());
+                /**
+                 * Sets the base mode of the app to error and show the provided message
+                 */
+                function setErrorState(errorMsg) {
+                    let failureEl = document.querySelector('.failure');
+                    failureEl.textContent = errorMsg || '';
+                    setHidden(failureEl, !errorMsg);
                 }
 
-                function setFormSubmissionState() {
-                    $('button.send-toast').prop('disabled', !canSubmitForm());
+                function isPermission(item, targetItem) {
+                    let isItem = item === '*' || targetItem === '*';
+                    if (!isItem) {
+                        isItem = item === targetItem;
+                    }
+                    return isItem;
                 }
 
-                $titleField.on('input change', setFormSubmissionState);
-                $msgField.on('input change', setFormSubmissionState);
+                /**
+                 * Parse the permissions array and check whether or not the match the specified required ones.
+                 *
+                 * @returns A boolean indicating if the user possesses the required permissions.
+                 */
+                function checkPermission(permissions, permissionValue) {
+                    let isAllowed = false;
 
-                $('form').submit(function (e) {
-                    e.preventDefault();
-
-                    if (canSubmitForm() === false) {
-                        return false;
+                    if (!permissions) {
+                        permissions = [];
                     }
 
-                    var options = {
-                        id: $('#msgId').val(),
-                        type: $('#toastType').val(),
-                        markdownMessage: ($('#markdownMessage').is(":checked")),
-                        showCloseButton: ($('#showCloseButton').is(":checked"))
+                    if (permissionValue.match(/^[a-zA-Z0-9]+:\*$/)) {
+                        permissionValue = permissionValue.replace('*', '*:*');
+                    }
+
+                    const permissionsToValidate = permissionValue.split(':'),
+                        targetDomain = permissionsToValidate[0],
+                        targetEntity = permissionsToValidate[1],
+                        targetAction = permissionsToValidate[2];
+
+                    permissions.forEach(function (permission) {
+                        const permissions = permission.split(':'),
+                            domain = permissions[0],
+                            entity = permissions[1],
+                            actionSet = permissions[2];
+
+                        if (targetDomain === domain) {
+                            const matchesEntity = isPermission(targetEntity, entity),
+                                matchesAction = isPermission(targetAction, actionSet);
+
+                            if (matchesEntity && matchesAction) {
+                                isAllowed = true;
+                            }
+                        }
+                    });
+
+                    return isAllowed;
+                }
+
+                function buildTrFromConversation(conversation, includeWrapUpDetails, clickListener) {
+                    let row = document.createElement('tr');
+
+                    var conversationId = conversation.conversationId;
+                    let cellConversationId = row.insertCell();
+                    cellConversationId.classList.add('conversation-id');
+                    let cellCustomerName = row.insertCell();
+                    let cellMediaType = row.insertCell();
+                    cellMediaType.classList.add('media-type');
+                    let cellWrapUp = row.insertCell();
+
+                    // Mark row as active if applicable
+                    if (!conversation.hasOwnProperty('conversationEnd')) {
+                        row.classList.add('in-progress');
+                    }
+
+                    // ID Cell
+                    cellConversationId.appendChild(document.createTextNode(conversationId));
+
+                    // Customer Cell
+                    let latestCustomer = getMostRecentParticipant(conversation, 'customer');
+                    if (latestCustomer && latestCustomer.participantName) {
+                        cellCustomerName.appendChild(document.createTextNode(latestCustomer.participantName));
+                    }
+
+                    // MediaType Cell
+                    let mediaType;
+                    let latestAcd = getMostRecentParticipant(conversation, 'acd');
+                    if (latestAcd && latestAcd.sessions) {
+                        mediaType = latestAcd.sessions[0].mediaType;
+                    }
+
+                    switch (mediaType) {
+                        case 'email':
+                            cellMediaType.classList.add('fa', 'fa-envelope');
+                            cellMediaType.setAttribute('aria-label', 'email');
+                            break;
+                        case 'voice':
+                        case 'callback':
+                            cellMediaType.classList.add('fas', 'fa-phone');
+                            cellMediaType.setAttribute('aria-label', 'voice or callback');
+                            break;
+                        case 'chat':
+                            cellMediaType.classList.add('fas', 'fa-comments');
+                            cellMediaType.setAttribute('aria-label', 'chat');
+                            break;
+                        case 'screenshare':
+                        case 'cobrowse':
+                            cellMediaType.classList.add('fas', 'fa-desktop');
+                            cellMediaType.setAttribute('aria-label', 'screenshare or cobrowse');
+                            break;
+                        default:
+                            if (typeof mediaType != 'undefined') {
+                                cellMediaType.classList.add('text-only');
+                                cellMediaType.appendChild(document.createTextNode(mediaType));
+                            }
+                    }
+
+                    // Wrap-up Cell
+                    let wrapUpSeg = getMostRecentWrapUpSegment(conversation);
+                    if (wrapUpSeg && wrapUpSeg._custom_wrapUp) {
+                        cellWrapUp.appendChild(document.createTextNode(wrapUpSeg._custom_wrapUp.name));
+                    }
+
+                    // Add Listener to row if specified
+                    if (clickListener) {
+                        row.addEventListener('click', clickListener);
+                    }
+
+                    return row;
+                }
+
+                // Holds wrapUpCode lookup results to improve downsteam fetches
+                let wrapUpCodeDetailsMap = {};
+
+                // Get user's convo history over specified range; optionally expanding wrapup
+                function getUserConversationHistory(userId, numDays, expandWrapup) {
+                    let intervalEnd = new Date();
+                    let intervalStart = (new Date(new Date().setDate(intervalEnd.getDate() - numDays)));
+
+                    let query = {
+                        "interval": intervalStart.toISOString() + "/" + intervalEnd.toISOString(),
+                        "order": "desc",
+                        "orderBy": "conversationStart",
+                        "paging": {
+                            "pageSize": 25,
+                            "pageNumber": 1
+                        },
+                        "segmentFilters": [
+                            {
+                                "type": "and",
+                                "predicates": [
+                                    {
+                                        "type": "dimension",
+                                        "dimension": "userId",
+                                        "operator": "matches",
+                                        "value": userId
+                                    }
+                                ]
+                            }
+                        ]
                     };
 
-                    var timeoutStr = $('#timeout').val();
-                    var timeoutInt = parseInt(timeoutStr, 10);
-                    if (timeoutInt == timeoutStr) {
-                        options.timeout = timeoutInt;
+                    return new platformClient.AnalyticsApi().postAnalyticsConversationsDetailsQuery(query)
+                        .then(function (results) {
+                            if (!results || !results.conversations) {
+                                // No conversations is returned as an empty object; return an empty array
+                                return [];
+                            }
+
+                            if (!expandWrapup) {
+                                return results.conversations;
+                            } else {
+                                let outstandingWrapupPromises = [];
+                                // Map of wrapUpCodes to segments that need to be updated when the wrap-up text returns
+                                let wrapUpToSegments = {};
+
+                                // Find and Issue requests for any unknown wrapup code details and return with promises as necessary
+                                // Note: Some duplicate requests here, but not terrible for a demo
+                                results.conversations.forEach(function (conversation, index) {
+                                    let latestWrapUp = getMostRecentWrapUpSegment(conversation);
+
+                                    if (latestWrapUp && latestWrapUp.wrapUpCode) {
+                                        let wrapUpCode = latestWrapUp.wrapUpCode;
+
+                                        let knownDetails = wrapUpCodeDetailsMap[wrapUpCode];
+                                        if (knownDetails) {
+                                            // We've previously fetched this wrap-up; insert it now
+                                            latestWrapUp._custom_wrapUp = knownDetails;
+                                        } else {
+                                            // Unknown wrap-up code; need to fetch it
+                                            let segmentsToUpdate = wrapUpToSegments[wrapUpCode];
+
+                                            if (segmentsToUpdate) {
+                                                // Additional segment for outstanding wrapup xhr request; add to list
+                                                segmentsToUpdate.push(latestWrapUp);
+                                            } else {
+                                                // First request for this wrap-up code
+                                                wrapUpToSegments[wrapUpCode] = [latestWrapUp];
+                                                outstandingWrapupPromises.push(
+                                                    new platformClient.RoutingApi().getRoutingWrapupcode(wrapUpCode)
+                                                        .then(function (wrapUpDetails) {
+                                                            // Persist for future use
+                                                            wrapUpCodeDetailsMap[wrapUpCode] = wrapUpDetails;
+                                                            // Update all associated segments
+                                                            wrapUpToSegments[wrapUpCode].forEach(function (currSegment) {
+                                                                currSegment._custom_wrapUp = wrapUpDetails;
+                                                            });
+                                                        })
+                                                        .catch(function (err) {
+                                                            console.error('Failed to look up wrapUpCode', err);
+                                                            // Update all associated segments
+                                                            wrapUpToSegments[wrapUpCode].forEach(function (currSegment) {
+                                                                currSegment._custom_wrapUp = null;
+                                                            });
+                                                        })
+                                                );
+                                            }
+                                        }
+                                    }
+                                });
+
+                                if (outstandingWrapupPromises.length === 0) {
+                                    return results.conversations;
+                                } else {
+                                    // Wait for all the outstanding wrap-up code fetches, then resolve with the convos
+                                    return Promise.all(outstandingWrapupPromises).then(function () {
+                                        return results.conversations;
+                                    });
+                                }
+                            }
+                        }
+                    );
+                }
+
+                function getMostRecentParticipant(conversation, participantPurpose) {
+                    if (!conversation.participants) {
+                        return null;
                     }
 
-                    myClientApp.alerting.showToastPopup($titleField.val(), $msgField.val(), options);
-                    $titleField.val('');
-                    $msgField.val('');
-                    setFormSubmissionState();
-                });
+                    let result = null;
 
-                setFormSubmissionState();
-                $titleField.focus();
+                    for (let index=conversation.participants.length - 1; !result && index >= 0; index--) {
+                        let currParticipant = conversation.participants[index];
+                        if (currParticipant.purpose === participantPurpose) {
+                            result = currParticipant;
+                        }
+                    }
 
-                // Attention
-                var count = 0;
-                var $increaseBtn = $('.increase-attn-btn');
-                var $clearBtn = $('.clear-attn-btn');
-
-                $increaseBtn.on('click', incrementCount);
-                $clearBtn.on('click', clearCount);
-
-                function incrementCount () {
-                    ++count;
-                    myClientApp.alerting.setAttentionCount(count);
+                    return result;
                 }
 
-                function clearCount () {
-                    count = 0;
-                    myClientApp.alerting.setAttentionCount(0);
+                function getMostRecentSegment(session, segmentType) {
+                    if (!session.segments) {
+                        return null;
+                    }
+
+                    let result = null;
+
+                    for (let index=session.segments.length - 1; !result && index >= 0; index--) {
+                        let currSegment = session.segments[index];
+                        if (currSegment.segmentType === segmentType) {
+                            result = currSegment;
+                        }
+                    }
+
+                    return result;
                 }
 
-                // OpenWindow
-                $('#openWindow').on('click', function () {
-                    const targetURL = document.getElementById('targetURL').value
-                    myClientApp.coreUi.openWindow(targetURL);
-                });
+                function getMostRecentWrapUpSegment(conversation) {
+                    let result = null;
+
+                    let lastAgent = getMostRecentParticipant(conversation, 'agent');
+                    if (lastAgent && lastAgent.sessions) {
+                        result = getMostRecentSegment(lastAgent.sessions[lastAgent.sessions.length - 1], 'wrapup')
+                    }
+
+                    return result;
+                }
             });
         </script>
     </body>
