@@ -186,17 +186,19 @@
                  *  This UI is used for testing purposes to manually navigate to a conversation by ID.
                  *  It purposefully ignores the fact that a user may not be authorized to view interactions.
                  */
-                 const callButton = document.getElementById('callBtn');
-                    if (callButton) {
-                          callButton.addEventListener('click', function () {
-                            console.log("Button clicked");
-                            makeCall();
-                              });
-                            }} else {
-                       console.error("Button not found");
-                    }
-                      });
+                 const callButton = document.querySelector('.manual-example button');
+                  if (callButton) {
+                    callButton.addEventListener('click', function () {
+                      console.log("Button clicked");
+                      makeCall();
+                    });
+                      } else {
+                        console.error("Button not found");
+                      }
 
+
+
+                
                 // Authenticate with Genesys Cloud
                 let authenticatingEl = document.querySelector('.authenticating');
                 setHidden(authenticatingEl, false);
