@@ -188,6 +188,17 @@
                  */
                 document.querySelector('.manual-example button').addEventListener('click', function() {
                     console.log('hello');
+
+                     const requestBody = {
+                              phoneNumber: '+15555555555',    // Destination number
+                                  queueId: 'YOUR_QUEUE_ID',       // Replace with your Queue ID
+                                  callFromQueueId: true,
+                                callerId: '+18885551234',       // Optional
+                                  callerIdName: 'Support Team'    // Optional
+                                    };
+                     let conversationsApi = new platformClient.ConversationsApi();
+                     const response = await conversationsApi.postConversationsCalls(requestBody);
+                            console.log('Call started:', response);
                     let conversationId = document.querySelector('#conversation-id').value.trim();
                     if (conversationId) {
                         clientApp.conversations.showInteractionDetails(conversationId);
