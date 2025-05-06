@@ -187,10 +187,8 @@
                  *  It purposefully ignores the fact that a user may not be authorized to view interactions.
                  */
                 document.querySelector('.manual-example button').addEventListener('click', function() {
-                    let conversationId = document.querySelector('#conversation-id').value.trim();
-                    if (conversationId) {
-                        clientApp.conversations.showInteractionDetails(conversationId);
-                    }
+                  makeCall();
+                    
                 });
 
                 // Authenticate with Genesys Cloud
@@ -237,24 +235,7 @@
                         // Update user data markup
                         interactionsHeaderEl.querySelector('.user-name').appendChild(document.createTextNode(' ' + profileData.name));
                         interactionsHeaderEl.querySelector('.interaction-detail-access').appendChild(document.createTextNode(' ' + (canViewInteraction ? 'Yes' : 'No')));
-                         let conversationsApi = new platformClient.ConversationsApi();
-                         try {
-                            const requestBody = {
-                              phoneNumber: '+15555555555',    // Destination number
-                                  queueId: 'YOUR_QUEUE_ID',       // Replace with your Queue ID
-                                  callFromQueueId: true,
-                                callerId: '+18885551234',       // Optional
-                                  callerIdName: 'Support Team'    // Optional
-                                    };
-
-                            const response = await conversationsApi.postConversationsCalls(requestBody);
-                            console.log('Call started:', response);
-                            
-                              } catch (error) {
-                        console.error('Error making call:', error);
-                        alert('Failed to start call. Check console for details.');
-                          }
-                        }
+                        
 
                           
                         function reloadInteractions() {
@@ -309,7 +290,7 @@
                         reloadButtonEl.addEventListener('click', reloadInteractions);
 
                         // Trigger initial fetch of interactions, will set state accordingly (i.e. disable the button)
-                        reloadInteractions();
+                        //reloadInteractions();
 
                         // Now, safe to show the interactions example
                         setHidden(interactionExampleEl, false);
@@ -325,7 +306,29 @@
                     });
 
                 // -- Utility Functions
+                function makeCall(){
+                 let conversationsApi = new platformClient.ConversationsApi();
+                         try {
+                            const requestBody = {
+                              phoneNumber: '+15555555555',    // Destination number
+                                  queueId: 'YOUR_QUEUE_ID',       // Replace with your Queue ID
+                                  callFromQueueId: true,
+                                callerId: '+18885551234',       // Optional
+                                  callerIdName: 'Support Team'    // Optional
+                                    };
 
+                            const response = await conversationsApi.postConversationsCalls(requestBody);
+                            console.log('Call started:', response);
+                            
+                              } catch (error) {
+                        console.error('Error making call:', error);
+                        alert('Failed to start call. Check console for details.');
+                          }
+                        }
+
+
+                    
+                }
                 function setHidden(el, hidden) {
                     if (hidden) {
                         el.classList.add('hidden');
