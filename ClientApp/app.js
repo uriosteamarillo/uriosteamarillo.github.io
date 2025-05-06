@@ -16,19 +16,16 @@ $(document).ready(function(){
        }
         checkPhoneNumber(token, flowId , phoneNumber)
           .then(flowExecutionId => {
-        console.log('Flow Execution ID:', flowExecutionId);
+        return pollFlowExecutionUntilComplete(token, flowExecutionId);
+    })
+    .then(outputData => {
+        console.log("Flow Output Data:", outputData);
 
-        setTimeout(() => {
-            getFlowExecutionDetails(token, flowExecutionId);
-        }, 5000);
-        
-       
+        // Example: render to HTML
+        document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
     })
-    .then(status => {
-        console.log('Flow Status:', status);
-    })
-    .catch(error => {
-        console.error('Error during flow execution:', error);
+    .catch(err => {
+        console.error("Error polling flow execution:", err);
     });
 	    
     }); //  BOTON DE LLAMAR
@@ -145,19 +142,43 @@ function getFlowExecutionDetails(token, flowExecutionId) {
         if (!response.ok) {
             throw new Error('Failed to fetch flow execution details');
         }
-        return response.json();
+        return response.json();  // Parse the response to JSON
     })
     .then(data => {
         console.log("Flow Execution Details:", data);
-        const outputDiv = document.getElementById("output");
-        if (outputDiv && data.outputData) {
-            outputDiv.innerText = JSON.stringify(data.outputData, null, 2);
-        }
-        return data;
+        return data;  // Return the data so it can be used elsewhere
     })
     .catch(error => {
         console.error("Error:", error);
     });
 }
+function pollFlowExecutionUntilComplete(token, flowExecutionId, maxAttempts = 5, interval = 2000) {
+    let attempts = 0;
+
+    return new Promise((resolve, reject) => {
+        function checkStatus() {
+            getFlowExecutionDetails(token, flowExecutionId)
+                .then(data => {
+                    const status = data.status;
+                    console.log("Current Status:", status);
+
+                    if (status === "Completed") {
+                        resolve(data.outputData);  // When done, resolve with output data
+                    } else {
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(checkStatus, interval); // Wait and retry
+                        } else {
+                            reject(new Error("Flow did not complete in time."));
+                        }
+                    }
+                })
+                .catch(err => reject(err));
+        }
+
+        checkStatus(); // Start polling
+    });
+}
+
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
 
