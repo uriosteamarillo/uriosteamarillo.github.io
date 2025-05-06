@@ -96,7 +96,7 @@ function makeOutboundCall(token, phoneNumber, queueId) {
 function checkPhoneNumber(token, flowId, phoneNumber) {
     const url = 'https://api.usw2.pure.cloud/api/v2/flows/executions';
     
-    const payload = {
+    const body = {
         flowId: flowId,
         inputData: {
             "Flow.phonenumber": phoneNumber
