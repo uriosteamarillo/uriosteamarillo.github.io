@@ -9,13 +9,20 @@ $(document).ready(function(){
         const phoneNumber = '+541112345678';  // E.164 format
         const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
 
-        checkPhoneNumber(token,'96ef0374-31c8-45b1-b814-2472f46cac74',phoneNumber)
-	    .then(response => {
-                console.log('WorkFlow successfully:', response);
-            })
-            .catch(error => {
-                console.error('WorkFlow  call:', error);
-            });
+        checkPhoneNumber(token, '96ef0374-31c8-45b1-b814-2472f46cac74', phoneNumber)
+          .then(flowExecutionId => {
+        console.log('Flow Execution ID:', flowExecutionId);
+
+        // Wait 5 seconds
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return getFlowExecutionStatus(token, flowExecutionId);
+    })
+    .then(status => {
+        console.log('Flow Status:', status);
+    })
+    .catch(error => {
+        console.error('Error during flow execution:', error);
+    });
 	    
         makeOutboundCall(token, phoneNumber, queueId)
             .then(response => {
@@ -103,20 +110,46 @@ function checkPhoneNumber(token, flowId, phoneNumber) {
         }
     };
 
-    return $.ajax({
-        url: url,
+    return fetch(url, {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(payload),
-        success: function (response) {
-            console.log("Flow execution started:", response);
-        },
-        error: function (xhr) {
-            console.error("Flow execution error:", xhr.responseText);
+        body: JSON.stringify(body)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Flow started:", data);
+        return data.id;  // This is the flowExecutionId
+    })
+    .catch(err => {
+        console.error("Error starting flow:", err);
+    });
+
+}
+function getFlowExecutionDetails(token, flowExecutionId) {
+    const url = `https://api.usw2.pure.cloud/api/v2/flows/executions/${flowExecutionId}`;
+
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
         }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch flow execution details');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Flow Execution Details:", data);
+        return data;
+    })
+    .catch(error => {
+        console.error("Error:", error);
     });
 }
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
