@@ -56,7 +56,7 @@ function getParameterByName(name, data) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-function makeOutboundCall(token, phoneNumber, callFromQueueId) {
+function makeOutboundCall(token, phoneNumber, queueId) {
     const url = `https://api.${config.environment}/api/v2/conversations/calls`;
 
     const body = {
