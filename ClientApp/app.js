@@ -9,7 +9,7 @@ $(document).ready(function(){
         const phoneNumber = '+541112345678';  // E.164 format
         const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
 
-        checkPhoneNumber(token,'96ef0374-31c8-45b1-b814-2472f46cac74/',phoneNumber)
+        checkPhoneNumber(token,'96ef0374-31c8-45b1-b814-2472f46cac74',phoneNumber)
 	    .then(response => {
                 console.log('WorkFlow successfully:', response);
             })
