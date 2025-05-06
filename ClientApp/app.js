@@ -40,6 +40,35 @@ function getParameterByName(name, data) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
+function makeOutboundCall(token, phoneNumber, queueId = null) {
+    const url = `https://api.${config.environment}/api/v2/conversations/calls`;
+
+    const body = {
+        phoneNumber: phoneNumber, // E.164 format recommended: e.g., "+541112345678"
+        queueId: queueId // Optional. If provided, routes call via a queue
+    };
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            type: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(body),
+            success: function (data) {
+                console.log("Outbound call created:", data);
+                resolve(data);
+            },
+            error: function (err) {
+                console.error("Error making outbound call:", err);
+                reject(err);
+            }
+        });
+    });
+}
+
 
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
-envir
+
