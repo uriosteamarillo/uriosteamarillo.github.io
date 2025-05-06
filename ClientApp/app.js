@@ -18,9 +18,11 @@ $(document).ready(function(){
           .then(flowExecutionId => {
         console.log('Flow Execution ID:', flowExecutionId);
 
-        // Wait 5 seconds
+        setTimeout(() => {
+            getFlowExecutionDetails(token, flowExecutionId);
+        }, 5000);
         
-        return getFlowExecutionDetails(token, flowExecutionId);
+       
     })
     .then(status => {
         console.log('Flow Status:', status);
