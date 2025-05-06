@@ -14,7 +14,7 @@ $(document).ready(function(){
         console.log('Flow Execution ID:', flowExecutionId);
 
         // Wait 5 seconds
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        
         return getFlowExecutionStatus(token, flowExecutionId);
     })
     .then(status => {
