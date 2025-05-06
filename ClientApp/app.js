@@ -56,12 +56,12 @@ function getParameterByName(name, data) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
-function makeOutboundCall(token, phoneNumber, queueId = null) {
+function makeOutboundCall(token, phoneNumber, callFromQueueId) {
     const url = `https://api.${config.environment}/api/v2/conversations/calls`;
 
     const body = {
         phoneNumber: phoneNumber, // E.164 format recommended: e.g., "+541112345678"
-        queueId: queueId // Optional. If provided, routes call via a queue
+        callFromQueueId: queueId // Optional. If provided, routes call via a queue
     };
 
     return new Promise((resolve, reject) => {
