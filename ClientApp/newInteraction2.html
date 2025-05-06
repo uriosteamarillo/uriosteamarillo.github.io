@@ -187,6 +187,7 @@
                  *  It purposefully ignores the fact that a user may not be authorized to view interactions.
                  */
                 document.querySelector('.manual-example button').addEventListener('click', function() {
+                    console.log('hello');
                     let conversationId = document.querySelector('#conversation-id').value.trim();
                     if (conversationId) {
                         clientApp.conversations.showInteractionDetails(conversationId);
