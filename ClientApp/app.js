@@ -146,6 +146,10 @@ function getFlowExecutionDetails(token, flowExecutionId) {
     })
     .then(data => {
         console.log("Flow Execution Details:", data);
+        const outputDiv = document.getElementById("output");
+        if (outputDiv && data.outputData) {
+            outputDiv.innerText = JSON.stringify(data.outputData, null, 2);
+        }
         return data;
     })
     .catch(error => {
