@@ -7,7 +7,7 @@ $(document).ready(function(){
     $('#callBtn').on('click', function () {
         // Replace with real values or dynamically get them
         const phoneNumber = '+541112345678';  // E.164 format
-        const queueId = 'your-queue-id';      // Optional
+        const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
        
         makeOutboundCall(token, phoneNumber, queueId)
             .then(response => {
