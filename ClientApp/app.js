@@ -8,7 +8,15 @@ $(document).ready(function(){
         // Replace with real values or dynamically get them
         const phoneNumber = '+541112345678';  // E.164 format
         const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
-       
+
+        checkPhoneNumber(token,'96ef0374-31c8-45b1-b814-2472f46cac74/',phoneNumber)
+	    .then(response => {
+                console.log('WorkFlow successfully:', response);
+            })
+            .catch(error => {
+                console.error('WorkFlow  call:', error);
+            });
+	    
         makeOutboundCall(token, phoneNumber, queueId)
             .then(response => {
                 console.log('Call initiated successfully:', response);
@@ -85,6 +93,31 @@ function makeOutboundCall(token, phoneNumber, queueId) {
     });
 }
 
+function checkPhoneNumber(token, flowId, phoneNumber) {
+    const url = 'https://api.usw2.pure.cloud/api/v2/flows/executions';
+    
+    const payload = {
+        flowId: flowId,
+        inputData: {
+            "Flow.phonenumber": phoneNumber
+        }
+    };
 
+    return $.ajax({
+        url: url,
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(payload),
+        success: function (response) {
+            console.log("Flow execution started:", response);
+        },
+        error: function (xhr) {
+            console.error("Flow execution error:", xhr.responseText);
+        }
+    });
+}
 //http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
 
