@@ -141,6 +141,8 @@
                 *
                 * Reading the PC Environment from the query string or state param returned from OAuth2 response
                 */
+
+                      console.log("Hello Starting");
                 const queryParameters = getQueryParameters();
                 const state = computeState(queryParameters);
                 let pcEnvironment = queryParameters.pcEnvironment;
