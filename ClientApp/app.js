@@ -14,7 +14,7 @@ $(document).ready(function(){
         alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
         return;
        }
-        checkPhoneNumber(token, flowid, phoneNumber)
+        checkPhoneNumber(token, flowId , phoneNumber)
           .then(flowExecutionId => {
         console.log('Flow Execution ID:', flowExecutionId);
 
