@@ -132,20 +132,7 @@
             </section>
         </section>
 
-        <section class="manual-example">
-            <h2>Manual Tester</h2>
-            <div class="form-group conversation-id">
-                <label for="conversation-id">Conversation ID:</label>
-                <input type="text" class="form-control" id="conversation-id">
-            </div>
-            <div class="form-group">
-              
-            </div>
-            <div class="form-group">
-                <div class="tester-note">[Note:] This tester intentionally bypasses client-side permission checks.</div>
-            </div>
-        </section>
-
+       
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 /*
@@ -186,7 +173,7 @@
                  *  This UI is used for testing purposes to manually navigate to a conversation by ID.
                  *  It purposefully ignores the fact that a user may not be authorized to view interactions.
                  */
-                 const callButton = document.querySelector('callBtn');
+                 const callButton = document.getElementById('callBtn');
                   if (callButton) {
                     callButton.addEventListener('click', function () {
                       console.log("Button clicked");
