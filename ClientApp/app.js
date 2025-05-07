@@ -4,30 +4,47 @@ var token;
 $(document).ready(function(){
      $("#errorMessage").hide();
 
+   $("#errorMessage").hide();
+
     $('#callBtn').on('click', function () {
-        // Replace with real values or dynamically get them
-        const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7';      // Optional
+														   
+        const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7'; // Optional
         const phoneNumber = $('#phoneInput').val(); // Get number from input
         const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
         
         if (!phoneNumber || !phoneNumber.startsWith('+')) {
-        alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
-        return;
-       }
-	document.getElementById('output').textContent = 'Processing';   
-        checkPhoneNumber(token, flowId , phoneNumber)
-          .then(flowExecutionId => {
-        return pollFlowExecutionUntilComplete(token, flowExecutionId);
-    })
-    .then(outputData => {
-        console.log("Flow Output Data:", outputData);
+            alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
+            return;
+        }
 
-        // Example: render to HTML
-        document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
-    })
-    .catch(err => {
-        console.error("Error polling flow execution:", err);
+        this.disabled = true;    
+        document.getElementById('output').textContent = 'Processing...';   
+													 
+						
+																	  
+	  
+						 
+													 
+
+        checkPhoneNumber(token, flowId, phoneNumber)
+            .then(flowExecutionId => {
+                return pollFlowExecutionUntilComplete(token, flowExecutionId);
+            })
+            .then(outputData => {
+                console.log("Flow Output Data:", outputData);
+                document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
+            })
+            .catch(err => {
+                console.error("Error during flow execution:", err);
+                document.getElementById('output').textContent = 'Error occurred. See console for details.';
+								   
+								  
+            })
+            .finally(() => {
+                this.disabled = false;
+            });
     });
+});
 	    
     }); //  BOTON DE LLAMAR
 
