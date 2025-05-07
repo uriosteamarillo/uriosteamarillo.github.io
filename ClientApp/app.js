@@ -1,28 +1,21 @@
 var config = {};
 var token;
 
-$(document).ready(function(){
-     $("#errorMessage").hide();
+$(document).ready(function () {
+    $("#errorMessage").hide();
 
     $('#callBtn').on('click', function () {
-														   
-        const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7'; // Optional
+        const button = this;
         const phoneNumber = $('#phoneInput').val(); // Get number from input
         const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
-        
+
         if (!phoneNumber || !phoneNumber.startsWith('+')) {
             alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
             return;
         }
 
-        this.disabled = true;    
-        document.getElementById('output').textContent = 'Processing...';   
-													 
-						
-																	  
-	  
-						 
-													 
+        button.disabled = true;
+        document.getElementById('output').textContent = 'Processing...';
 
         checkPhoneNumber(token, flowId, phoneNumber)
             .then(flowExecutionId => {
@@ -35,46 +28,34 @@ $(document).ready(function(){
             .catch(err => {
                 console.error("Error during flow execution:", err);
                 document.getElementById('output').textContent = 'Error occurred. See console for details.';
-								   
-								  
             })
             .finally(() => {
-                this.disabled = false;
+                button.disabled = false;
             });
     });
-});
-	    
 
-
-	
-    
-    if(window.location.hash) 
-    {	
-        config.environment = getParameterByName('environment', window.location.search);               
+    // OAuth & token parsing
+    if (window.location.hash) {
+        config.environment = getParameterByName('environment', window.location.search);
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
         loadQueues(token);
-    }
-    else
-    {	
-        //Config Genesys Cloud
+    } else {
         config = {
-            "environment": "usw2.pure.cloud",
-            "clientId": "35a67a68-4cdb-4fff-a3ba-17a589e070a8",
-            "redirectUri": "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
-
+            environment: "usw2.pure.cloud",
+            clientId: "35a67a68-4cdb-4fff-a3ba-17a589e070a8",
+            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
         };
-        
+
         var queryStringData = {
             response_type: "token",
             client_id: config.clientId,
             redirect_uri: config.redirectUri
-        }        
-        
+        };
+
         window.location.replace("https://login." + config.environment + "/authorize?" + jQuery.param(queryStringData));
     }
-
-});
+});// ready document
 
 
 function getParameterByName(name, data) {
