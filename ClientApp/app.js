@@ -25,7 +25,7 @@ $(document).ready(function () {
             .then(outputData => {
                 console.log("Flow Output Data:", outputData);
                 document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
-                if (outputData.["Flow.CanCall"] === true) {
+                if (outputData["Flow.CanCall"] === true) {
                         makeOutboundCall(token, phoneNumber, queueId)
                         .then(response => {
                         console.log("Outbound call initiated:", response);
