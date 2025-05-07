@@ -160,7 +160,7 @@ function pollFlowExecutionUntilComplete(token, flowExecutionId, maxAttempts = 5,
                     const status = data.status;
                     console.log("Current Status:", status);
 
-                    if (status === "Completed") {
+                    if (status === "COMPLETED") {
                         resolve(data.outputData);  // When done, resolve with output data
                     } else {
                         attempts++;
