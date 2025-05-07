@@ -4,8 +4,6 @@ var token;
 $(document).ready(function(){
      $("#errorMessage").hide();
 
-   $("#errorMessage").hide();
-
     $('#callBtn').on('click', function () {
 														   
         const queueId = 'c2d11d3a-d9f7-44ed-a3d4-3871adc69ea7'; // Optional
@@ -46,7 +44,7 @@ $(document).ready(function(){
     });
 });
 	    
-    }); //  BOTON DE LLAMAR
+
 
 	
     
