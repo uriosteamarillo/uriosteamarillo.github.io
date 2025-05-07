@@ -24,6 +24,17 @@ $(document).ready(function () {
             .then(outputData => {
                 console.log("Flow Output Data:", outputData);
                 document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
+                if (outputData.CanCall === true) {
+                        makeOutboundCall(token, phoneNumber, queueId)
+                        .then(response => {
+                        console.log("Outbound call initiated:", response);
+                        })
+                            .catch(err => {
+                        console.error("Error initiating outbound call:", err);
+                    });
+    } else {
+        console.log("Cannot make call: CanCall is false or not set.");
+    }
             })
             .catch(err => {
                 console.error("Error during flow execution:", err);
