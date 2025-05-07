@@ -6,6 +6,7 @@ $(document).ready(function () {
 
     $('#callBtn').on('click', function () {
         const button = this;
+        const queueId = $('#queueSelect').val();  // Capture it at the moment of interacti
         const phoneNumber = $('#phoneInput').val(); // Get number from input
         const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
 
@@ -78,7 +79,7 @@ function getParameterByName(name, data) {
 
 function makeOutboundCall(token, phoneNumber, queueId) {
     const url = `https://api.${config.environment}/api/v2/conversations/calls`;
-
+   
     const body = {
         phoneNumber: phoneNumber, // E.164 format recommended: e.g., "+541112345678"
         callFromQueueId: queueId // Optional. If provided, routes call via a queue
