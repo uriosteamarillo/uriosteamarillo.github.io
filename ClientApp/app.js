@@ -53,7 +53,7 @@ $(document).ready(function(){
         config.environment = getParameterByName('environment', window.location.search);               
         token = getParameterByName('access_token', window.location.hash);
         location.hash = '';
-        
+        loadQueues(token);
     }
     else
     {	
@@ -190,6 +190,38 @@ function pollFlowExecutionUntilComplete(token, flowExecutionId, maxAttempts = 5,
         }
 
         checkStatus(); // Start polling
+    });
+}
+
+function loadQueues(token) {
+    const url = `https://api.${config.environment}/api/v2/routing/queues?pageSize=100&pageNumber=1`;
+
+    fetch(url, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch queues');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const queueSelect = $('#queueSelect');
+        queueSelect.empty(); // Clear any placeholder option
+
+        data.entities.forEach(queue => {
+            queueSelect.append(
+                $('<option></option>')
+                    .val(queue.id)
+                    .text(queue.name)
+            );
+        });
+    })
+    .catch(error => {
+        console.error("Error loading queues:", error);
+        $('#queueSelect').html('<option value="">Failed to load queues</option>');
     });
 }
 
