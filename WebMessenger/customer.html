@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mock Company Website</title>
+  <title>MockCo Website</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #f8f9fa;
       color: #333;
     }
@@ -30,77 +30,33 @@
       color: #fff;
       text-decoration: none;
       margin-left: 20px;
+      cursor: pointer;
+    }
+
+    section {
+      display: none;
+      padding: 40px 20px;
+    }
+
+    .active {
+      display: block;
     }
 
     .hero {
       background-color: #007bff;
       color: white;
-      padding: 60px 20px;
       text-align: center;
     }
 
-    .hero h2 {
-      font-size: 40px;
-      margin: 0 0 20px;
+    .features, .products, .support, .contact {
+      background-color: #fff;
     }
 
-    .hero p {
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-
-    .hero button {
-      padding: 10px 20px;
-      background: white;
-      color: #007bff;
-      border: none;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .features {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      padding: 40px 20px;
-      background: #fff;
-    }
-
-    .feature {
-      width: 300px;
-      margin: 20px;
+    .feature, .product, .faq, .contact-info {
+      margin: 20px 0;
       padding: 20px;
-      background: #f1f1f1;
+      background: #e9ecef;
       border-radius: 8px;
-      text-align: center;
-    }
-
-    .feature h3 {
-      margin-top: 0;
-    }
-
-    .newsletter {
-      padding: 40px 20px;
-      background-color: #e9ecef;
-      text-align: center;
-    }
-
-    .newsletter input[type="email"] {
-      padding: 10px;
-      width: 250px;
-      margin-right: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .newsletter button {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
     }
 
     footer {
@@ -110,7 +66,6 @@
       padding: 20px;
     }
 
-    /* Chat form */
     .chat-form {
       position: fixed;
       top: 100px;
@@ -154,47 +109,57 @@
 <header>
   <h1>MockCo</h1>
   <nav>
-    <a href="#">Home</a>
-    <a href="#">Products</a>
-    <a href="#">Solutions</a>
-    <a href="#">Support</a>
-    <a href="#">Contact</a>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('products')">Products</a>
+    <a onclick="showPage('support')">Support</a>
+    <a onclick="showPage('contact')">Contact</a>
   </nav>
 </header>
 
-<section class="hero">
+<!-- Pages -->
+<section id="home" class="hero active">
   <h2>Welcome to MockCo</h2>
   <p>We provide innovative solutions for modern challenges.</p>
-  <button>Learn More</button>
 </section>
 
-<section class="features">
-  <div class="feature">
-    <h3>Fast Support</h3>
-    <p>Reach our support team 24/7 with live chat and co-browse.</p>
+<section id="products" class="products">
+  <h2>Our Products</h2>
+  <div class="product">
+    <h3>Cloud Platform</h3>
+    <p>Secure, scalable cloud services tailored to your business.</p>
   </div>
-  <div class="feature">
-    <h3>Custom Solutions</h3>
-    <p>Tailored technology and service packages that fit your needs.</p>
-  </div>
-  <div class="feature">
-    <h3>Analytics</h3>
-    <p>Visualize and improve performance with real-time analytics.</p>
+  <div class="product">
+    <h3>Customer AI</h3>
+    <p>Real-time insights and automation powered by AI.</p>
   </div>
 </section>
 
-<section class="newsletter">
-  <h2>Stay Updated</h2>
-  <p>Subscribe to our newsletter to receive the latest news.</p>
-  <input type="email" placeholder="you@example.com" />
-  <button>Subscribe</button>
+<section id="support" class="support">
+  <h2>Support & FAQs</h2>
+  <div class="faq">
+    <h3>How can I reach support?</h3>
+    <p>Use our live chat, email, or phone 24/7.</p>
+  </div>
+  <div class="faq">
+    <h3>Do you support co-browsing?</h3>
+    <p>Yes! We offer seamless co-browse with chat agents.</p>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact Us</h2>
+  <div class="contact-info">
+    <p><strong>Email:</strong> support@mockco.com</p>
+    <p><strong>Phone:</strong> +1 800 123 4567</p>
+    <p><strong>Address:</strong> 123 Business Lane, Tech City</p>
+  </div>
 </section>
 
 <footer>
   &copy; 2025 MockCo Inc. All rights reserved.
 </footer>
 
-<!-- Chat Form (you can hook Genesys here) -->
+<!-- Chat Form -->
 <div class="chat-form">
   <h3>Start a Chat</h3>
   <label for="firstname">First Name</label>
@@ -203,8 +168,18 @@
   <input type="text" id="lastname" placeholder="Doe" />
   <label for="email">Email</label>
   <input type="email" id="email" placeholder="john@example.com" />
-  <button onclick="alert('Mock Chat Start')">Start Chat</button>
+  <button onclick="alert('Mock Chat Started')">Start Chat</button>
 </div>
+
+<script>
+  function showPage(pageId) {
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(pageId).classList.add('active');
+  }
+</script>
 
 </body>
 </html>
