@@ -103,6 +103,130 @@
       cursor: pointer;
     }
   </style>
+  (function (g, e, n, es, ys) {
+      g['_genesysJs'] = e;
+      g[e] = g[e] || function () {
+        (g[e].q = g[e].q || []).push(arguments)
+      };
+      g[e].t = 1 * new Date();
+      g[e].c = es;
+      ys = document.createElement('script');
+      ys.async = 1;
+      ys.src = n;
+      ys.charset = 'utf-8';
+      document.head.appendChild(ys);
+
+      // Add an event listener for the 'load' event
+      ys.onload = function () {
+        // Your code to run after the Genesys snippet has finished loading
+
+	//localStorage.clear()      
+        console.log('Code executed after Genesys snippet has loaded');
+       Genesys("subscribe", "Messenger.closed", function(){
+        console.log('Messenger Closed');
+	       endconversation();
+	       
+       });
+
+      
+
+
+
+      };
+      // Your code to run immediately after the Genesys snippet goes here
+      console.log('Code executed immediately after Genesys snippet');
+    
+
+    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+      environment: 'prod-usw2',
+      deploymentId: '47519974-653c-4ba6-890a-59fcbab5d744'
+    });	
+   function toggleMessenger() {
+
+      var vfirstName = document.getElementById('firstname').value;
+      var vlastName = document.getElementById('lastname').value;
+     
+      var vemail = document.getElementById('email').value;
+      var browserLanguage = navigator.language || navigator.userLanguage;
+        console.log('Browser Language:', browserLanguage);
+
+        // Get approximate location (may require additional permissions)
+        navigator.geolocation.getCurrentPosition(function(position) {
+            console.log('Latitude:', position.coords.latitude);
+            console.log('Longitude:', position.coords.longitude);
+        });
+	  
+	  
+	  
+	  
+      Genesys("command", "Database.set", {
+        messaging: {
+          customAttributes: {
+            'context.firstName': vfirstName,
+            'context.lastName': vlastName,
+            'context.email': vemail,
+            'browser_language': browserLanguage,
+            'current_location': "Argentina",
+	    'customer': "Mexichem"
+           
+          }
+        }
+      });
+      console.log('Messenger OPEN');
+      Genesys("command", "Messenger.open", {},
+        function (o) {
+          Genesys("subscribe", "Messenger.ready", handleMessengerReady);
+          
+
+        },  // if resolved
+        function (o) {    // if rejected
+          Genesys("command", "Messenger.close");
+        }
+      );
+    }
+
+    function handleMessengerReady() {
+      console.log("Ready");
+
+//SUBSCRIPTION TO EVENTS
+
+Genesys("subscribe", "Conversations.closed", function(){
+
+console.log('Conversation Closed..... <YOUR CODE HERE>');
+
+});
+
+
+
+    }	
+
+	
+   function endconversation(){
+Genesys("command", "MessagingService.clearConversation", 
+    {}, 
+    function() {
+    /*fulfilled callback*/
+	console.log("Conversation Cleared")
+    },
+    function() {
+    /*rejected callback*/
+	    console.log("Conversation NOT Cleared")
+    });
+
+	   
+   }
+
+
+window.addEventListener('beforeunload', function (e) {
+    // Cancel the event
+    e.preventDefault();
+    // Chrome requires returnValue to be set
+    e.returnValue = '';
+    
+    // Your custom code here, for example:
+	endconversation()
+    alert("Do you really want to leave?");
+});
 </head>
 <body>
 
@@ -179,6 +303,16 @@
     });
     document.getElementById(pageId).classList.add('active');
   }
+
+   function startChat() {
+        // Add your logic here to handle the start of the chat
+       
+
+        // Get browser language
+        
+		
+		toggleMessenger();
+    }
 </script>
 
 </body>
