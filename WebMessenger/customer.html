@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Company Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    .hero {
+      background-color: #007bff;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 40px;
+      margin: 0 0 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .hero button {
+      padding: 10px 20px;
+      background: white;
+      color: #007bff;
+      border: none;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      padding: 40px 20px;
+      background: #fff;
+    }
+
+    .feature {
+      width: 300px;
+      margin: 20px;
+      padding: 20px;
+      background: #f1f1f1;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+    }
+
+    .newsletter {
+      padding: 40px 20px;
+      background-color: #e9ecef;
+      text-align: center;
+    }
+
+    .newsletter input[type="email"] {
+      padding: 10px;
+      width: 250px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .newsletter button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Chat form */
+    .chat-form {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      z-index: 1000;
+    }
+
+    .chat-form label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    .chat-form input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .chat-form button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MockCo</h1>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">Solutions</a>
+    <a href="#">Support</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Welcome to MockCo</h2>
+  <p>We provide innovative solutions for modern challenges.</p>
+  <button>Learn More</button>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>Fast Support</h3>
+    <p>Reach our support team 24/7 with live chat and co-browse.</p>
+  </div>
+  <div class="feature">
+    <h3>Custom Solutions</h3>
+    <p>Tailored technology and service packages that fit your needs.</p>
+  </div>
+  <div class="feature">
+    <h3>Analytics</h3>
+    <p>Visualize and improve performance with real-time analytics.</p>
+  </div>
+</section>
+
+<section class="newsletter">
+  <h2>Stay Updated</h2>
+  <p>Subscribe to our newsletter to receive the latest news.</p>
+  <input type="email" placeholder="you@example.com" />
+  <button>Subscribe</button>
+</section>
+
+<footer>
+  &copy; 2025 MockCo Inc. All rights reserved.
+</footer>
+
+<!-- Chat Form (you can hook Genesys here) -->
+<div class="chat-form">
+  <h3>Start a Chat</h3>
+  <label for="firstname">First Name</label>
+  <input type="text" id="firstname" placeholder="John" />
+  <label for="lastname">Last Name</label>
+  <input type="text" id="lastname" placeholder="Doe" />
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="john@example.com" />
+  <button onclick="alert('Mock Chat Start')">Start Chat</button>
+</div>
+
+</body>
+</html>
