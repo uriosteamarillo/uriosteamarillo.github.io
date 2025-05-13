@@ -43,9 +43,19 @@
     }
 
     .hero {
-      background-color: #007bff;
+      background-image: url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
       color: white;
       text-align: center;
+    }
+
+    .hero h2, .hero p {
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      display: inline-block;
+      margin: 0 auto;
+      border-radius: 10px;
     }
 
     .features, .products, .support, .contact {
@@ -57,6 +67,12 @@
       padding: 20px;
       background: #e9ecef;
       border-radius: 8px;
+    }
+
+    .product img, .contact-info img, .faq img {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
     }
 
     footer {
@@ -103,6 +119,7 @@
       cursor: pointer;
     }
   </style>
+
   <script>
     (function (g, e, n, es, ys) {
       g['_genesysJs'] = e;
@@ -117,119 +134,92 @@
       ys.charset = 'utf-8';
       document.head.appendChild(ys);
 
-      // Add an event listener for the 'load' event
       ys.onload = function () {
-        // Your code to run after the Genesys snippet has finished loading
-
-	//localStorage.clear()      
-        console.log('Code executed after Genesys snippet has loaded');
-       Genesys("subscribe", "Messenger.closed", function(){
-        console.log('Messenger Closed');
-	       endconversation();
-	       
-       });
-
-      
-
-
-
+        console.log('Genesys script loaded');
+        Genesys("subscribe", "Messenger.closed", function(){
+          console.log('Messenger Closed');
+          endconversation();
+        });
       };
-      // Your code to run immediately after the Genesys snippet goes here
-      console.log('Code executed immediately after Genesys snippet');
-    
+
+      console.log('Immediately after Genesys script called');
 
     })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
       environment: 'prod-usw2',
       deploymentId: '47519974-653c-4ba6-890a-59fcbab5d744'
     });	
-   function toggleMessenger() {
 
+    function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
       var vlastName = document.getElementById('lastname').value;
-     
       var vemail = document.getElementById('email').value;
       var browserLanguage = navigator.language || navigator.userLanguage;
-        console.log('Browser Language:', browserLanguage);
 
-        // Get approximate location (may require additional permissions)
-        navigator.geolocation.getCurrentPosition(function(position) {
-            console.log('Latitude:', position.coords.latitude);
-            console.log('Longitude:', position.coords.longitude);
-        });
-	  
-	  
-	  
-	  
-      Genesys("command", "Database.set", {
-        messaging: {
-          customAttributes: {
-            'context.firstName': vfirstName,
-            'context.lastName': vlastName,
-            'context.email': vemail,
-            'browser_language': browserLanguage,
-            'current_location': "Argentina",
-	    'customer': "Mexichem"
-           
+      navigator.geolocation.getCurrentPosition(function(position) {
+        Genesys("command", "Database.set", {
+          messaging: {
+            customAttributes: {
+              'context.firstName': vfirstName,
+              'context.lastName': vlastName,
+              'context.email': vemail,
+              'browser_language': browserLanguage,
+              'latitude': position.coords.latitude,
+              'longitude': position.coords.longitude,
+              'customer': "Mexichem"
+            }
           }
-        }
+        });
+      }, function() {
+        Genesys("command", "Database.set", {
+          messaging: {
+            customAttributes: {
+              'context.firstName': vfirstName,
+              'context.lastName': vlastName,
+              'context.email': vemail,
+              'browser_language': browserLanguage,
+              'current_location': "Argentina",
+              'customer': "Mexichem"
+            }
+          }
+        });
       });
-      console.log('Messenger OPEN');
-      Genesys("command", "Messenger.open", {},
-        function (o) {
-          Genesys("subscribe", "Messenger.ready", handleMessengerReady);
-          
 
-        },  // if resolved
-        function (o) {    // if rejected
+      Genesys("command", "Messenger.open", {},
+        function () {
+          Genesys("subscribe", "Messenger.ready", handleMessengerReady);
+        },
+        function () {
           Genesys("command", "Messenger.close");
         }
       );
     }
 
     function handleMessengerReady() {
-      console.log("Ready");
+      console.log("Messenger ready");
+      Genesys("subscribe", "Conversations.closed", function(){
+        console.log('Conversation Closed');
+      });
+    }
 
-//SUBSCRIPTION TO EVENTS
+    function endconversation(){
+      Genesys("command", "MessagingService.clearConversation", {}, 
+        function() {
+          console.log("Conversation Cleared");
+        },
+        function() {
+          console.log("Conversation NOT Cleared");
+        }
+      );
+    }
 
-Genesys("subscribe", "Conversations.closed", function(){
-
-console.log('Conversation Closed..... <YOUR CODE HERE>');
-
-});
-
-
-
-    }	
-
-	
-   function endconversation(){
-Genesys("command", "MessagingService.clearConversation", 
-    {}, 
-    function() {
-    /*fulfilled callback*/
-	console.log("Conversation Cleared")
-    },
-    function() {
-    /*rejected callback*/
-	    console.log("Conversation NOT Cleared")
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = '';
+      endconversation();
     });
-
-	   
-   }
-
-
-window.addEventListener('beforeunload', function (e) {
-    // Cancel the event
-    e.preventDefault();
-    // Chrome requires returnValue to be set
-    e.returnValue = '';
-    
-    // Your custom code here, for example:
-	endconversation()
-    alert("Do you really want to leave?");
-});	
-</script>	
+  </script>
 </head>
+
 <body>
 
 <header>
@@ -242,7 +232,6 @@ window.addEventListener('beforeunload', function (e) {
   </nav>
 </header>
 
-<!-- Pages -->
 <section id="home" class="hero active">
   <h2>Welcome to MockCo</h2>
   <p>We provide innovative solutions for modern challenges.</p>
@@ -253,10 +242,12 @@ window.addEventListener('beforeunload', function (e) {
   <div class="product">
     <h3>Cloud Platform</h3>
     <p>Secure, scalable cloud services tailored to your business.</p>
+    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=60" alt="Cloud Platform Image">
   </div>
   <div class="product">
     <h3>Customer AI</h3>
     <p>Real-time insights and automation powered by AI.</p>
+    <img src="https://images.unsplash.com/photo-1581091012184-5c1a19c8c861?auto=format&fit=crop&w=800&q=60" alt="Customer AI Image">
   </div>
 </section>
 
@@ -265,6 +256,7 @@ window.addEventListener('beforeunload', function (e) {
   <div class="faq">
     <h3>How can I reach support?</h3>
     <p>Use our live chat, email, or phone 24/7.</p>
+    <img src="https://media.giphy.com/media/3o7btXJQm5DD8nN3j2/giphy.gif" alt="Support GIF">
   </div>
   <div class="faq">
     <h3>Do you support co-browsing?</h3>
@@ -278,6 +270,7 @@ window.addEventListener('beforeunload', function (e) {
     <p><strong>Email:</strong> support@mockco.com</p>
     <p><strong>Phone:</strong> +1 800 123 4567</p>
     <p><strong>Address:</strong> 123 Business Lane, Tech City</p>
+    <img src="https://images.unsplash.com/photo-1600573471600-7b2c9ec2ad7e?auto=format&fit=crop&w=800&q=60" alt="Map or Office Location">
   </div>
 </section>
 
@@ -306,16 +299,12 @@ window.addEventListener('beforeunload', function (e) {
     document.getElementById(pageId).classList.add('active');
   }
 
-   function startChat() {
-        // Add your logic here to handle the start of the chat
-       
-
-        // Get browser language
-        
-		
-		toggleMessenger();
-    }
+  function startChat() {
+    showPage('support');
+    toggleMessenger();
+  }
 </script>
 
 </body>
 </html>
+
