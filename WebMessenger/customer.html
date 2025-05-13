@@ -119,32 +119,6 @@
   </style>
 
   <script>
-    (function (g, e, n, es, ys) {
-      g['_genesysJs'] = e;
-      g[e] = g[e] || function () {
-        (g[e].q = g[e].q || []).push(arguments)
-      };
-      g[e].t = 1 * new Date();
-      g[e].c = es;
-      ys = document.createElement('script');
-      ys.async = 1;
-      ys.src = n;
-      ys.charset = 'utf-8';
-      document.head.appendChild(ys);
-
-      ys.onload = function () {
-        console.log('Genesys script loaded');
-        Genesys("subscribe", "Messenger.closed", function(){
-          console.log('Messenger Closed');
-          endconversation();
-        });
-      };
-
-    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
-      environment: 'prod-usw2',
-      deploymentId: '47519974-653c-4ba6-890a-59fcbab5d744'
-    });	
-
     function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
       var vlastName = document.getElementById('lastname').value;
@@ -180,39 +154,21 @@
         });
       });
 
-      Genesys("command", "Messenger.open", {},
-        function () {
-          Genesys("subscribe", "Messenger.ready", handleMessengerReady);
-        },
-        function () {
-          Genesys("command", "Messenger.close");
-        }
-      );
+      Genesys("command", "Messenger.open", {});
     }
 
-    function handleMessengerReady() {
-      console.log("Messenger ready");
-      Genesys("subscribe", "Conversations.closed", function(){
-        console.log('Conversation Closed');
+    function showPage(pageId) {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(section => {
+        section.classList.remove('active');
       });
+      document.getElementById(pageId).classList.add('active');
     }
 
-    function endconversation(){
-      Genesys("command", "MessagingService.clearConversation", {}, 
-        function() {
-          console.log("Conversation Cleared");
-        },
-        function() {
-          console.log("Conversation NOT Cleared");
-        }
-      );
+    function startChat() {
+      showPage('support');
+      toggleMessenger();
     }
-
-    window.addEventListener('beforeunload', function (e) {
-      e.preventDefault();
-      e.returnValue = '';
-      endconversation();
-    });
   </script>
 </head>
 
@@ -231,7 +187,9 @@
 <section id="home" class="hero active">
   <h2>Welcome to Argentina Web Site</h2>
   <p>Innovative tech from the heart of South America.</p>
-  <img src="https://media.giphy.com/media/3o7abB06u9bNzA8lu8/giphy.gif" alt="Argentina GIF">
+  <img src="https://via.placeholder.com/800x400.png?text=Welcome+to+Argentina" alt="Argentina Image">
+  <p>Explore our products, support, and contact information through the menu above or below.</p>
+  <a onclick="showPage('products')">Check our Products</a> | <a onclick="showPage('support')">Support</a>
 </section>
 
 <section id="products" class="products">
@@ -239,13 +197,17 @@
   <div class="product">
     <h3>Cloud Platform</h3>
     <p>Secure, scalable cloud services tailored to your business.</p>
-    <img src="https://media.giphy.com/media/L95W4wv8nnb9K/giphy.gif" alt="Cloud GIF">
+    <img src="https://via.placeholder.com/800x400.png?text=Cloud+Platform" alt="Cloud Platform Image">
+    <p>Our platform is designed to scale with your business needs.</p>
   </div>
   <div class="product">
     <h3>Customer AI</h3>
     <p>Real-time insights and automation powered by AI.</p>
-    <img src="https://media.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" alt="AI GIF">
+    <img src="https://via.placeholder.com/800x400.png?text=Customer+AI" alt="AI Image">
+    <p>Let our AI enhance your customer interactions and deliver insights.</p>
   </div>
+  <p>For more details, contact us or explore the support section.</p>
+  <a onclick="showPage('contact')">Contact Us</a>
 </section>
 
 <section id="support" class="support">
@@ -253,13 +215,16 @@
   <div class="faq">
     <h3>How can I reach support?</h3>
     <p>Use our live chat, email, or phone 24/7.</p>
-    <img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" alt="Support GIF">
+    <img src="https://via.placeholder.com/800x400.png?text=Support+Image" alt="Support Image">
+    <p>Our team is always available to assist you.</p>
   </div>
   <div class="faq">
     <h3>Do you support co-browsing?</h3>
     <p>Yes! We offer seamless co-browse with chat agents.</p>
-    <img src="https://media.giphy.com/media/3o6MbfalYdZrLZzWx2/giphy.gif" alt="Co-browsing GIF">
+    <img src="https://via.placeholder.com/800x400.png?text=Co-Browsing+Image" alt="Co-Browsing Image">
   </div>
+  <p>Have more questions? Reach out to us through the contact section.</p>
+  <a onclick="showPage('contact')">Contact Us</a>
 </section>
 
 <section id="contact" class="contact">
@@ -268,8 +233,10 @@
     <p><strong>Email:</strong> support@argentinaweb.com</p>
     <p><strong>Phone:</strong> +54 11 1234 5678</p>
     <p><strong>Address:</strong> Av. Corrientes 1234, Buenos Aires, Argentina</p>
-    <img src="https://media.giphy.com/media/l2QDM9Jnim1YVILXa/giphy.gif" alt="Buenos Aires Map GIF">
+    <img src="https://via.placeholder.com/800x400.png?text=Buenos+Aires+Map" alt="Buenos Aires Map">
   </div>
+  <p>Feel free to get in touch with us for any inquiries or support!</p>
+  <a onclick="showPage('home')">Back to Home</a>
 </section>
 
 <footer>
@@ -288,22 +255,8 @@
   <button onclick="startChat()">Start Chat</button>
 </div>
 
-<script>
-  function showPage(pageId) {
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-      section.classList.remove('active');
-    });
-    document.getElementById(pageId).classList.add('active');
-  }
-
-  function startChat() {
-    showPage('support');
-    toggleMessenger();
-  }
-</script>
-
 </body>
 </html>
+
 
 
