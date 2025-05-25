@@ -148,7 +148,13 @@
       console.log("Ready");
 
 //SUBSCRIPTION TO EVENTS
+Gnesys("subscribe", "Messenger.closed", function(){
 
+
+console.log('Messenger  Closed..... <YOUR CODE HERE>');	
+});
+
+	    
 Genesys("subscribe", "Conversations.closed", function(){
 
 console.log('Conversation Closed..... <YOUR CODE HERE>');
