@@ -196,14 +196,25 @@
         });
       });
 
-      Genesys("command", "Messenger.open", {});
+     Genesys("command", "Messenger.open", {});
 
     // SUBSCRIBE TO GENESYS EVENTS
      Genesys("subscribe", "Database.updated", function(e){
      console.log(e.data)  // Updated database object
      });
 
-      
+     Genesys("subscribe", "Messenger.closed", function(){
+
+
+       console.log('Messenger  Closed..... <YOUR CODE HERE>');	
+      });
+
+	    
+      Genesys("subscribe", "Conversations.closed", function(){
+
+       console.log('Conversation Closed..... <YOUR CODE HERE>');
+
+        }); 
     }
 
     function showPage(pageId) {
