@@ -119,12 +119,19 @@
   </style>
 
   <script>
+   Genesys("subscribe", "Database.updated", function(e){
+  console.log(e.data)  // Updated database object
+  });
+    
     function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
       var vlastName = document.getElementById('lastname').value;
       var vemail = document.getElementById('email').value;
       var browserLanguage = navigator.language || navigator.userLanguage;
 
+
+        
+      
       navigator.geolocation.getCurrentPosition(function(position) {
         Genesys("command", "Database.set", {
           messaging: {
