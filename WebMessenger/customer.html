@@ -199,6 +199,24 @@
      Genesys("command", "Messenger.open", {});
 
     // SUBSCRIBE TO GENESYS EVENTS
+
+    setInterval(function() {
+    Genesys(
+        "command",
+        "Database.get",
+        { name: "messaging.customAttributes" },
+        function(data) {
+            // fulfilled, returns data
+            console.log("Datos recibidos:", data);
+        },
+        function() {
+            // rejected
+            console.error("Error al obtener los datos.");
+        }
+    );
+}, 1000); // 1000 ms = 1 segundo
+
+	    
      Genesys("subscribe", "Database.updated", function(e){
      console.log("Datos adjuntos modificados")  // Updated database object
      
