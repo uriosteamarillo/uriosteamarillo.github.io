@@ -200,7 +200,9 @@
 
     // SUBSCRIBE TO GENESYS EVENTS
      Genesys("subscribe", "Database.updated", function(e){
-     console.log(e.data)  // Updated database object
+     console.log("Datos adjuntos modificados")  // Updated database object
+     
+	     console.log(e.data)  // Updated database object
      });
 
      Genesys("subscribe", "Messenger.closed", function(){
