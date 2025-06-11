@@ -119,7 +119,44 @@
   </style>
 
   <script>
-  
+   (function (g, e, n, es, ys) {
+      g['_genesysJs'] = e;
+      g[e] = g[e] || function () {
+        (g[e].q = g[e].q || []).push(arguments)
+      };
+      g[e].t = 1 * new Date();
+      g[e].c = es;
+      ys = document.createElement('script');
+      ys.async = 1;
+      ys.src = n;
+      ys.charset = 'utf-8';
+      document.head.appendChild(ys);
+
+      // Add an event listener for the 'load' event
+      ys.onload = function () {
+        // Your code to run after the Genesys snippet has finished loading
+
+	     //localStorage.clear()      
+        console.log('Code executed after Genesys snippet has loaded');
+       Genesys("subscribe", "Messenger.closed", function(){
+        console.log('Messenger Closed');
+	      // endconversation();
+	       
+       });
+
+      
+
+
+
+      };
+      // Your code to run immediately after the Genesys snippet goes here
+      console.log('Code executed immediately after Genesys snippet');
+    
+
+    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+      environment: 'prod-usw2',
+      deploymentId: '47519974-653c-4ba6-890a-59fcbab5d744'
+    });	
     
     function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
