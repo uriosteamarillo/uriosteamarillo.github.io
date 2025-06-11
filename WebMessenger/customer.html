@@ -119,9 +119,7 @@
   </style>
 
   <script>
-   Genesys("subscribe", "Database.updated", function(e){
-  console.log(e.data)  // Updated database object
-  });
+  
     
     function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
@@ -162,6 +160,13 @@
       });
 
       Genesys("command", "Messenger.open", {});
+
+    // SUBSCRIBE TO GENESYS EVENTS
+     Genesys("subscribe", "Database.updated", function(e){
+     console.log(e.data)  // Updated database object
+     });
+
+      
     }
 
     function showPage(pageId) {
