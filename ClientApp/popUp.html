@@ -18,6 +18,14 @@
         document.body.innerHTML = "<p style='color: red;'>No target URL provided. Use ?target=https://example.com</p>";
       }
     };
+
+
+     // 🟥 Este evento se ejecuta cuando la ventana madre se cierra o recarga
+    window.onunload = () => {
+      if (popup && !popup.closed) {
+        popup.close(); // 🔥 Cierra la ventana hija cuando la madre muere
+      }
+    };
   </script>
 </head>
 <body>
