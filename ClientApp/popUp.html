@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popup Launcher</title>
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const target = params.get("target");
+
+      if (target) {
+        const popup = window.open(target, "_blank", "width=800,height=600");
+
+        if (!popup) {
+          alert("Popup was blocked. Please allow popups for this site.");
+        }
+      } else {
+        document.body.innerHTML = "<p style='color: red;'>No target URL provided. Use ?target=https://example.com</p>";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Opening popup...</p>
+</body>
+</html>
