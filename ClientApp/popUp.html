@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Popup Launcher</title>
+  <title>Iframe Launcher</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    #iframe-container {
+      width: 100vw;
+      height: 100vh;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
   <script>
-    let popup = null;  // Declarar en scope global para que onunload acceda
+    let iframe = null;
 
     window.onload = function () {
-      // Para pruebas, usás target fijo:
+      // URL fija para pruebas
       const target = 'http://es1scrpgen01v:3001/?action=signin&username=agent&password=Agent2019!&agentId=TVLGO2&id=aabbCCDD123&agentName=TVLGO2&scriptType=Interaction&showConcierge=false&reRoute=true&SERVICE=Upsell_NBA&env=training&PhoneNumber=96789309&ins_no=750010&INTERACTION_DIRECTION=I&type=VOICE#!/sessions/6842d338de1ef2f443e34ef5/scripts/687e4a4927571f44bec3f719/run';
       // const params = new URLSearchParams(window.location.search);
       // const target = params.get("target");
 
       if (target) {
-        popup = window.open(target, "_blank", "width=800,height=600");
-
-        if (!popup) {
-          alert("Popup was blocked. Please allow popups for this site.");
-        }
+        iframe = document.createElement("iframe");
+        iframe.src = target;
+        document.getElementById("iframe-container").appendChild(iframe);
       } else {
         document.body.innerHTML = "<p style='color: red;'>No target URL provided. Use ?target=https://example.com</p>";
       }
     };
 
     window.onunload = () => {
-      if (popup && !popup.closed) {
-        popup.close(); // Cierra la ventana hija cuando la madre se cierra o recarga
-      }
+      // No hace falta cerrar nada, el iframe muere con la pestaña
+      console.log("Ventana cerrada. iframe muere con ella.");
     };
   </script>
 </head>
 <body>
-  <p>Opening popup...</p>
+  <div id="iframe-container"></div>
 </body>
 </html>
+
