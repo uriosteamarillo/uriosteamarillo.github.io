@@ -3,30 +3,52 @@
 <head>
   <title>Popup Launcher</title>
   <script>
-    let popup = null;  // Declarar en scope global para que onunload acceda
+    //let popup = null;  // Declarar en scope global para que onunload acceda
 
-    window.onload = function () {
+   // window.onload = function () {
       // Para pruebas, usás target fijo:
       const target = 'http://es1scrpgen01v:3001/?action=signin&username=agent&password=Agent2019!&agentId=TVLGO2&id=aabbCCDD123&agentName=TVLGO2&scriptType=Interaction&showConcierge=false&reRoute=true&SERVICE=Upsell_NBA&env=training&PhoneNumber=96789309&ins_no=750010&INTERACTION_DIRECTION=I&type=VOICE#!/sessions/6842d338de1ef2f443e34ef5/scripts/687e4a4927571f44bec3f719/run';
       // const params = new URLSearchParams(window.location.search);
       // const target = params.get("target");
 
-      if (target) {
-        popup = window.open(target, "_blank", "width=800,height=600");
+     // if (target) {
+       // popup = window.open(target, "_blank", "width=800,height=600");
 
-        if (!popup) {
-          alert("Popup was blocked. Please allow popups for this site.");
-        }
-      } else {
-        document.body.innerHTML = "<p style='color: red;'>No target URL provided. Use ?target=https://example.com</p>";
-      }
-    };
+        //if (!popup) {
+         // alert("Popup was blocked. Please allow popups for this site.");
+       // }
+      //} else {
+       // document.body.innerHTML = "<p style='color: red;'>No target URL provided. Use ?target=https://example.com</p>";
+      //}
+    //};
 
-    window.onunload = () => {
-      if (popup && !popup.closed) {
-        popup.close(); // Cierra la ventana hija cuando la madre se cierra o recarga
-      }
-    };
+    //window.onunload = () => {
+      //if (popup && !popup.closed) {
+       // popup.close(); // Cierra la ventana hija cuando la madre se cierra o recarga
+     // }
+   // };
+
+
+// Esta función abrirá el popup cuando se cargue la página
+        let popupWindow;
+
+        window.onload = function() {
+            popupWindow = window.open(target, 'Popup', 'width=600,height=400');
+        };
+
+        // Esta función cerrará el popup cuando se cierre la ventana principal
+        window.onbeforeunload = function() {
+            if (popupWindow && !popupWindow.closed) {
+                popupWindow.close();
+            }
+        };
+
+
+
+
+
+
+    
   </script>
 </head>
 <body>
