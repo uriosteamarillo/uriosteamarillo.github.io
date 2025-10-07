@@ -47,6 +47,42 @@ $(document).ready(function () {
             });
     });
 
+
+   // --- Button click handler ---
+$('#shareToken').on('click', async function() {
+    const button = this;
+    if (!conversationId) {
+        alert('No ConversationId.');
+        return;
+    }
+    
+    // Disable button to prevent double clicks
+    button.disabled = true;
+ 
+
+    try {
+        const attributes = {};
+        attributes[key] = value; // create dynamic key/value pair
+
+        const result =  updateSecureAttributes(token, conversationId);
+        console.log("Secure attributes updated:", result);
+       
+    } catch (error) {
+        console.error("Error updating secure attributes:", error);
+       
+    } finally {
+        button.disabled = false;
+    }
+});
+   
+
+
+
+
+
+
+
+    
     // OAuth & token parsing
     if (window.location.hash) {
         config.environment = getParameterByName('environment', window.location.search);
