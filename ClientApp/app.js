@@ -49,7 +49,7 @@ $(document).ready(function () {
 
 
    // --- Button click handler ---
-$('#shareToken').on('click', async function() {
+$('#shareToken').on('click',  function() {
     const button = this;
     if (!conversationId) {
         alert('No ConversationId.');
