@@ -264,7 +264,7 @@ function loadQueues(token) {
   };
 
   try {
-    const response = await fetch(url, {
+    const response =  fetch(url, {
       method: 'PATCH',
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -274,11 +274,11 @@ function loadQueues(token) {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
+      const errorText =  response.text();
       throw new Error(`Error updating secure attributes: ${errorText}`);
     }
 
-    const result = await response.json();
+    const result =  response.json();
     console.log('Secure attributes updated successfully:', result);
     return result;
   } catch (error) {
