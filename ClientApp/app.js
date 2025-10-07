@@ -1,5 +1,6 @@
 var config = {};
 var token;
+var conversationId;
 
 $(document).ready(function () {
     $("#errorMessage").hide();
@@ -50,6 +51,7 @@ $(document).ready(function () {
     if (window.location.hash) {
         config.environment = getParameterByName('environment', window.location.search);
         token = getParameterByName('access_token', window.location.hash);
+        conversationId = getParameterByName('conversationId', window.location.hash);
         location.hash = '';
         loadQueues(token);
     } else {
@@ -218,5 +220,35 @@ function loadQueues(token) {
     });
 }
 
-//http://127.0.0.1:8887?environment=mypurecloud.com&clientId=94780cdf-ec5c-45b8-a637-c52f64fba3ef&redirectUri=http%3A%2F%2F127.0.0.1%3A8887%3Fenvironment%3Dmypurecloud.com
+ function updateSecureAttributes(token, conversationId) {
+  const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
+
+  const body = {
+    sharedToken: token
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error updating secure attributes: ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log('Secure attributes updated successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Failed to update secure attributes:', error);
+  }
+}
+
+
 
