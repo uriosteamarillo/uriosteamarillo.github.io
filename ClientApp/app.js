@@ -1,4 +1,4 @@
-// Version 12:23
+// Version 12:43
 var config = {};
 var token;
 var conversationId;
