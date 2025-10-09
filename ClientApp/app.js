@@ -63,9 +63,7 @@ $('#shareToken').on('click',  function() {
  
 
     try {
-        const attributes = {};
-        attributes[key] = value; // create dynamic key/value pair
-
+      
         const result =  updateSecureAttributes(token, conversationId);
         console.log("Secure attributes updated:", result);
        
