@@ -87,10 +87,11 @@ $('#shareToken').on('click',  function() {
     if (window.location.hash) {
         config.environment = getParameterByName('environment', window.location.search);
         token = getParameterByName('access_token', window.location.hash);
-        conversationId = getParameterByName('conversationId', window.location.hash);
+       ;
         location.hash = '';
         loadQueues(token);
     } else {
+         conversationId = getParameterByName('conversationId', window.location.search)
         config = {
             environment: "usw2.pure.cloud",
             clientId: getParameterByName('clientId', window.location.search), //"35a67a68-4cdb-4fff-a3ba-17a589e070a8",
