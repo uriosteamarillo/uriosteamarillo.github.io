@@ -1,6 +1,8 @@
+// Version 12:23
 var config = {};
 var token;
 var conversationId;
+
 
 $(document).ready(function () {
     $("#errorMessage").hide();
