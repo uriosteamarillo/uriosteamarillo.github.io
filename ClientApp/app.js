@@ -91,15 +91,16 @@ $('#shareToken').on('click',  function() {
         token = getParameterByName('access_token', window.location.hash);
        ;
         location.hash = '';
+        conversationId = sessionStorage.getItem("conversationId");
         loadQueues(token);
     } else {
-         conversationId = getParameterByName('conversationId', window.location.search)
+        conversationId = getParameterByName('conversationId', window.location.search)
         console.log("ConversationId Recieved", conversationId);
-        alert(conversationId)
+        sessionStorage.setItem("conversationId", conversationId);
         config = {
             environment: "usw2.pure.cloud",
             clientId: getParameterByName('clientId', window.location.search), //"35a67a68-4cdb-4fff-a3ba-17a589e070a8",
-            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud&ConversationId="+conversationId
+            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
         };
 
         var queryStringData = {
