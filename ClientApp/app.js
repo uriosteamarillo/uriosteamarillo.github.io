@@ -92,10 +92,11 @@ $('#shareToken').on('click',  function() {
         loadQueues(token);
     } else {
          conversationId = getParameterByName('conversationId', window.location.search)
+        console.log("ConversationId Recieved", conversationId);
         config = {
             environment: "usw2.pure.cloud",
             clientId: getParameterByName('clientId', window.location.search), //"35a67a68-4cdb-4fff-a3ba-17a589e070a8",
-            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
+            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud&ConversationId="+conversationId
         };
 
         var queryStringData = {
