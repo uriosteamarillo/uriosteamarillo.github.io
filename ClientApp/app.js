@@ -263,9 +263,11 @@ function loadQueues(token) {
  function updateSecureAttributes(token, conversationId) {
   const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
 
-  const body = {
-    sharedToken: token
-  };
+const body = {
+  attributes: {
+    sharedtoken: token
+  }
+};
 
   try {
     const response =  fetch(url, {
