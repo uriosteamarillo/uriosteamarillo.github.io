@@ -197,23 +197,54 @@ window.addEventListener('beforeunload', function (e) {
 <body>
 
 <div class="container">
-<img class="logo" src="./icons8-chat.gif" alt="chat">
-    <h2>Chat demo form</h2>
-    <form>
-        <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" name="firstname" required>
+  <img class="logo" src="./icons8-chat.gif" alt="chat">
+  <h2>Chat demo form</h2>
+  <form>
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstname" name="firstname" required>
+    <div id="fnameError" style="color:red; display:none;">First name is required</div>
 
-        <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" name="lastname" required>
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" name="lastname" required>
+    <div id="lnameError" style="color:red; display:none;">Last name is required</div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <div id="emailError" style="color:red; display:none;">Valid email is required</div>
 
-        <button type="button" onclick="startChat()">Start Chat</button>
-    </form>
+    <button type="button" id="startBtn" onclick="startChat()" disabled>Start Chat</button>
+  </form>
 </div>
 
 <script>
+const fields = ['firstname', 'lastname', 'email'];
+const button = document.getElementById('startBtn');
+
+fields.forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener('input', validateForm);
+});
+
+function validateForm() {
+  let allValid = true;
+
+  fields.forEach(id => {
+    const input = document.getElementById(id);
+    const error = document.getElementById(id + 'Error');
+
+    if (!input.value.trim() || !input.checkValidity()) {
+      error.style.display = 'block';
+      allValid = false;
+    } else {
+      error.style.display = 'none';
+    }
+  });
+
+  button.disabled = !allValid;
+}
+
+
+	
     function startChat() {
         // Add your logic here to handle the start of the chat
        
@@ -227,6 +258,7 @@ window.addEventListener('beforeunload', function (e) {
 
 </body>
 </html>
+
 
 
 
