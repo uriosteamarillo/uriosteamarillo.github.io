@@ -260,13 +260,7 @@ function validateForm() {
   button.disabled = !allValid;
 }
 
-document.cookie.split(';').forEach(cookie => {
-  const [name] = cookie.split('=');
-  if (name && name.trim().includes('gcm')) {
-    document.cookie = `${name.trim()}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    console.log(`Cookie eliminada: ${name.trim()}`);
-  }
-});
+
 	
     function startChat() {
         // Add your logic here to handle the start of the chat
@@ -281,6 +275,7 @@ document.cookie.split(';').forEach(cookie => {
 
 </body>
 </html>
+
 
 
 
