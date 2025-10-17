@@ -183,7 +183,10 @@ console.log('Conversation Closed..... <YOUR CODE HERE>');
     }	
 
 	
-   function endconversation(){
+function endconversation(){
+
+Genesys("command", "Messenger.close");	   
+
 Genesys("command", "MessagingService.clearConversation", 
     {}, 
     function() {
@@ -207,7 +210,7 @@ window.addEventListener('beforeunload', function (e) {
     
     // Your custom code here, for example:
 	endconversation()
-    alert("Do you really want to leave?");
+    //alert("Do you really want to leave?");
 });	
 </script>	
 </head>
@@ -275,6 +278,7 @@ function validateForm() {
 
 </body>
 </html>
+
 
 
 
