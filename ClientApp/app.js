@@ -165,41 +165,39 @@ async function generateCodeChallenge(verifier) {
         .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function updateSecureAttributes(token, conversationId) {
-    
-const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
+async function updateSecureAttributes(token, conversationId) {
+    const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
 
-const body = {
-  attributes: {
-    sharedtoken: token
-  }
-};
+    const body = {
+      attributes: {
+        sharedtoken: token
+      }
+    };
 
-  try {
-    const response =  fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
 
-    if (!response.ok) {
-      const errorText =  response.text();
-      throw new Error(`Error updating secure attributes: ${errorText}`);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error updating secure attributes: ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log('Secure attributes updated successfully:', result);
+        return result;
+    } catch (error) {
+        console.error('Failed to update secure attributes:', error);
     }
-
-    const result =  response.json();
-    console.log('Secure attributes updated successfully:', result);
-    return result;
-  } 
-  catch (error) {
-    console.error('Failed to update secure attributes:', error);
-  }
 }
 
- async function startAuthFlow() {
+async function startAuthFlow() {
     config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
     config.clientId = getParameterByName('clientId', window.location.search);
     config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
@@ -241,29 +239,23 @@ async function exchangeCodeForToken(code) {
     return data.access_token;
 }
 
+$(document).ready(async function () {
 
-
-
-$(document).ready(function () {
-
- const code = getParameterByName('code', window.location.search);
+    const code = getParameterByName('code', window.location.search);
 
     if (code) {
-        const tokenData = await exchangeCodeForToken(code);
-        token = tokenData;
+        token = await exchangeCodeForToken(code);
         conversationId = sessionStorage.getItem("conversationId");
         loadQueues(token);
     } else {
         startAuthFlow();
     }
 
-
-    
     $("#errorMessage").hide();
 
     $('#callBtn').on('click', function () {
         const button = this;
-        const queueId = $('#queueSelect').val();  // Capture it at the moment of interacti
+        const queueId = $('#queueSelect').val();  // Capture it at the moment of interaction
         const phoneNumber = $('#phoneInput').val(); // Get number from input
         const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
 
@@ -283,16 +275,16 @@ $(document).ready(function () {
                 console.log("Flow Output Data:", outputData);
                 document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
                 if (outputData["Flow.CanCall"] === true) {
-                        makeOutboundCall(token, phoneNumber, queueId)
+                    makeOutboundCall(token, phoneNumber, queueId)
                         .then(response => {
-                        console.log("Outbound call initiated:", response);
+                            console.log("Outbound call initiated:", response);
                         })
-                            .catch(err => {
-                        console.error("Error initiating outbound call:", err);
-                    });
-    } else {
-        console.log("Cannot make call: CanCall is false or not set.");
-    }
+                        .catch(err => {
+                            console.error("Error initiating outbound call:", err);
+                        });
+                } else {
+                    console.log("Cannot make call: CanCall is false or not set.");
+                }
             })
             .catch(err => {
                 console.error("Error during flow execution:", err);
@@ -303,32 +295,28 @@ $(document).ready(function () {
             });
     });
 
+    // --- Button click handler ---
+    $('#shareToken').on('click', async function() {
+        const button = this;
+        if (!conversationId) {
+            alert('No ConversationId.');
+            return;
+        }
 
-   // --- Button click handler ---
-$('#shareToken').on('click',  function() {
-    const button = this;
-    if (!conversationId) {
-        alert('No ConversationId.');
-        return;
-    }
-    
-    // Disable button to prevent double clicks
-    button.disabled = true;
- 
+        // Disable button to prevent double clicks
+        button.disabled = true;
 
-    try {
-      
-        const result =  updateSecureAttributes(token, conversationId);
-        console.log("Secure attributes updated:", result);
-       
-    } catch (error) {
-        console.error("Error updating secure attributes:", error);
-       
-    } finally {
-        button.disabled = false;
-    }
+        try {
+            const result = await updateSecureAttributes(token, conversationId);
+            console.log("Secure attributes updated:", result);
+        } catch (error) {
+            console.error("Error updating secure attributes:", error);
+        } finally {
+            button.disabled = false;
+        }
+    });
+
 });
-   
 
 
 
