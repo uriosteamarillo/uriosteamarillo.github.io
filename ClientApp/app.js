@@ -166,7 +166,8 @@ async function generateCodeChallenge(verifier) {
 }
 
 function updateSecureAttributes(token, conversationId) {
-  const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
+    
+const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
 
 const body = {
   attributes: {
@@ -192,9 +193,11 @@ const body = {
     const result =  response.json();
     console.log('Secure attributes updated successfully:', result);
     return result;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Failed to update secure attributes:', error);
   }
+}
 
 $(document).ready(function () {
     $("#errorMessage").hide();
