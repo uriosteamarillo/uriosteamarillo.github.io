@@ -162,7 +162,7 @@ async function updateSecureAttributes(token, conversationId) {
 }
 
 async function startAuthFlow() {
-    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
+    config.environment =  'usw2.pure.cloud';
     config.clientId = getParameterByName('clientId', window.location.search);
     config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
 
