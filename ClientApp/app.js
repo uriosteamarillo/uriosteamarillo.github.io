@@ -199,7 +199,66 @@ const body = {
   }
 }
 
+ async function startAuthFlow() {
+    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
+    config.clientId = getParameterByName('clientId', window.location.search);
+    config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
+
+    const codeVerifier = generateRandomString(64);
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    sessionStorage.setItem('code_verifier', codeVerifier);
+
+    const query = new URLSearchParams({
+        response_type: 'code',
+        client_id: config.clientId,
+        redirect_uri: config.redirectUri,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256'
+    });
+
+    window.location.href = `https://login.${config.environment}/authorize?${query.toString()}`;
+}
+
+async function exchangeCodeForToken(code) {
+    const codeVerifier = sessionStorage.getItem('code_verifier');
+    const tokenUrl = `https://login.${config.environment}/oauth/token`;
+
+    const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
+        client_id: config.clientId,
+        code_verifier: codeVerifier
+    });
+
+    const res = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+    });
+
+    const data = await res.json();
+    return data.access_token;
+}
+
+
+
+
 $(document).ready(function () {
+
+ const code = getParameterByName('code', window.location.search);
+
+    if (code) {
+        const tokenData = await exchangeCodeForToken(code);
+        token = tokenData;
+        conversationId = sessionStorage.getItem("conversationId");
+        loadQueues(token);
+    } else {
+        startAuthFlow();
+    }
+
+
+    
     $("#errorMessage").hide();
 
     $('#callBtn').on('click', function () {
@@ -273,67 +332,10 @@ $('#shareToken').on('click',  function() {
 
 
 
-
-
-
-
-    
     // OAuth & token parsing
-    async function startAuthFlow() {
-    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
-    config.clientId = getParameterByName('clientId', window.location.search);
-    config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
+   
 
-    const codeVerifier = generateRandomString(64);
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
-    sessionStorage.setItem('code_verifier', codeVerifier);
 
-    const query = new URLSearchParams({
-        response_type: 'code',
-        client_id: config.clientId,
-        redirect_uri: config.redirectUri,
-        code_challenge: codeChallenge,
-        code_challenge_method: 'S256'
-    });
-
-    window.location.href = `https://login.${config.environment}/authorize?${query.toString()}`;
-}
-
-async function exchangeCodeForToken(code) {
-    const codeVerifier = sessionStorage.getItem('code_verifier');
-    const tokenUrl = `https://login.${config.environment}/oauth/token`;
-
-    const body = new URLSearchParams({
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
-        client_id: config.clientId,
-        code_verifier: codeVerifier
-    });
-
-    const res = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
-    });
-
-    const data = await res.json();
-    return data.access_token;
-}
-
-// Detecta si venís del login con un "code="
-$(document).ready(async function () {
-    const code = getParameterByName('code', window.location.search);
-
-    if (code) {
-        const tokenData = await exchangeCodeForToken(code);
-        token = tokenData;
-        conversationId = sessionStorage.getItem("conversationId");
-        loadQueues(token);
-    } else {
-        startAuthFlow();
-    }
-});
 // ready document
 
 
