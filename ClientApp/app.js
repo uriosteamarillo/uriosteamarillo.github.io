@@ -3,159 +3,6 @@ var config = {};
 var token;
 var conversationId;
 
-function generateRandomString(length) {
-    const array = new Uint8Array(length);
-    window.crypto.getRandomValues(array);
-    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
-}
-
-async function generateCodeChallenge(verifier) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(verifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return btoa(String.fromCharCode(...new Uint8Array(digest)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-
-$(document).ready(function () {
-    $("#errorMessage").hide();
-
-    $('#callBtn').on('click', function () {
-        const button = this;
-        const queueId = $('#queueSelect').val();  // Capture it at the moment of interacti
-        const phoneNumber = $('#phoneInput').val(); // Get number from input
-        const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
-
-        if (!phoneNumber || !phoneNumber.startsWith('+')) {
-            alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
-            return;
-        }
-
-        button.disabled = true;
-        document.getElementById('output').textContent = 'Processing...';
-
-        checkPhoneNumber(token, flowId, phoneNumber)
-            .then(flowExecutionId => {
-                return pollFlowExecutionUntilComplete(token, flowExecutionId);
-            })
-            .then(outputData => {
-                console.log("Flow Output Data:", outputData);
-                document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
-                if (outputData["Flow.CanCall"] === true) {
-                        makeOutboundCall(token, phoneNumber, queueId)
-                        .then(response => {
-                        console.log("Outbound call initiated:", response);
-                        })
-                            .catch(err => {
-                        console.error("Error initiating outbound call:", err);
-                    });
-    } else {
-        console.log("Cannot make call: CanCall is false or not set.");
-    }
-            })
-            .catch(err => {
-                console.error("Error during flow execution:", err);
-                document.getElementById('output').textContent = 'Error occurred. See console for details.';
-            })
-            .finally(() => {
-                button.disabled = false;
-            });
-    });
-
-
-   // --- Button click handler ---
-$('#shareToken').on('click',  function() {
-    const button = this;
-    if (!conversationId) {
-        alert('No ConversationId.');
-        return;
-    }
-    
-    // Disable button to prevent double clicks
-    button.disabled = true;
- 
-
-    try {
-      
-        const result =  updateSecureAttributes(token, conversationId);
-        console.log("Secure attributes updated:", result);
-       
-    } catch (error) {
-        console.error("Error updating secure attributes:", error);
-       
-    } finally {
-        button.disabled = false;
-    }
-});
-   
-
-
-
-
-
-
-
-    
-    // OAuth & token parsing
-    async function startAuthFlow() {
-    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
-    config.clientId = getParameterByName('clientId', window.location.search);
-    config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
-
-    const codeVerifier = generateRandomString(64);
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
-    sessionStorage.setItem('code_verifier', codeVerifier);
-
-    const query = new URLSearchParams({
-        response_type: 'code',
-        client_id: config.clientId,
-        redirect_uri: config.redirectUri,
-        code_challenge: codeChallenge,
-        code_challenge_method: 'S256'
-    });
-
-    window.location.href = `https://login.${config.environment}/authorize?${query.toString()}`;
-}
-
-async function exchangeCodeForToken(code) {
-    const codeVerifier = sessionStorage.getItem('code_verifier');
-    const tokenUrl = `https://login.${config.environment}/oauth/token`;
-
-    const body = new URLSearchParams({
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
-        client_id: config.clientId,
-        code_verifier: codeVerifier
-    });
-
-    const res = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
-    });
-
-    const data = await res.json();
-    return data.access_token;
-}
-
-// Detecta si venís del login con un "code="
-$(document).ready(async function () {
-    const code = getParameterByName('code', window.location.search);
-
-    if (code) {
-        const tokenData = await exchangeCodeForToken(code);
-        token = tokenData;
-        conversationId = sessionStorage.getItem("conversationId");
-        loadQueues(token);
-    } else {
-        startAuthFlow();
-    }
-});
-// ready document
-
-
 function getParameterByName(name, data) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\#&?]" + name + "=([^&#?]*)"),
@@ -304,7 +151,21 @@ function loadQueues(token) {
     });
 }
 
- function updateSecureAttributes(token, conversationId) {
+function generateRandomString(length) {
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+}
+
+async function generateCodeChallenge(verifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function updateSecureAttributes(token, conversationId) {
   const url = `https://api.${config.environment}/api/v2/conversations/${conversationId}/secureattributes`;
 
 const body = {
@@ -334,7 +195,148 @@ const body = {
   } catch (error) {
     console.error('Failed to update secure attributes:', error);
   }
+
+$(document).ready(function () {
+    $("#errorMessage").hide();
+
+    $('#callBtn').on('click', function () {
+        const button = this;
+        const queueId = $('#queueSelect').val();  // Capture it at the moment of interacti
+        const phoneNumber = $('#phoneInput').val(); // Get number from input
+        const flowId = '96ef0374-31c8-45b1-b814-2472f46cac74';
+
+        if (!phoneNumber || !phoneNumber.startsWith('+')) {
+            alert('Please enter a valid phone number in E.164 format (e.g., +541112345678)');
+            return;
+        }
+
+        button.disabled = true;
+        document.getElementById('output').textContent = 'Processing...';
+
+        checkPhoneNumber(token, flowId, phoneNumber)
+            .then(flowExecutionId => {
+                return pollFlowExecutionUntilComplete(token, flowExecutionId);
+            })
+            .then(outputData => {
+                console.log("Flow Output Data:", outputData);
+                document.getElementById('output').textContent = JSON.stringify(outputData, null, 2);
+                if (outputData["Flow.CanCall"] === true) {
+                        makeOutboundCall(token, phoneNumber, queueId)
+                        .then(response => {
+                        console.log("Outbound call initiated:", response);
+                        })
+                            .catch(err => {
+                        console.error("Error initiating outbound call:", err);
+                    });
+    } else {
+        console.log("Cannot make call: CanCall is false or not set.");
+    }
+            })
+            .catch(err => {
+                console.error("Error during flow execution:", err);
+                document.getElementById('output').textContent = 'Error occurred. See console for details.';
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+    });
+
+
+   // --- Button click handler ---
+$('#shareToken').on('click',  function() {
+    const button = this;
+    if (!conversationId) {
+        alert('No ConversationId.');
+        return;
+    }
+    
+    // Disable button to prevent double clicks
+    button.disabled = true;
+ 
+
+    try {
+      
+        const result =  updateSecureAttributes(token, conversationId);
+        console.log("Secure attributes updated:", result);
+       
+    } catch (error) {
+        console.error("Error updating secure attributes:", error);
+       
+    } finally {
+        button.disabled = false;
+    }
+});
+   
+
+
+
+
+
+
+
+    
+    // OAuth & token parsing
+    async function startAuthFlow() {
+    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
+    config.clientId = getParameterByName('clientId', window.location.search);
+    config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
+
+    const codeVerifier = generateRandomString(64);
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    sessionStorage.setItem('code_verifier', codeVerifier);
+
+    const query = new URLSearchParams({
+        response_type: 'code',
+        client_id: config.clientId,
+        redirect_uri: config.redirectUri,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256'
+    });
+
+    window.location.href = `https://login.${config.environment}/authorize?${query.toString()}`;
 }
 
-}  //documentready
+async function exchangeCodeForToken(code) {
+    const codeVerifier = sessionStorage.getItem('code_verifier');
+    const tokenUrl = `https://login.${config.environment}/oauth/token`;
+
+    const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
+        client_id: config.clientId,
+        code_verifier: codeVerifier
+    });
+
+    const res = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+    });
+
+    const data = await res.json();
+    return data.access_token;
+}
+
+// Detecta si venís del login con un "code="
+$(document).ready(async function () {
+    const code = getParameterByName('code', window.location.search);
+
+    if (code) {
+        const tokenData = await exchangeCodeForToken(code);
+        token = tokenData;
+        conversationId = sessionStorage.getItem("conversationId");
+        loadQueues(token);
+    } else {
+        startAuthFlow();
+    }
+});
+// ready document
+
+
+
+
+ 
+
+
 
