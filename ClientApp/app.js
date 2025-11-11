@@ -163,12 +163,14 @@ async function updateSecureAttributes(token, conversationId) {
 
 async function startAuthFlow() {
     config.environment =  'usw2.pure.cloud';
-    config.clientId = getParameterByName('clientId', window.location.search);
+    config.clientId = getParameterByName('clientId', window.location.search)   || sessionStorage.getItem('clientId');
     config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
 
     const codeVerifier = generateRandomString(64);
     const codeChallenge = await generateCodeChallenge(codeVerifier);
     sessionStorage.setItem('code_verifier', codeVerifier);
+    sessionStorage.setItem('environment', config.environment);
+    sessionStorage.setItem('clientId', config.clientId);
 
     const query = new URLSearchParams({
         response_type: 'code',
