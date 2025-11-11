@@ -102,7 +102,7 @@ function pollFlowExecutionUntilComplete(token, flowExecutionId, maxAttempts = 5,
 }
 
 function loadQueues(token) {
-    const url = `https://api.${config.environment}/api/v2/routing/queues?pageSize=100&pageNumber=1`;
+    const url = `https://api.usw2.pure.cloud/api/v2/routing/queues?pageSize=100&pageNumber=1`;
     fetch(url, { headers: { 'Authorization': 'Bearer ' + token } })
     .then(response => {
         if (!response.ok) throw new Error('Failed to fetch queues: ' + response.status);
