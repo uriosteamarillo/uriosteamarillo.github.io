@@ -186,11 +186,11 @@ async function exchangeCodeForToken(code) {
     const codeVerifier = sessionStorage.getItem('code_verifier');
     if (!codeVerifier) throw new Error('Missing code_verifier in sessionStorage');
 
-    const tokenUrl = `https://login.${config.environment}/oauth/token`;
+    const tokenUrl = `https://login.usw2.pure.cloud/oauth/token`;
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
+        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud",
         client_id: config.clientId,
         code_verifier: codeVerifier
     });
