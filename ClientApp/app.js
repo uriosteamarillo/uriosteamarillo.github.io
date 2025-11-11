@@ -163,14 +163,13 @@ async function updateSecureAttributes(token, conversationId) {
 
 async function startAuthFlow() {
     config.environment =  'usw2.pure.cloud';
-    config.clientId = getParameterByName('clientId', window.location.search)   || sessionStorage.getItem('clientId');
+    config.clientId = getParameterByName('clientId', window.location.search) ;
     config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
 
     const codeVerifier = generateRandomString(64);
     const codeChallenge = await generateCodeChallenge(codeVerifier);
     sessionStorage.setItem('code_verifier', codeVerifier);
-    sessionStorage.setItem('environment', config.environment);
-    sessionStorage.setItem('clientId', config.clientId);
+ 
 
     const query = new URLSearchParams({
         response_type: 'code',
@@ -187,13 +186,14 @@ async function startAuthFlow() {
 async function exchangeCodeForToken(code) {
     const codeVerifier = sessionStorage.getItem('code_verifier');
     if (!codeVerifier) throw new Error('Missing code_verifier in sessionStorage');
-
+    const clientId = sessionStorage.getItem('clientId');
+    if (!clientId) throw new Error('Missing clientId in sessionStorage');
     const tokenUrl = `https://login.usw2.pure.cloud/oauth/token`;
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code: code,
         redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud",
-        client_id: config.clientId,
+        client_id: clientId,
         code_verifier: codeVerifier
     });
 
@@ -233,6 +233,10 @@ $(document).ready(async function () {
             conversationId = getParameterByName('conversationId', window.location.search);
             if (conversationId) {
                 sessionStorage.setItem("conversationId", conversationId);
+            }
+            clientId =getParameterByName('clientId', window.location.search);
+              if (clientId) {
+                sessionStorage.setItem("clientId", clientId);
             }
             await startAuthFlow();
         }
