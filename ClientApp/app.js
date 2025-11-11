@@ -3,6 +3,20 @@ var config = {};
 var token;
 var conversationId;
 
+function generateRandomString(length) {
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+}
+
+async function generateCodeChallenge(verifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
 
 $(document).ready(function () {
     $("#errorMessage").hide();
@@ -84,32 +98,62 @@ $('#shareToken').on('click',  function() {
 
     
     // OAuth & token parsing
-    if (window.location.hash) {
-        config.environment = getParameterByName('environment', window.location.search);
-        token = getParameterByName('access_token', window.location.hash);
-       ;
-        location.hash = '';
+    async function startAuthFlow() {
+    config.environment = getParameterByName('environment', window.location.search) || 'usw2.pure.cloud';
+    config.clientId = getParameterByName('clientId', window.location.search);
+    config.redirectUri = "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment;
+
+    const codeVerifier = generateRandomString(64);
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    sessionStorage.setItem('code_verifier', codeVerifier);
+
+    const query = new URLSearchParams({
+        response_type: 'code',
+        client_id: config.clientId,
+        redirect_uri: config.redirectUri,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256'
+    });
+
+    window.location.href = `https://login.${config.environment}/authorize?${query.toString()}`;
+}
+
+async function exchangeCodeForToken(code) {
+    const codeVerifier = sessionStorage.getItem('code_verifier');
+    const tokenUrl = `https://login.${config.environment}/oauth/token`;
+
+    const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=" + config.environment,
+        client_id: config.clientId,
+        code_verifier: codeVerifier
+    });
+
+    const res = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+    });
+
+    const data = await res.json();
+    return data.access_token;
+}
+
+// Detecta si venís del login con un "code="
+$(document).ready(async function () {
+    const code = getParameterByName('code', window.location.search);
+
+    if (code) {
+        const tokenData = await exchangeCodeForToken(code);
+        token = tokenData;
         conversationId = sessionStorage.getItem("conversationId");
         loadQueues(token);
     } else {
-        conversationId = getParameterByName('conversationId', window.location.search)
-        console.log("ConversationId Recieved", conversationId);
-        sessionStorage.setItem("conversationId", conversationId);
-        config = {
-            environment: "usw2.pure.cloud",
-            clientId: getParameterByName('clientId', window.location.search), //"35a67a68-4cdb-4fff-a3ba-17a589e070a8",
-            redirectUri: "https://uriosteamarillo.github.io/ClientApp/newInteraction.html?environment=usw2.pure.cloud"
-        };
-
-        var queryStringData = {
-            response_type: "token",
-            client_id: config.clientId,
-            redirect_uri: config.redirectUri
-        };
-
-        window.location.replace("https://login." + config.environment + "/authorize?" + jQuery.param(queryStringData));
+        startAuthFlow();
     }
-});// ready document
+});
+// ready document
 
 
 function getParameterByName(name, data) {
