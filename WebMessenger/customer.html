@@ -262,7 +262,15 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
     /* FUNCIONES NUEVAS (NO ROMPEN NADA) */
     function fakeBuy(product) {
       alert("🛒 " + product + " added to cart!\nRedirecting to checkout...");
-      window.open("https://example.com/checkout?product=" + product, "_blank");
+       Genesys('command', 'Journey.record', {
+    eventName: 'product_added',
+    customAttributes: {
+      price: 15.99,
+      code: 'CDE-123',
+      name: 'Product',
+      hasBatteries: false
+    }
+  });
     }
 
     function fakePromo() {
@@ -286,7 +294,18 @@ window.addEventListener("hashchange", function () {
   }
 });
 
+function trackPage() {
+  Genesys('command', 'Journey.pageview', {
+    location: window.location.href,
+    title: document.title
+  });
 
+  console.log("📍 Pageview sent:", window.location.href);
+}
+
+window.addEventListener('load', trackPage);
+window.addEventListener('hashchange', trackPage);
+window.addEventListener('popstate', trackPage);
 	  
   </script>
 </head>
