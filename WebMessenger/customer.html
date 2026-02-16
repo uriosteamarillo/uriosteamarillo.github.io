@@ -225,7 +225,7 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
 		
     }
 
-   function showPage(pageId, updateHash = true) {
+ function showPage(pageId, updateHash = true) {
 
   // Cambiar sección visible
   const sections = document.querySelectorAll('section');
@@ -240,18 +240,17 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
   if (updateHash) {
     window.location.hash = pageId;
   }
+  trackVirtualPage(pageId);
+ 
+}
 
-  // 🔥 Tracking para Genesys
-  Genesys("command", "Database.set", {
-    messaging: {
-      customAttributes: {
-        current_page: pageId,
-        navigation_timestamp: new Date().toISOString()
-      }
-    }
+  function trackVirtualPage(pageName) {
+  Genesys('command', 'Journey.pageview', {
+    location:  pageName,
+    title: pageName
   });
 
-  console.log("Tracked page:", pageId);
+  console.log("Virtual pageview sent:", pageName);
 }
 
 
@@ -275,6 +274,14 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
 
     function fakePromo() {
       alert("🔥 Special Promotion!\nGet 30% OFF today only!");
+	Genesys('command', 'Journey.record', {
+    eventName: 'product_added',
+    customAttributes: {
+      price: 0.99,
+      code: 'DIS-120',
+      name: 'Disccount'
+    }
+  });
     }
 // Cuando carga la página
 window.addEventListener("load", function () {
@@ -294,18 +301,9 @@ window.addEventListener("hashchange", function () {
   }
 });
 
-function trackPage() {
-  Genesys('command', 'Journey.pageview', {
-    location: window.location.href,
-    title: document.title
-  });
 
-  console.log("📍 Pageview sent:", window.location.href);
-}
 
-window.addEventListener('load', trackPage);
-window.addEventListener('hashchange', trackPage);
-window.addEventListener('popstate', trackPage);
+
 	  
   </script>
 </head>
