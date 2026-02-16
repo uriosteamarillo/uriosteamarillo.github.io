@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer AI Details</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #eef2f7;
+  padding: 40px;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: auto;
+}
+
+button {
+  padding: 10px 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary { background: #17a2b8; color: white; }
+.warning { background: #ffc107; color: black; }
+.back { background: #6c757d; color: white; }
+</style>
+
+<script>
+function requestAI() {
+  alert("🤖 AI Specialist will contact you!");
+}
+
+function goBack() {
+  window.history.back();
+}
+</script>
+</head>
+
+<body>
+<div class="container">
+  <h1>Customer AI</h1>
+  <p>AI-powered analytics and real-time customer journey optimization.</p>
+
+  <button class="primary" onclick="requestAI()">Request AI Consultation</button>
+  <button class="warning" onclick="alert('Whitepaper downloaded!')">Download Whitepaper</button>
+  <br>
+  <button class="back" onclick="goBack()">⬅ Go Back</button>
+</div>
+</body>
+</html>
