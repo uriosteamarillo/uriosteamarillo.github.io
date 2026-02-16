@@ -240,6 +240,8 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
   if (updateHash) {
     window.location.hash = pageId;
   }
+
+ document.title = "Argentina Web Site - " + pageName;	 
   trackVirtualPage(pageId);
  
 }
