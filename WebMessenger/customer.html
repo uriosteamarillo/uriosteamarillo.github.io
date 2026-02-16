@@ -241,19 +241,12 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
     window.location.hash = pageId;
   }
 
- document.title = "Argentina Web Site - " + pageName;	 
+ document.title = "Argentina Web Site - " + pageId;	 
   trackVirtualPage(pageId);
  
 }
 
-  function trackVirtualPage(pageName) {
-  Genesys('command', 'Journey.pageview', {
-    location:  pageName,
-    title: pageName
-  });
 
-  console.log("Virtual pageview sent:", pageName);
-}
 
 
     function startChat() {
