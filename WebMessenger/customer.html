@@ -116,6 +116,17 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: #28a745;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+    }
   </style>
 
   <script>
@@ -132,41 +143,26 @@
       ys.charset = 'utf-8';
       document.head.appendChild(ys);
 
-      // Add an event listener for the 'load' event
       ys.onload = function () {
-        // Your code to run after the Genesys snippet has finished loading
-
-	     //localStorage.clear()      
         console.log('Code executed after Genesys snippet has loaded');
-       Genesys("subscribe", "Messenger.closed", function(){
-        console.log('Messenger Closed');
-	      // endconversation();
-	       
-       });
-
-      
-
-
-
+        Genesys("subscribe", "Messenger.closed", function(){
+          console.log('Messenger Closed');
+        });
       };
-      // Your code to run immediately after the Genesys snippet goes here
+
       console.log('Code executed immediately after Genesys snippet');
-    
 
     })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
       environment: 'prod-usw2',
       deploymentId: '47519974-653c-4ba6-890a-59fcbab5d744'
     });	
-    
+
     function toggleMessenger() {
       var vfirstName = document.getElementById('firstname').value;
       var vlastName = document.getElementById('lastname').value;
       var vemail = document.getElementById('email').value;
       var browserLanguage = navigator.language || navigator.userLanguage;
 
-
-        
-      
       navigator.geolocation.getCurrentPosition(function(position) {
         Genesys("command", "Database.set", {
           messaging: {
@@ -196,18 +192,17 @@
         });
       });
 
-     Genesys("command", "Messenger.open", {});
-
-    // SUBSCRIBE TO GENESYS EVENTS
+      Genesys("command", "Messenger.open", {});
+      // SUBSCRIBE TO GENESYS EVENTS
 Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
 	 console.log("Mensaje Recibido:", data);
     //console.log(data);
 });
-   
-	    
+
+
      Genesys("subscribe", "Database.updated", function(e){
      console.log("Datos adjuntos modificados")  // Updated database object
-     
+
 	     console.log(e.data)  // Updated database object
      });
 
@@ -217,25 +212,34 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
        console.log('Messenger  Closed..... <YOUR CODE HERE>');	
       });
 
-	    
+
       Genesys("subscribe", "Conversations.closed", function(){
 
        console.log('Conversation Closed..... <YOUR CODE HERE>');
 
         }); 
+
+		
     }
 
     function showPage(pageId) {
       const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        section.classList.remove('active');
-      });
+      sections.forEach(section => section.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
     }
 
     function startChat() {
-     // showPage('support');
       toggleMessenger();
+    }
+
+    /* FUNCIONES NUEVAS (NO ROMPEN NADA) */
+    function fakeBuy(product) {
+      alert("🛒 " + product + " added to cart!\nRedirecting to checkout...");
+      window.open("https://example.com/checkout?product=" + product, "_blank");
+    }
+
+    function fakePromo() {
+      alert("🔥 Special Promotion!\nGet 30% OFF today only!");
     }
   </script>
 </head>
@@ -255,63 +259,56 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
 <section id="home" class="hero active">
   <h2>Welcome to Argentina Web Site</h2>
   <p>Innovative tech from the heart of South America.</p>
-  <img src="https://via.placeholder.com/800x400.png?text=Welcome+to+Argentina" alt="Argentina Image">
-  <p>Explore our products, support, and contact information through the menu above or below.</p>
-  <a onclick="showPage('products')">Check our Products</a> | <a onclick="showPage('support')">Support</a>
+  <img src="https://images.unsplash.com/photo-1589909202802-8f4aadce1849" alt="Argentina Landscape">
+  <br><br>
+  <button class="action-btn" onclick="fakePromo()">View Special Offer</button>
 </section>
 
 <section id="products" class="products">
   <h2>Our Products</h2>
+
   <div class="product">
     <h3>Cloud Platform</h3>
     <p>Secure, scalable cloud services tailored to your business.</p>
-    <img src="https://via.placeholder.com/800x400.png?text=Cloud+Platform" alt="Cloud Platform Image">
-    <p>Our platform is designed to scale with your business needs.</p>
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="Cloud">
+    <button class="action-btn" onclick="fakeBuy('Cloud Platform')">Buy Now</button>
   </div>
+
   <div class="product">
     <h3>Customer AI</h3>
-    <p>Real-time insights and automation powered by AI.</p>
-    <img src="https://via.placeholder.com/800x400.png?text=Customer+AI" alt="AI Image">
-    <p>Let our AI enhance your customer interactions and deliver insights.</p>
+    <p>Real-time insights powered by AI.</p>
+    <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b" alt="AI">
+    <button class="action-btn" onclick="fakeBuy('Customer AI')">Buy Now</button>
   </div>
-  <p>For more details, contact us or explore the support section.</p>
-  <a onclick="showPage('contact')">Contact Us</a>
 </section>
 
 <section id="support" class="support">
   <h2>Support & FAQs</h2>
+
   <div class="faq">
     <h3>How can I reach support?</h3>
-    <p>Use our live chat, email, or phone 24/7.</p>
-    <img src="https://via.placeholder.com/800x400.png?text=Support+Image" alt="Support Image">
-    <p>Our team is always available to assist you.</p>
+    <p>Use our live chat 24/7.</p>
+    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216" alt="Support">
+    <button class="action-btn" onclick="fakePromo()">Upgrade to Premium Support</button>
   </div>
-  <div class="faq">
-    <h3>Do you support co-browsing?</h3>
-    <p>Yes! We offer seamless co-browse with chat agents.</p>
-    <img src="https://via.placeholder.com/800x400.png?text=Co-Browsing+Image" alt="Co-Browsing Image">
-  </div>
-  <p>Have more questions? Reach out to us through the contact section.</p>
-  <a onclick="showPage('contact')">Contact Us</a>
 </section>
 
 <section id="contact" class="contact">
   <h2>Contact Us</h2>
+
   <div class="contact-info">
     <p><strong>Email:</strong> support@argentinaweb.com</p>
     <p><strong>Phone:</strong> +54 11 1234 5678</p>
-    <p><strong>Address:</strong> Av. Corrientes 1234, Buenos Aires, Argentina</p>
-    <img src="https://via.placeholder.com/800x400.png?text=Buenos+Aires+Map" alt="Buenos Aires Map">
+    <p><strong>Address:</strong> Av. Corrientes 1234, Buenos Aires</p>
+    <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad" alt="Buenos Aires">
+    <button class="action-btn" onclick="fakeBuy('Enterprise Plan')">Request Enterprise Plan</button>
   </div>
-  <p>Feel free to get in touch with us for any inquiries or support!</p>
-  <a onclick="showPage('home')">Back to Home</a>
 </section>
 
 <footer>
   &copy; 2025 Argentina Web Site. Proudly built in Argentina.
 </footer>
 
-<!-- Chat Form -->
 <div class="chat-form">
   <h3>Start a Chat</h3>
   <label for="firstname">First Name</label>
@@ -325,6 +322,3 @@ Genesys("subscribe", "MessagingService.messagesReceived", function({ data }) {
 
 </body>
 </html>
-
-
-
