@@ -1,70 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+<meta charset="UTF-8">
+<title>Dummy CRM + Genesys Widget</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    height:100vh;
+    display:flex;
+}
+
+/* CRM AREA */
+#crm {
+    flex:1;
+    padding:20px;
+    background:#f4f6f8;
+}
+
+/* GENESYS PANEL */
+#genesysPanel {
+    width:400px;
+    background:#1f2933;
+    color:white;
+    position:relative;
+    transition:width 0.3s ease;
+    display:flex;
+    flex-direction:column;
+}
+
+/* COLLAPSED */
+#genesysPanel.collapsed {
+    width:40px;
+}
+
+/* TOGGLE BUTTON */
+#toggleBtn {
+    position:absolute;
+    left:-20px;
+    top:20px;
+    width:20px;
+    height:40px;
+    background:#1f2933;
+    color:white;
+    border-radius:5px 0 0 5px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+/* IFRAME */
+#genesysFrame {
+    border:none;
+    width:100%;
+    height:100%;
+}
+
+/* Hide iframe when collapsed */
+.collapsed iframe {
+    display:none;
+}
+
+/* CRM fake styling */
+.card {
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+</style>
 </head>
+
 <body>
 
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-                <span class="font-weight-bold">Email :</span>
-                <span class="text-black-50" id="emailDisplay">edogaru@mail.com.my</span>
-                <span> </span>
-            </div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Name</label><input id="firstNameInput" type="text" class="form-control" placeholder="first name" value=""></div>
-                    <div class="col-md-6"><label class="labels">Surname</label><input id="surnameInput" type="text" class="form-control" value="" placeholder="surname"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Email ID</label><input id="emailInput" type="text" class="form-control" placeholder="enter email id" value=""></div>
-                    <!-- Add other input fields here -->
-                </div>
-                <div class="mt-5 text-center"><button id="saveButton" class="btn btn-primary profile-button" type="button">Save Profile</button></div>
-            </div>
-        </div>
-        <!-- Add other columns here -->
+<!-- CRM -->
+<div id="crm">
+
+    <h2>CRM Demo</h2>
+
+    <div class="card">
+        <h3>Cliente</h3>
+        <p>Nombre: Juan Pérez</p>
+        <p>Contrato: 12345678</p>
+        <p>Estado: Activo</p>
     </div>
+
+    <div class="card">
+        <h3>Últimas Interacciones</h3>
+        <ul>
+            <li>Llamada entrante - 10:32</li>
+            <li>Email recibido - Ayer</li>
+            <li>Alarma conectada</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Notas</h3>
+        <textarea style="width:100%;height:120px;"></textarea>
+    </div>
+
+</div>
+
+<!-- GENESYS SIDE PANEL -->
+<div id="genesysPanel">
+
+    <div id="toggleBtn">◀</div>
+
+    <!-- REPLACE URL BELOW -->
+    <iframe
+        id="genesysFrame"
+        src="https://apps.mypurecloud.com/crm/index.html">
+    </iframe>
+
 </div>
 
 <script>
-    // Function to get query parameters from URL
-    function getUrlParameter(name) {
-        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    };
 
-    // Populate input fields with values from URL
-    document.addEventListener('DOMContentLoaded', function() {
-        var firstName = getUrlParameter('firstName');
-        var surname = getUrlParameter('surname');
-        var email = getUrlParameter('email');
+const panel = document.getElementById("genesysPanel");
+const btn = document.getElementById("toggleBtn");
 
-        document.getElementById('firstNameInput').value = firstName;
-        document.getElementById('surnameInput').value = surname;
-        document.getElementById('emailInput').value = email;
+btn.onclick = () => {
+    panel.classList.toggle("collapsed");
 
-        // Display email in the email display span
-        document.getElementById('emailDisplay').textContent = email;
-    });
+    btn.innerHTML =
+        panel.classList.contains("collapsed")
+        ? "▶"
+        : "◀";
+};
 
-    // Add event listener to save button
-    document.getElementById('saveButton').addEventListener('click', function() {
-        // Add code to save profile data here
-        alert('Profile saved!');
-    });
 </script>
 
 </body>
