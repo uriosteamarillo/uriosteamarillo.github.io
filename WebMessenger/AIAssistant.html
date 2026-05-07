@@ -510,38 +510,54 @@
   // SEND MESSAGE
   // =========================================
 
-  async function sendMessage() {
+ async function sendMessage() {
 
-    const input = document.getElementById("messageInput");
+  const input = document.getElementById("messageInput");
 
-    const text = input.value.trim();
+  const text = input.value.trim();
 
-    if (!text) return;
+  if (!text) return;
 
-    addMessage(text, "user");
+  addMessage(text, "user");
 
-    showTyping();
+  showTyping();
 
-    input.value = "";
+  input.value = "";
 
-    autoResize(input);
+  autoResize(input);
+
+  try {
+
+    await Genesys(
+      "command",
+      "MessagingService.sendMessage",
+      {
+        message: text
+      }
+    );
+
+  } catch (err) {
+
+    console.warn(
+      "Conversation expired. Restarting...",
+      err
+    );
 
     try {
 
-      // =====================================
-      // VERIFY SESSION
-      // =====================================
+      conversationReady = false;
 
-      if (!conversationActive) {
+      await Genesys(
+        "command",
+        "MessagingService.clearConversation"
+      ).catch(() => {});
 
-        console.log("No active conversation");
+      Genesys(
+        "command",
+        "MessagingService.startConversation"
+      );
 
-        await restartConversation();
-      }
-
-      // =====================================
-      // SEND
-      // =====================================
+      await waitForConversationReady();
 
       await Genesys(
         "command",
@@ -551,37 +567,22 @@
         }
       );
 
-    } catch (err) {
+    } catch (retryErr) {
 
-      console.error("Send failed:", err);
+      console.error(
+        "Recovery failed",
+        retryErr
+      );
 
-      try {
+      hideTyping();
 
-        console.log("Trying recovery...");
-
-        await restartConversation();
-
-        await Genesys(
-          "command",
-          "MessagingService.sendMessage",
-          {
-            message: text
-          }
-        );
-
-      } catch (retryErr) {
-
-        console.error("Recovery failed:", retryErr);
-
-        hideTyping();
-
-        addMessage(
-          "Connection lost. Please retry.",
-          "agent"
-        );
-      }
+      addMessage(
+        "Connection lost. Retry.",
+        "agent"
+      );
     }
   }
+}
 
   // =========================================
   // ADD MESSAGE
