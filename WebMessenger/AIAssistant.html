@@ -1,4 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Genesys AI Assistant</title>
+
+  <!-- ========================================= -->
+  <!-- GENESYS -->
+  <!-- ========================================= -->
+
+  <script type="text/javascript" charset="utf-8">
+
+    (function (g, e, n, es, ys) {
+
+      g['_genesysJs'] = e;
+
+      g[e] = g[e] || function () {
+
+        (g[e].q = g[e].q || []).push(arguments)
+      };
+
+      g[e].t = 1 * new Date();
+
+      g[e].c = es;
+
+      ys = document.createElement('script');
+
+      ys.async = 1;
+
+      ys.src = n;
+
+      ys.charset = 'utf-8';
+
+      document.head.appendChild(ys);
+
+    })(
+      window,
+      'Genesys',
+      'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js',
+      {
+        environment: 'prod-usw2',
+        deploymentId: '9f1b1ed2-677b-4f2c-8451-d701581477a5'
+      }
+    );
+
+  </script>
+
+  <!-- ========================================= -->
+  <!-- FONT -->
+  <!-- ========================================= -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- ========================================= -->
+  <!-- STYLES -->
+  <!-- ========================================= -->
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+
+      margin: 0;
+
+      background: #0f172a;
+
+      font-family: 'Inter', sans-serif;
+
+      height: 100vh;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      color: white;
+    }
+
+    .chat-wrapper {
+
+      width: 100%;
+
+      max-width: 950px;
+
+      height: 92vh;
+
+      background: #111827;
+
+      border-radius: 24px;
+
+      overflow: hidden;
+
+      display: flex;
+
+      flex-direction: column;
+
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    .header {
+
+      padding: 22px 28px;
+
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+
+      font-size: 18px;
+
+      font-weight: 600;
+
+      background: rgba(255,255,255,0.03);
+
+      backdrop-filter: blur(12px);
+    }
+
+    .messages {
+
+      flex: 1;
+
+      overflow-y: auto;
+
+      padding: 30px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 18px;
+    }
+
+    .message-row {
+
+      display: flex;
+    }
+
+    .message-row.user {
+
+      justify-content: flex-end;
+    }
+
+    .message-row.agent {
+
+      justify-content: flex-start;
+    }
+
+    .bubble {
+
+      max-width: 75%;
+
+      padding: 14px 18px;
+
+      border-radius: 20px;
+
+      line-height: 1.5;
+
+      font-size: 15px;
+
+      white-space: pre-wrap;
+
+      animation: fadeIn 0.2s ease;
+    }
+
+    .user .bubble {
+
+      background: #2563eb;
+
+      color: white;
+
+      border-bottom-right-radius: 8px;
+    }
+
+    .agent .bubble {
+
+      background: #1f2937;
+
+      color: #f9fafb;
+
+      border-bottom-left-radius: 8px;
+    }
+
+    .typing {
+
+      display: none;
+
+      padding: 0 30px 15px;
+
+      color: #9ca3af;
+
+      font-size: 14px;
+    }
+
+    .input-container {
+
+      padding: 20px;
+
+      border-top: 1px solid rgba(255,255,255,0.08);
+
+      background: #111827;
+    }
+
+    .input-box {
+
+      display: flex;
+
+      align-items: flex-end;
+
+      gap: 12px;
+
+      background: #1f2937;
+
+      border-radius: 20px;
+
+      padding: 12px 14px;
+    }
+
+    textarea {
+
+      flex: 1;
+
+      background: transparent;
+
+      border: none;
+
+      outline: none;
+
+      resize: none;
+
+      color: white;
+
+      font-size: 15px;
+
+      max-height: 140px;
+
+      font-family: inherit;
+
+      line-height: 1.5;
+    }
+
+    textarea::placeholder {
+
+      color: #9ca3af;
+    }
+
+    .send-btn {
+
+      width: 44px;
+
+      height: 44px;
+
+      border: none;
+
+      border-radius: 14px;
+
+      background: #2563eb;
+
+      color: white;
+
+      font-size: 18px;
+
+      cursor: pointer;
+
+      transition: all 0.2s ease;
+    }
+
+    .send-btn:hover {
+
+      background: #1d4ed8;
+
+      transform: scale(1.05);
+    }
+
+    ::-webkit-scrollbar {
+
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+
+      background: rgba(255,255,255,0.12);
+
+      border-radius: 999px;
+    }
+
+    @keyframes fadeIn {
+
+      from {
+
+        opacity: 0;
+
+        transform: translateY(6px);
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="chat-wrapper">
+
+  <div class="header">
+    Genesys AI Assistant
+  </div>
+
+  <div id="messages" class="messages"></div>
+
+  <div id="typing" class="typing">
+    AI is typing...
+  </div>
+
+  <div class="input-container">
+
+    <div class="input-box">
+
+      <textarea
+        id="messageInput"
+        rows="1"
+        placeholder="Message Genesys AI..."
+      ></textarea>
+
+      <button class="send-btn" onclick="sendMessage()">
+        ↑
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 <script>
+
+  // =========================================
+  // WAIT FOR SDK
+  // =========================================
+
+  async function waitForGenesys() {
+
+    return new Promise((resolve) => {
+
+      const interval = setInterval(() => {
+
+        if (window.Genesys) {
+
+          clearInterval(interval);
+
+          console.log("Genesys SDK Loaded");
+
+          resolve();
+        }
+
+      }, 100);
+
+    });
+  }
 
   // =========================================
   // GLOBAL STATE
@@ -7,6 +385,78 @@
   let conversationActive = false;
 
   let startingConversation = false;
+
+  // =========================================
+  // INIT
+  // =========================================
+
+  async function initApp() {
+
+    await waitForGenesys();
+
+    registerSubscriptions();
+
+    await startConversation();
+  }
+
+  // =========================================
+  // REGISTER EVENTS
+  // =========================================
+
+  function registerSubscriptions() {
+
+    // =====================================
+    // READY
+    // =====================================
+
+    Genesys(
+      "subscribe",
+      "MessagingService.ready",
+      function () {
+
+        console.log("Messaging Ready");
+      }
+    );
+
+    // =====================================
+    // RECEIVE MESSAGES
+    // =====================================
+
+    Genesys(
+      "subscribe",
+      "MessagingService.messagesReceived",
+      function (event) {
+
+        hideTyping();
+
+        console.log("Received:", event);
+
+        conversationActive = true;
+
+        event.data.messages.forEach(msg => {
+
+          if (!msg.text) return;
+
+          addMessage(msg.text, "agent");
+        });
+      }
+    );
+
+    // =====================================
+    // CONVERSATION CLOSED
+    // =====================================
+
+    Genesys(
+      "subscribe",
+      "MessagingService.conversationCleared",
+      function () {
+
+        console.log("Conversation cleared");
+
+        conversationActive = false;
+      }
+    );
+  }
 
   // =========================================
   // START CONVERSATION
@@ -18,9 +468,9 @@
 
     startingConversation = true;
 
-    console.log("Starting conversation...");
-
     try {
+
+      console.log("Starting conversation...");
 
       await Genesys(
         "command",
@@ -42,64 +492,6 @@
       startingConversation = false;
     }
   }
-
-  // =========================================
-  // INITIAL START
-  // =========================================
-
-  startConversation();
-
-  // =========================================
-  // RECEIVE MESSAGES
-  // =========================================
-
-  Genesys(
-    "subscribe",
-    "MessagingService.messagesReceived",
-    function (event) {
-
-      hideTyping();
-
-      console.log("Received:", event);
-
-      conversationActive = true;
-
-      event.data.messages.forEach(msg => {
-
-        if (!msg.text) return;
-
-        addMessage(msg.text, "agent");
-      });
-    }
-  );
-
-  // =========================================
-  // CONVERSATION CLOSED
-  // =========================================
-
-  Genesys(
-    "subscribe",
-    "MessagingService.conversationCleared",
-    function () {
-
-      console.log("Conversation cleared");
-
-      conversationActive = false;
-    }
-  );
-
-  // =========================================
-  // SESSION EXPIRED / CLOSED
-  // =========================================
-
-  Genesys(
-    "subscribe",
-    "MessagingService.ready",
-    function () {
-
-      console.log("Messaging service ready");
-    }
-  );
 
   // =========================================
   // RESTART CONVERSATION
@@ -137,18 +529,18 @@
     try {
 
       // =====================================
-      // VERIFY ACTIVE SESSION
+      // VERIFY SESSION
       // =====================================
 
       if (!conversationActive) {
 
-        console.log("No active conversation. Creating new one...");
+        console.log("No active conversation");
 
         await restartConversation();
       }
 
       // =====================================
-      // SEND MESSAGE
+      // SEND
       // =====================================
 
       await Genesys(
@@ -163,13 +555,9 @@
 
       console.error("Send failed:", err);
 
-      // =====================================
-      // AUTO RECOVER
-      // =====================================
-
       try {
 
-        console.log("Trying automatic recovery...");
+        console.log("Trying recovery...");
 
         await restartConversation();
 
@@ -188,7 +576,7 @@
         hideTyping();
 
         addMessage(
-          "Connection lost. Please try again.",
+          "Connection lost. Please retry.",
           "agent"
         );
       }
@@ -196,7 +584,7 @@
   }
 
   // =========================================
-  // ADD MESSAGE TO UI
+  // ADD MESSAGE
   // =========================================
 
   function addMessage(text, sender) {
@@ -249,7 +637,7 @@
 
     el.style.height = "auto";
 
-    el.style.height = (el.scrollHeight) + "px";
+    el.style.height = el.scrollHeight + "px";
   }
 
   // =========================================
@@ -266,4 +654,14 @@
     document.getElementById("typing").style.display = "none";
   }
 
+  // =========================================
+  // START APP
+  // =========================================
+
+  initApp();
+
 </script>
+
+</body>
+
+</html>
