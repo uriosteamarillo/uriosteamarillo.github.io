@@ -742,17 +742,26 @@
 
 async function clearGenesysSession() {
 
+ async function clearGenesysSession() {
+
   try {
 
-    // =====================================
-    // CLEAR CONVERSATION
-    // =====================================
+    try {
 
-    await Genesys(
-      "command",
-      "MessagingService.clearConversation"
-    ).catch(() => {});
+      await Genesys(
+        "command",
+        "MessagingService.clearConversation"
+      );
 
+    } catch (e) {
+
+      console.warn(
+        "clearConversation failed",
+        e
+      );
+    }
+
+   
     // =====================================
     // REMOVE LOCAL STORAGE
     // =====================================
