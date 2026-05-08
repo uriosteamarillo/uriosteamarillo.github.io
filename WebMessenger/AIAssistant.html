@@ -603,10 +603,20 @@
 
       conversationReady = false;
 
-      await Genesys(
-        "command",
-        "MessagingService.clearConversation"
-      ).catch(() => {});
+    try {
+
+  await Genesys(
+    "command",
+    "MessagingService.clearConversation"
+  );
+
+} catch (e) {
+
+  console.warn(
+    "clearConversation failed",
+    e
+  );
+}
 
       Genesys(
         "command",
@@ -742,7 +752,7 @@
 
 async function clearGenesysSession() {
 
- 
+  try {
 
     try {
 
@@ -759,7 +769,6 @@ async function clearGenesysSession() {
       );
     }
 
-   
     // =====================================
     // REMOVE LOCAL STORAGE
     // =====================================
@@ -770,6 +779,7 @@ async function clearGenesysSession() {
         key.toLowerCase().includes("genesys") ||
         key.toLowerCase().includes("purecloud")
       ) {
+
         localStorage.removeItem(key);
       }
     });
@@ -784,6 +794,7 @@ async function clearGenesysSession() {
         key.toLowerCase().includes("genesys") ||
         key.toLowerCase().includes("purecloud")
       ) {
+
         sessionStorage.removeItem(key);
       }
     });
@@ -818,10 +829,12 @@ async function clearGenesysSession() {
 
   } catch (err) {
 
-    console.error("Failed clearing session", err);
+    console.error(
+      "Failed clearing session",
+      err
+    );
   }
 }
-
 
   
   // =========================================
