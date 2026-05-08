@@ -114,20 +114,55 @@
         0 20px 50px rgba(0,0,0,0.35);
     }
 
-    .header {
+  .header {
 
-      padding: 22px 28px;
+  padding: 22px 28px;
 
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 
-      font-size: 18px;
+  background: rgba(255,255,255,0.03);
 
-      font-weight: 600;
+  backdrop-filter: blur(12px);
 
-      background: rgba(255,255,255,0.03);
+  display: flex;
 
-      backdrop-filter: blur(12px);
-    }
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.header-title {
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.clear-btn {
+
+  border: none;
+
+  background: #dc2626;
+
+  color: white;
+
+  padding: 10px 14px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  transition: 0.2s ease;
+}
+
+.clear-btn:hover {
+
+  background: #b91c1c;
+
+  transform: scale(1.04);
+}
 
     .messages {
 
@@ -313,6 +348,19 @@
         transform: translateY(0);
       }
     }
+    .streaming-cursor::after {
+
+  content: "▋";
+
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+
+  50% {
+    opacity: 0;
+  }
+}
 
   </style>
 
@@ -322,9 +370,17 @@
 
 <div class="chat-wrapper">
 
-  <div class="header">
+ <div class="header">
+
+  <div class="header-title">
     Genesys AI Assistant
   </div>
+
+  <button class="clear-btn" onclick="clearGenesysSession()">
+    Clear Session
+  </button>
+
+</div>
 
   <div id="messages" class="messages"></div>
 
@@ -437,7 +493,7 @@
 
           if (!msg.text) return;
 
-          addMessage(msg.text, "agent");
+          addMessage(msg.text, "agent", true);
         });
       }
     );
@@ -588,27 +644,56 @@
   // ADD MESSAGE
   // =========================================
 
-  function addMessage(text, sender) {
+  async function addMessage(text, sender, streaming = false) {
 
-    const messages = document.getElementById("messages");
+  const messages = document.getElementById("messages");
 
-    const row = document.createElement("div");
+  const row = document.createElement("div");
 
-    row.className = `message-row ${sender}`;
+  row.className = `message-row ${sender}`;
 
-    const bubble = document.createElement("div");
+  const bubble = document.createElement("div");
 
-    bubble.className = "bubble";
+  bubble.className = "bubble";
+
+  row.appendChild(bubble);
+
+  messages.appendChild(row);
+
+  messages.scrollTop = messages.scrollHeight;
+
+  // =====================================
+  // NORMAL MESSAGE
+  // =====================================
+
+  if (!streaming) {
 
     bubble.innerText = text;
 
-    row.appendChild(bubble);
-
-    messages.appendChild(row);
-
-    messages.scrollTop = messages.scrollHeight;
+    return;
   }
 
+  // =====================================
+  // STREAMING EFFECT
+  // =====================================
+
+  bubble.classList.add("streaming-cursor");
+
+  let current = "";
+
+  for (let i = 0; i < text.length; i++) {
+
+    current += text[i];
+
+    bubble.innerText = current;
+
+    messages.scrollTop = messages.scrollHeight;
+
+    await new Promise(r => setTimeout(r, 12));
+  }
+
+  bubble.classList.remove("streaming-cursor");
+}
   // =========================================
   // ENTER TO SEND
   // =========================================
@@ -655,6 +740,83 @@
     document.getElementById("typing").style.display = "none";
   }
 
+sync function clearGenesysSession() {
+
+  try {
+
+    // =====================================
+    // CLEAR CONVERSATION
+    // =====================================
+
+    await Genesys(
+      "command",
+      "MessagingService.clearConversation"
+    ).catch(() => {});
+
+    // =====================================
+    // REMOVE LOCAL STORAGE
+    // =====================================
+
+    Object.keys(localStorage).forEach(key => {
+
+      if (
+        key.toLowerCase().includes("genesys") ||
+        key.toLowerCase().includes("purecloud")
+      ) {
+        localStorage.removeItem(key);
+      }
+    });
+
+    // =====================================
+    // REMOVE SESSION STORAGE
+    // =====================================
+
+    Object.keys(sessionStorage).forEach(key => {
+
+      if (
+        key.toLowerCase().includes("genesys") ||
+        key.toLowerCase().includes("purecloud")
+      ) {
+        sessionStorage.removeItem(key);
+      }
+    });
+
+    // =====================================
+    // REMOVE COOKIES
+    // =====================================
+
+    document.cookie.split(";").forEach(cookie => {
+
+      const eqPos = cookie.indexOf("=");
+
+      const name =
+        eqPos > -1
+          ? cookie.substr(0, eqPos).trim()
+          : cookie.trim();
+
+      document.cookie =
+        name +
+        "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    });
+
+    // =====================================
+    // CLEAR UI
+    // =====================================
+
+    document.getElementById("messages").innerHTML = "";
+
+    console.log("Genesys session cleared");
+
+    location.reload();
+
+  } catch (err) {
+
+    console.error("Failed clearing session", err);
+  }
+}
+
+
+  
   // =========================================
   // START APP
   // =========================================
