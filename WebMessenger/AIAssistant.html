@@ -750,71 +750,40 @@ function renderStructuredContent(contentArray) {
       messages.appendChild(container);
     }
 
-    // =====================================
-    // VIDEO
-    // =====================================
+  
 
-    if (item.contentType === "Video") {
+    // CARD
+        if (item.contentType === "Card") {
 
-      const container =
-        document.createElement("div");
+            console.log("CARD RECEIVED", item.card);
 
-      container.className =
-        "message-row agent";
+            const card = document.createElement("div");
+            card.className = "custom-card";
 
-      const bubble =
-        document.createElement("div");
+            card.innerHTML = `
+                <h3>${item.card.title || ""}</h3>
+                <p>${item.card.description || ""}</p>
+            `;
 
-      bubble.className =
-        "bubble";
+            // ACTIONS
+            if (item.card.actions?.length) {
 
-      const video =
-        document.createElement("video");
+                item.card.actions.forEach(action => {
 
-      video.src =
-        item.video.url;
+                    const btn = document.createElement("button");
 
-      video.controls = true;
+                    btn.innerText = action.text || "Open";
 
-      video.playsInline = true;
+                    btn.onclick = () => {
+                        window.open(action.url, "_blank");
+                    };
 
-      video.style.width =
-        "100%";
+                    card.appendChild(btn);
+                });
+            }
 
-      video.style.borderRadius =
-        "14px";
-
-      if (item.video.poster) {
-
-        video.poster =
-          item.video.poster;
-      }
-
-      bubble.appendChild(video);
-
-      if (item.video.title) {
-
-        const title =
-          document.createElement("div");
-
-        title.style.marginTop =
-          "10px";
-
-        title.style.fontWeight =
-          "600";
-
-        title.innerText =
-          item.video.title;
-
-        bubble.appendChild(title);
-      }
-
-      container.appendChild(bubble);
-
-      messages.appendChild(container);
-    }
-
-  });
+            messagesContainer.appendChild(card);
+        }
 
   messages.scrollTop =
     messages.scrollHeight;
