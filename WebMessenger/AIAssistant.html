@@ -748,94 +748,81 @@ function renderStructuredContent(contentArray) {
       messages.appendChild(container);
     }
 
-    // =====================================
-    // CARD
-    // =====================================
+   // =====================================
+ // CARD
+ // =====================================
 
-    if (item.contentType === "Card") {
+ if (item.contentType === "Card") {
 
-      console.log(
-        "CARD RECEIVED",
-        item.card
-      );
+   console.log(
+     "CARD RECEIVED",
+     item.card
+   );
 
-      const container =
-        document.createElement("div");
+   // =====================================
+   // GET VIDEO URL
+   // =====================================
 
-      container.className =
-        "message-row agent";
+   const action =
+     item.card.actions?.[0];
 
-      const card =
-        document.createElement("div");
+   if (!action?.url) return;
 
-      card.className = "bubble";
+   // =====================================
+   // CREATE ROW
+   // =====================================
 
-      card.style.maxWidth = "420px";
+   const container =
+     document.createElement("div");
 
-      card.innerHTML = `
-        <h3 style="margin-top:0;">
-          ${item.card.title || ""}
-        </h3>
+   container.className =
+     "message-row agent";
 
-        <p>
-          ${item.card.description || ""}
-        </p>
-      `;
+   // =====================================
+   // CREATE VIDEO
+   // =====================================
 
-      // =====================================
-      // ACTIONS
-      // =====================================
+   const video =
+     document.createElement("video");
 
-      if (item.card.actions?.length) {
+   video.src = action.url;
 
-        item.card.actions.forEach(action => {
+   video.controls = true;
 
-          const btn =
-            document.createElement("button");
+   video.autoplay = true;
 
-          btn.innerText =
-            action.text || "Open";
+   video.muted = true;
 
-          btn.style.marginTop = "10px";
-          btn.style.padding = "10px 14px";
-          btn.style.border = "none";
-          btn.style.borderRadius = "12px";
-          btn.style.background = "#2563eb";
-          btn.style.color = "white";
-          btn.style.cursor = "pointer";
+   video.playsInline = true;
 
-          btn.onclick = () => {
+   video.style.maxWidth = "420px";
 
-            // =====================================
-            // AUTOPLAY VIDEO
-            // =====================================
+   video.style.borderRadius = "18px";
 
-            const video =
-              document.createElement("video");
+   video.style.background = "#000";
 
-            video.src = action.url;
+   // =====================================
+   // APPEND
+   // =====================================
 
-            video.controls = true;
+   container.appendChild(video);
 
-            video.autoplay = true;
+   messages.appendChild(container);
 
-            video.style.width = "100%";
+   // =====================================
+   // FORCE PLAY
+   // =====================================
 
-            video.style.marginTop = "12px";
+   video.play().catch(err => {
 
-            card.appendChild(video);
-          };
+     console.warn(
+       "Autoplay blocked",
+       err
+     );
+   });
+ }
 
-          card.appendChild(btn);
-        });
-      }
-
-      container.appendChild(card);
-
-      messages.appendChild(container);
-    }
-
-  });
+  }); // FOR EACH
 
   messages.scrollTop =
     messages.scrollHeight;
