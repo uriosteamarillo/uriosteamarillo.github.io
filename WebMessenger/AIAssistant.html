@@ -703,7 +703,67 @@
 
     return;
   }
- // =====================================
+ 
+
+
+
+
+    
+  // =====================================
+  // STREAMING EFFECT
+  // =====================================
+
+  bubble.classList.add("streaming-cursor");
+
+  let current = "";
+
+  for (let i = 0; i < text.length; i++) {
+
+    current += text[i];
+
+    bubble.innerText = current;
+
+    messages.scrollTop = messages.scrollHeight;
+
+    await new Promise(r => setTimeout(r, 12));
+  }
+
+  bubble.classList.remove("streaming-cursor");
+}
+  // =========================================
+  // ENTER TO SEND
+  // =========================================
+
+  const textarea = document.getElementById("messageInput");
+
+  textarea.addEventListener("keydown", function(e) {
+
+    if (e.key === "Enter" && !e.shiftKey) {
+
+      e.preventDefault();
+
+      sendMessage();
+    }
+  });
+
+  // =========================================
+  // AUTO RESIZE
+  // =========================================
+
+  textarea.addEventListener("input", function () {
+
+    autoResize(this);
+  });
+
+  function autoResize(el) {
+
+    el.style.height = "auto";
+
+    el.style.height = el.scrollHeight + "px";
+  }
+
+
+// =====================================
     // STRUCTURED
     // 
 
@@ -841,64 +901,7 @@
     messages.scrollHeight;
 }
 
-
-
-
-
     
-  // =====================================
-  // STREAMING EFFECT
-  // =====================================
-
-  bubble.classList.add("streaming-cursor");
-
-  let current = "";
-
-  for (let i = 0; i < text.length; i++) {
-
-    current += text[i];
-
-    bubble.innerText = current;
-
-    messages.scrollTop = messages.scrollHeight;
-
-    await new Promise(r => setTimeout(r, 12));
-  }
-
-  bubble.classList.remove("streaming-cursor");
-}
-  // =========================================
-  // ENTER TO SEND
-  // =========================================
-
-  const textarea = document.getElementById("messageInput");
-
-  textarea.addEventListener("keydown", function(e) {
-
-    if (e.key === "Enter" && !e.shiftKey) {
-
-      e.preventDefault();
-
-      sendMessage();
-    }
-  });
-
-  // =========================================
-  // AUTO RESIZE
-  // =========================================
-
-  textarea.addEventListener("input", function () {
-
-    autoResize(this);
-  });
-
-  function autoResize(el) {
-
-    el.style.height = "auto";
-
-    el.style.height = el.scrollHeight + "px";
-  }
-
   // =========================================
   // TYPING
   // =========================================
