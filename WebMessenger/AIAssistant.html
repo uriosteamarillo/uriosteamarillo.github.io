@@ -509,14 +509,22 @@
   // =====================================
   // STRUCTURED CONTENT
   // =====================================
+if (msg.content) {
 
-  if (
-    msg.content &&
+  console.log(
+    "STRUCTURED CONTENT:",
+    msg.content
+  );
+
+  renderStructuredContent(
     Array.isArray(msg.content)
-  ) {
+      ? msg.content
+      : [msg.content]
+  );
+}
 
-    renderStructuredContent(msg.content);
-  }
+          
+
 });
     });
 
