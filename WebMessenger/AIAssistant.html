@@ -675,10 +675,148 @@
   }
 }
 
+
+function renderStructuredContent(contentArray) {
+
+  const messages =
+    document.getElementById("messages");
+
+  contentArray.forEach(item => {
+
+    // =====================================
+    // QUICK REPLY
+    // =====================================
+
+    if (item.contentType === "QuickReply") {
+
+      const container =
+        document.createElement("div");
+
+      container.className =
+        "message-row agent";
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.style.display = "flex";
+
+      wrapper.style.gap = "10px";
+
+      wrapper.style.flexWrap = "wrap";
+
+      const button =
+        document.createElement("button");
+
+      button.innerText =
+        item.quickReply.text;
+
+      button.style.background =
+        "#2563eb";
+
+      button.style.border =
+        "none";
+
+      button.style.color =
+        "white";
+
+      button.style.padding =
+        "10px 16px";
+
+      button.style.borderRadius =
+        "999px";
+
+      button.style.cursor =
+        "pointer";
+
+      button.onclick = () => {
+
+        sendQuickReply(
+          item.quickReply.payload
+        );
+      };
+
+      wrapper.appendChild(button);
+
+      container.appendChild(wrapper);
+
+      messages.appendChild(container);
+    }
+
+    // =====================================
+    // VIDEO
+    // =====================================
+
+    if (item.contentType === "Video") {
+
+      const container =
+        document.createElement("div");
+
+      container.className =
+        "message-row agent";
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "bubble";
+
+      const video =
+        document.createElement("video");
+
+      video.src =
+        item.video.url;
+
+      video.controls = true;
+
+      video.playsInline = true;
+
+      video.style.width =
+        "100%";
+
+      video.style.borderRadius =
+        "14px";
+
+      if (item.video.poster) {
+
+        video.poster =
+          item.video.poster;
+      }
+
+      bubble.appendChild(video);
+
+      if (item.video.title) {
+
+        const title =
+          document.createElement("div");
+
+        title.style.marginTop =
+          "10px";
+
+        title.style.fontWeight =
+          "600";
+
+        title.innerText =
+          item.video.title;
+
+        bubble.appendChild(title);
+      }
+
+      container.appendChild(bubble);
+
+      messages.appendChild(container);
+    }
+
+  });
+
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
   // =========================================
   // ADD MESSAGE
   // =========================================
 
+  
   async function addMessage(text, sender, streaming = false) {
 
   const messages = document.getElementById("messages");
