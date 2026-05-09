@@ -707,9 +707,7 @@ function renderStructuredContent(contentArray) {
         document.createElement("div");
 
       wrapper.style.display = "flex";
-
       wrapper.style.gap = "10px";
-
       wrapper.style.flexWrap = "wrap";
 
       const button =
@@ -750,40 +748,94 @@ function renderStructuredContent(contentArray) {
       messages.appendChild(container);
     }
 
-  
-
+    // =====================================
     // CARD
-        if (item.contentType === "Card") {
+    // =====================================
 
-            console.log("CARD RECEIVED", item.card);
+    if (item.contentType === "Card") {
 
-            const card = document.createElement("div");
-            card.className = "custom-card";
+      console.log(
+        "CARD RECEIVED",
+        item.card
+      );
 
-            card.innerHTML = `
-                <h3>${item.card.title || ""}</h3>
-                <p>${item.card.description || ""}</p>
-            `;
+      const container =
+        document.createElement("div");
 
-            // ACTIONS
-            if (item.card.actions?.length) {
+      container.className =
+        "message-row agent";
 
-                item.card.actions.forEach(action => {
+      const card =
+        document.createElement("div");
 
-                    const btn = document.createElement("button");
+      card.className = "bubble";
 
-                    btn.innerText = action.text || "Open";
+      card.style.maxWidth = "420px";
 
-                    btn.onclick = () => {
-                        window.open(action.url, "_blank");
-                    };
+      card.innerHTML = `
+        <h3 style="margin-top:0;">
+          ${item.card.title || ""}
+        </h3>
 
-                    card.appendChild(btn);
-                });
-            }
+        <p>
+          ${item.card.description || ""}
+        </p>
+      `;
 
-            messagesContainer.appendChild(card);
-        }
+      // =====================================
+      // ACTIONS
+      // =====================================
+
+      if (item.card.actions?.length) {
+
+        item.card.actions.forEach(action => {
+
+          const btn =
+            document.createElement("button");
+
+          btn.innerText =
+            action.text || "Open";
+
+          btn.style.marginTop = "10px";
+          btn.style.padding = "10px 14px";
+          btn.style.border = "none";
+          btn.style.borderRadius = "12px";
+          btn.style.background = "#2563eb";
+          btn.style.color = "white";
+          btn.style.cursor = "pointer";
+
+          btn.onclick = () => {
+
+            // =====================================
+            // AUTOPLAY VIDEO
+            // =====================================
+
+            const video =
+              document.createElement("video");
+
+            video.src = action.url;
+
+            video.controls = true;
+
+            video.autoplay = true;
+
+            video.style.width = "100%";
+
+            video.style.marginTop = "12px";
+
+            card.appendChild(video);
+          };
+
+          card.appendChild(btn);
+        });
+      }
+
+      container.appendChild(card);
+
+      messages.appendChild(container);
+    }
+
+  });
 
   messages.scrollTop =
     messages.scrollHeight;
