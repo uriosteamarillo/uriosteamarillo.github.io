@@ -491,13 +491,34 @@
 
         event.data.messages.forEach(msg => {
 
-          if (!msg.text) return;
+         console.log("FULL MESSAGE:", msg);
 
-          addMessage(msg.text, "agent", true);
-        });
-      }
+  // =====================================
+  // TEXT
+  // =====================================
+
+  if (msg.text) {
+
+    addMessage(
+      msg.text,
+      "agent",
+      true
     );
+  }
 
+  // =====================================
+  // STRUCTURED CONTENT
+  // =====================================
+
+  if (
+    msg.content &&
+    Array.isArray(msg.content)
+  ) {
+
+    renderStructuredContent(msg.content);
+  }
+});
+      
     // =====================================
     // CONVERSATION CLOSED
     // =====================================
@@ -682,7 +703,149 @@
 
     return;
   }
+ // =====================================
+    // STRUCTURED
+    // 
 
+ function renderStructuredContent(contentArray) {
+
+  const messages =
+    document.getElementById("messages");
+
+  contentArray.forEach(item => {
+
+    // =====================================
+    // QUICK REPLY
+    // =====================================
+
+    if (item.contentType === "QuickReply") {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.style.display = "flex";
+      wrapper.style.gap = "10px";
+      wrapper.style.flexWrap = "wrap";
+      wrapper.style.marginTop = "10px";
+
+      const button =
+        document.createElement("button");
+
+      button.innerText =
+        item.quickReply.text;
+
+      button.style.background =
+        "#2563eb";
+
+      button.style.border = "none";
+
+      button.style.color = "white";
+
+      button.style.padding =
+        "10px 16px";
+
+      button.style.borderRadius =
+        "999px";
+
+      button.style.cursor = "pointer";
+
+      button.style.fontSize = "14px";
+
+      button.style.transition =
+        "0.2s ease";
+
+      button.onmouseenter = () => {
+
+        button.style.transform =
+          "scale(1.05)";
+      };
+
+      button.onmouseleave = () => {
+
+        button.style.transform =
+          "scale(1)";
+      };
+
+      button.onclick = () => {
+
+        sendQuickReply(
+          item.quickReply.payload
+        );
+      };
+
+      wrapper.appendChild(button);
+
+      messages.appendChild(wrapper);
+    }
+
+    // =====================================
+    // VIDEO
+    // =====================================
+
+    if (item.contentType === "Video") {
+
+      const container =
+        document.createElement("div");
+
+      container.className =
+        "message-row agent";
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className = "bubble";
+
+      const video =
+        document.createElement("video");
+
+      video.src = item.video.url;
+
+      video.controls = true;
+
+      video.style.width = "100%";
+
+      video.style.borderRadius =
+        "14px";
+
+      if (item.video.poster) {
+
+        video.poster =
+          item.video.poster;
+      }
+
+      bubble.appendChild(video);
+
+      if (item.video.title) {
+
+        const title =
+          document.createElement("div");
+
+        title.style.marginTop = "10px";
+
+        title.style.fontWeight = "600";
+
+        title.innerText =
+          item.video.title;
+
+        bubble.appendChild(title);
+      }
+
+      container.appendChild(bubble);
+
+      messages.appendChild(container);
+    }
+
+  });
+
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+
+
+
+
+    
   // =====================================
   // STREAMING EFFECT
   // =====================================
