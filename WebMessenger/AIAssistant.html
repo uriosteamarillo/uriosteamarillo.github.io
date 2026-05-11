@@ -762,14 +762,14 @@ function renderStructuredContent(contentArray) {
         item.quickReply.text;
 
       // =====================================
-      // MODERN GREY STYLE
+      // BUTTON STYLE
       // =====================================
 
       button.style.background =
-        "#374151";
+        "#374151"; // gris
 
       button.style.border =
-        "1px solid rgba(255,255,255,0.08)";
+        "1px solid rgba(255,255,255,0.12)";
 
       button.style.color =
         "white";
@@ -793,19 +793,19 @@ function renderStructuredContent(contentArray) {
         "all 0.18s ease";
 
       // =====================================
-      // HOVER EFFECT
+      // HOVER EFFECT -> AZUL
       // =====================================
 
       button.onmouseenter = () => {
 
         button.style.background =
-          "#4b5563";
+          "#2563eb";
 
         button.style.transform =
           "translateY(-2px) scale(1.03)";
 
         button.style.boxShadow =
-          "0 6px 18px rgba(0,0,0,0.25)";
+          "0 6px 18px rgba(37,99,235,0.35)";
       };
 
       button.onmouseleave = () => {
