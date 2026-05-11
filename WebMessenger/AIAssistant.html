@@ -683,6 +683,40 @@ if (msg.content) {
   }
 }
 
+// =========================================
+// SEND QUICK REPLY
+// =========================================
+
+async function sendQuickReply(payload) {
+
+  // SHOW USER MESSAGE
+  addMessage(payload, "user");
+
+  showTyping();
+
+  try {
+
+    await Genesys(
+      "command",
+      "MessagingService.sendMessage",
+      {
+        message: payload
+      }
+    );
+
+  } catch (err) {
+
+    console.error(
+      "Quick reply failed",
+      err
+    );
+
+    hideTyping();
+  }
+}
+
+
+  
 
 function renderStructuredContent(contentArray) {
 
