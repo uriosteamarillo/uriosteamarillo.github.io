@@ -491,6 +491,11 @@
 
         event.data.messages.forEach(msg => {
 
+
+        if (msg.direction === "Inbound") {
+        return;
+         }
+
          console.log("FULL MESSAGE:", msg);
 
   // =====================================
