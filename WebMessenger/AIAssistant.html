@@ -723,26 +723,32 @@ function renderStructuredContent(contentArray) {
   const messages =
     document.getElementById("messages");
 
-  contentArray.forEach(item => {
+  // =====================================
+  // QUICK REPLIES CONTAINER
+  // =====================================
 
-    // =====================================
-    // QUICK REPLY
-    // =====================================
+  const quickReplies =
+    contentArray.filter(
+      item => item.contentType === "QuickReply"
+    );
 
-    if (item.contentType === "QuickReply") {
+  if (quickReplies.length > 0) {
 
-      const container =
-        document.createElement("div");
+    const container =
+      document.createElement("div");
 
-      container.className =
-        "message-row agent";
+    container.className =
+      "message-row agent";
 
-      const wrapper =
-        document.createElement("div");
+    const wrapper =
+      document.createElement("div");
 
-      wrapper.style.display = "flex";
-      wrapper.style.gap = "10px";
-      wrapper.style.flexWrap = "wrap";
+    wrapper.style.display = "flex";
+    wrapper.style.flexWrap = "wrap";
+    wrapper.style.gap = "8px";
+    wrapper.style.marginTop = "-10px";
+
+    quickReplies.forEach(item => {
 
       const button =
         document.createElement("button");
@@ -750,11 +756,15 @@ function renderStructuredContent(contentArray) {
       button.innerText =
         item.quickReply.text;
 
+      // =====================================
+      // BUTTON STYLE
+      // =====================================
+
       button.style.background =
-        "#2563eb";
+        "#1e3a8a";
 
       button.style.border =
-        "none";
+        "1px solid rgba(255,255,255,0.12)";
 
       button.style.color =
         "white";
@@ -768,7 +778,51 @@ function renderStructuredContent(contentArray) {
       button.style.cursor =
         "pointer";
 
+      button.style.fontSize =
+        "14px";
+
+      button.style.fontWeight =
+        "500";
+
+      button.style.transition =
+        "all 0.18s ease";
+
+      // =====================================
+      // HOVER EFFECT
+      // =====================================
+
+      button.onmouseenter = () => {
+
+        button.style.background =
+          "#2563eb";
+
+        button.style.transform =
+          "translateY(-2px) scale(1.03)";
+
+        button.style.boxShadow =
+          "0 6px 18px rgba(37,99,235,0.35)";
+      };
+
+      button.onmouseleave = () => {
+
+        button.style.background =
+          "#1e3a8a";
+
+        button.style.transform =
+          "translateY(0) scale(1)";
+
+        button.style.boxShadow =
+          "none";
+      };
+
+      // =====================================
+      // CLICK
+      // =====================================
+
       button.onclick = () => {
+
+        // REMOVE QUICK REPLIES AFTER CLICK
+        container.remove();
 
         sendQuickReply(
           item.quickReply.payload
@@ -776,87 +830,86 @@ function renderStructuredContent(contentArray) {
       };
 
       wrapper.appendChild(button);
+    });
 
-      container.appendChild(wrapper);
+    container.appendChild(wrapper);
+
+    messages.appendChild(container);
+  }
+
+  // =====================================
+  // CARDS / VIDEO
+  // =====================================
+
+  contentArray.forEach(item => {
+
+    if (item.contentType === "Card") {
+
+      console.log(
+        "CARD RECEIVED",
+        item.card
+      );
+
+      const action =
+        item.card.actions?.[0];
+
+      if (!action?.url) return;
+
+      // =====================================
+      // CREATE ROW
+      // =====================================
+
+      const container =
+        document.createElement("div");
+
+      container.className =
+        "message-row agent";
+
+      // =====================================
+      // VIDEO
+      // =====================================
+
+      const video =
+        document.createElement("video");
+
+      video.src = action.url;
+
+      video.controls = false;
+
+      video.autoplay = true;
+
+      video.muted = true;
+
+      video.loop = true;
+
+      video.playsInline = true;
+
+      video.style.maxWidth = "420px";
+
+      video.style.borderRadius = "18px";
+
+      video.style.background = "#000";
+
+      video.style.boxShadow =
+        "0 10px 30px rgba(0,0,0,0.35)";
+
+      container.appendChild(video);
 
       messages.appendChild(container);
+
+      // =====================================
+      // FORCE PLAY
+      // =====================================
+
+      video.play().catch(err => {
+
+        console.warn(
+          "Autoplay blocked",
+          err
+        );
+      });
     }
-
-   // =====================================
- // CARD
- // =====================================
-
- if (item.contentType === "Card") {
-
-   console.log(
-     "CARD RECEIVED",
-     item.card
-   );
-
-   // =====================================
-   // GET VIDEO URL
-   // =====================================
-
-   const action =
-     item.card.actions?.[0];
-
-   if (!action?.url) return;
-
-   // =====================================
-   // CREATE ROW
-   // =====================================
-
-   const container =
-     document.createElement("div");
-
-   container.className =
-     "message-row agent";
-
-   // =====================================
-   // CREATE VIDEO
-   // =====================================
-
-   const video =
-     document.createElement("video");
-
-   video.src = action.url;
-
-   video.controls = false;
-
-   video.autoplay = true;
-
-   video.muted = false;
-
-   video.playsInline = true;
-
-   video.style.maxWidth = "420px";
-
-   video.style.borderRadius = "18px";
-
-   video.style.background = "#000";
-
-   // =====================================
-   // APPEND
-   // =====================================
-
-   container.appendChild(video);
-
-   messages.appendChild(container);
-
-   // =====================================
-   // FORCE PLAY
-   // =====================================
-
-   video.play().catch(err => {
-
-     console.warn(
-       "Autoplay blocked",
-       err
-     );
-   });
- }
-
-  }); // FOR EACH
+  });
 
   messages.scrollTop =
     messages.scrollHeight;
