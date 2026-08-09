@@ -2,92 +2,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>My Kindle Notes</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #ffffff;
-            color: #000000;
-            margin: 20px;
-            max-width: 700px;
-        }
+<meta charset="UTF-8">
 
-        h1 {
-            font-size: 26px;
-            border-bottom: 2px solid #000000;
-            padding-bottom: 10px;
-        }
+<title>My Kindle Notes</title>
 
-        h2 {
-            font-size: 20px;
-        }
+<style>
 
-        input, textarea {
-            width: 100%;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #777777;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    color: black;
+    margin: 20px;
+    max-width: 700px;
+}
 
-        textarea {
-            height: 180px;
-        }
+h1 {
+    font-size: 26px;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
 
-        button {
-            font-size: 18px;
-            padding: 10px 16px;
-            margin: 5px 5px 10px 0;
-            background: #eeeeee;
-            color: #000000;
-            border: 1px solid #555555;
-        }
+h2 {
+    font-size: 20px;
+}
 
-        .note {
-            border-top: 1px solid #999999;
-            padding: 12px 0;
-        }
+input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
-        .note-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 180px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
-        .note-date {
-            font-size: 13px;
-            color: #555555;
-            margin: 5px 0;
-        }
+button {
+    font-size: 18px;
+    padding: 10px 16px;
+    margin: 5px 5px 10px 0;
+    background: #eeeeee;
+    color: black;
+    border: 1px solid #555555;
+}
 
-        .note-content {
-            font-size: 17px;
-            white-space: pre-wrap;
-            margin: 8px 0;
-        }
+.note {
+    border-top: 1px solid #999999;
+    padding: 15px 0;
+}
 
-        #status {
-            font-size: 15px;
-            margin: 10px 0;
-        }
+.note-title {
+    font-size: 20px;
+    font-weight: bold;
+}
 
-        .hidden {
-            display: none;
-        }
-    </style>
+.note-date {
+    font-size: 13px;
+    color: #555555;
+    margin-top: 5px;
+}
+
+.note-content {
+    font-size: 17px;
+    white-space: pre-wrap;
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+#status {
+    font-size: 15px;
+    margin: 10px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <h1>My Kindle Notes</h1>
 
-<div id="status">Loading...</div>
 
-<button onclick="showNewNote()">+ New Note</button>
+<div id="status">
+Loading...
+</div>
+
+
+<button onclick="showNewNote()">
++ New Note
+</button>
+
 
 <div id="editor" class="hidden">
 
@@ -102,144 +120,271 @@
         id="content"
         placeholder="Write your note..."></textarea>
 
-    <button onclick="saveNote()">SAVE</button>
-    <button onclick="cancelNote()">CANCEL</button>
+    <br>
+
+    <button onclick="saveNote()">
+        SAVE
+    </button>
+
+    <button onclick="cancelNote()">
+        CANCEL
+    </button>
 
 </div>
 
+
 <h2>Notes</h2>
+
 
 <div id="notes">
 </div>
 
+
+
 <script>
 
-var API_URL =
-    "https://gz2tmb3zh5rqxlftcdisr2igjy0tjosd.lambda-url.us-west-2.on.aws/";
 
+/*
+==================================================
+API
+==================================================
+*/
+
+var API_URL =
+"https://gz2tmb3zh5rqxlftcdisr2igjy0tjosd.lambda-url.us-west-2.on.aws/";
+
+
+
+/*
+==================================================
+STATUS
+==================================================
+*/
 
 function setStatus(message) {
-    document.getElementById("status").innerHTML = message;
+
+    document.getElementById("status")
+        .innerHTML = message;
+
 }
 
+
+
+/*
+==================================================
+LOAD NOTES
+==================================================
+*/
 
 function loadNotes() {
 
     setStatus("Loading notes...");
 
-    var xhr = new XMLHttpRequest();
 
-    xhr.open("GET", API_URL, true);
+    var xhr =
+        new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
 
-        if (xhr.readyState !== 4) {
-            return;
-        }
+    xhr.open(
+        "GET",
+        API_URL + "?action=list",
+        true
+    );
 
-        if (xhr.status === 200) {
 
-            try {
+    xhr.onreadystatechange =
+        function() {
 
-                var notes = JSON.parse(xhr.responseText);
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
-                displayNotes(notes);
 
-                setStatus(notes.length + " note(s)");
+            if (xhr.status === 200) {
 
-            } catch (e) {
+                try {
 
-                setStatus("Error reading notes");
+                    var notes =
+                        JSON.parse(
+                            xhr.responseText
+                        );
+
+
+                    displayNotes(notes);
+
+
+                    setStatus(
+                        notes.length +
+                        " note(s)"
+                    );
+
+                }
+
+                catch (e) {
+
+                    setStatus(
+                        "Error reading notes"
+                    );
+
+                }
 
             }
 
-        } else {
+            else {
+
+                setStatus(
+                    "Error HTTP " +
+                    xhr.status
+                );
+
+            }
+
+        };
+
+
+    xhr.onerror =
+        function() {
 
             setStatus(
-                "Error: HTTP " + xhr.status
+                "Connection error"
             );
 
-        }
-    };
+        };
 
-    xhr.onerror = function() {
-
-        setStatus("Connection error");
-
-    };
 
     xhr.send();
+
 }
 
+
+
+/*
+==================================================
+DISPLAY NOTES
+==================================================
+*/
 
 function displayNotes(notes) {
 
     var container =
         document.getElementById("notes");
 
+
     container.innerHTML = "";
 
-    if (notes.length === 0) {
+
+    if (!notes ||
+        notes.length === 0) {
 
         container.innerHTML =
             "<p>No notes yet.</p>";
 
         return;
+
     }
 
+
     /*
-     * Newest notes first
-     */
+    Newest first
+    */
 
-    notes.sort(function(a, b) {
+    notes.sort(
+        function(a, b) {
 
-        return String(b.createdAt)
-            .localeCompare(String(a.createdAt));
+            return String(
+                b.createdAt
+            ).localeCompare(
+                String(a.createdAt)
+            );
 
-    });
+        }
+    );
 
 
-    for (var i = 0; i < notes.length; i++) {
+    for (
+        var i = 0;
+        i < notes.length;
+        i++
+    ) {
 
-        var note = notes[i];
+        var note =
+            notes[i];
+
 
         var div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className = "note";
+        div.className =
+            "note";
 
+
+        /*
+        TITLE
+        */
 
         var title =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        title.className = "note-title";
+        title.className =
+            "note-title";
 
         title.innerHTML =
-            escapeHtml(note.title);
+            escapeHtml(
+                note.title
+            );
 
+
+        /*
+        DATE
+        */
 
         var date =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        date.className = "note-date";
+        date.className =
+            "note-date";
 
         date.innerHTML =
-            escapeHtml(note.createdAt || "");
+            escapeHtml(
+                note.createdAt || ""
+            );
 
+
+        /*
+        CONTENT
+        */
 
         var content =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        content.className = "note-content";
+        content.className =
+            "note-content";
 
         content.innerHTML =
-            escapeHtml(note.content);
+            escapeHtml(
+                note.content
+            );
 
+
+        /*
+        DELETE BUTTON
+        */
 
         var deleteButton =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
-        deleteButton.innerHTML = "DELETE";
+        deleteButton.innerHTML =
+            "DELETE";
 
 
         deleteButton.onclick =
@@ -254,188 +399,320 @@ function displayNotes(notes) {
             })(note.id);
 
 
+        /*
+        ADD
+        */
+
         div.appendChild(title);
+
         div.appendChild(date);
+
         div.appendChild(content);
-        div.appendChild(deleteButton);
+
+        div.appendChild(
+            deleteButton
+        );
+
 
         container.appendChild(div);
+
     }
+
 }
 
+
+
+/*
+==================================================
+NEW NOTE
+==================================================
+*/
 
 function showNewNote() {
 
-    document.getElementById("editor")
-        .className = "";
+    document.getElementById(
+        "editor"
+    ).className = "";
 
-    document.getElementById("title")
-        .value = "";
 
-    document.getElementById("content")
-        .value = "";
+    document.getElementById(
+        "title"
+    ).value = "";
 
-    document.getElementById("title")
-        .focus();
+
+    document.getElementById(
+        "content"
+    ).value = "";
+
+
+    document.getElementById(
+        "title"
+    ).focus();
+
 }
 
+
+
+/*
+==================================================
+CANCEL
+==================================================
+*/
 
 function cancelNote() {
 
-    document.getElementById("editor")
-        .className = "hidden";
+    document.getElementById(
+        "editor"
+    ).className = "hidden";
+
 }
 
+
+
+/*
+==================================================
+SAVE NOTE
+==================================================
+*/
 
 function saveNote() {
 
     var title =
-        document.getElementById("title").value;
+        document.getElementById(
+            "title"
+        ).value;
+
 
     var content =
-        document.getElementById("content").value;
+        document.getElementById(
+            "content"
+        ).value;
 
 
     if (!title && !content) {
 
-        alert("Please enter a note.");
+        alert(
+            "Please enter a note."
+        );
 
         return;
+
     }
 
 
-    setStatus("Saving...");
-
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.open("POST", API_URL, true);
-
-    xhr.setRequestHeader(
-        "Content-Type",
-        "application/json"
+    setStatus(
+        "Saving..."
     );
 
 
-    xhr.onreadystatechange = function() {
+    /*
+    URL encode the note.
+    This avoids POST and CORS
+    preflight problems on Kindle.
+    */
 
-        if (xhr.readyState !== 4) {
-            return;
-        }
-
-        if (xhr.status === 200 ||
-            xhr.status === 201) {
-
-            cancelNote();
-
-            loadNotes();
-
-        } else {
-
-            setStatus(
-                "Error saving: HTTP " +
-                xhr.status
-            );
-
-        }
-    };
+    var url =
+        API_URL +
+        "?action=save" +
+        "&title=" +
+        encodeURIComponent(title) +
+        "&content=" +
+        encodeURIComponent(content);
 
 
-    xhr.onerror = function() {
+    var xhr =
+        new XMLHttpRequest();
 
-        setStatus("Connection error");
-
-    };
-
-
-    var data = {
-
-        title: title,
-
-        content: content
-
-    };
-
-
-    xhr.send(
-        JSON.stringify(data)
-    );
-}
-
-
-function deleteNote(id) {
-
-    if (!confirm("Delete this note?")) {
-        return;
-    }
-
-
-    setStatus("Deleting...");
-
-
-    var xhr = new XMLHttpRequest();
 
     xhr.open(
-        "DELETE",
-        API_URL + "?id=" +
-        encodeURIComponent(id),
+        "GET",
+        url,
         true
     );
 
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange =
+        function() {
 
-        if (xhr.readyState !== 4) {
-            return;
-        }
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
-        if (xhr.status === 200) {
 
-            loadNotes();
+            if (xhr.status === 200) {
 
-        } else {
+                cancelNote();
+
+                loadNotes();
+
+            }
+
+            else {
+
+                setStatus(
+                    "Error saving HTTP " +
+                    xhr.status
+                );
+
+            }
+
+        };
+
+
+    xhr.onerror =
+        function() {
 
             setStatus(
-                "Error deleting: HTTP " +
-                xhr.status
+                "Connection error"
             );
 
-        }
-    };
-
-
-    xhr.onerror = function() {
-
-        setStatus("Connection error");
-
-    };
+        };
 
 
     xhr.send();
+
 }
 
 
+
+/*
+==================================================
+DELETE NOTE
+==================================================
+*/
+
+function deleteNote(id) {
+
+    if (
+        !confirm(
+            "Delete this note?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    setStatus(
+        "Deleting..."
+    );
+
+
+    var url =
+        API_URL +
+        "?action=delete&id=" +
+        encodeURIComponent(id);
+
+
+    var xhr =
+        new XMLHttpRequest();
+
+
+    xhr.open(
+        "GET",
+        url,
+        true
+    );
+
+
+    xhr.onreadystatechange =
+        function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+
+            if (xhr.status === 200) {
+
+                loadNotes();
+
+            }
+
+            else {
+
+                setStatus(
+                    "Error deleting HTTP " +
+                    xhr.status
+                );
+
+            }
+
+        };
+
+
+    xhr.onerror =
+        function() {
+
+            setStatus(
+                "Connection error"
+            );
+
+        };
+
+
+    xhr.send();
+
+}
+
+
+
+/*
+==================================================
+ESCAPE HTML
+==================================================
+*/
+
 function escapeHtml(text) {
 
-    if (text === null ||
-        text === undefined) {
+    if (
+        text === null ||
+        text === undefined
+    ) {
 
         return "";
 
     }
 
+
     return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
 }
 
 
+
+/*
+==================================================
+START
+==================================================
+*/
+
 loadNotes();
 
+
 </script>
+
 
 </body>
 </html>
