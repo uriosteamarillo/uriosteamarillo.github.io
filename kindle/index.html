@@ -1,479 +1,367 @@
-
 <!DOCTYPE html>
+
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>My Notes</title>
 
-<meta charset="UTF-8">
-
-<title>My Kindle Notes</title>
-
+```
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+    }
 
-body {
-    font-family: Arial, sans-serif;
-    background: white;
-    color: black;
-    margin: 20px;
-    max-width: 700px;
-}
+    h1 {
+        margin-bottom: 10px;
+    }
 
-h1 {
-    font-size: 26px;
-    border-bottom: 2px solid black;
-    padding-bottom: 10px;
-}
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        cursor: pointer;
+    }
 
-h2 {
-    font-size: 20px;
-}
+    input,
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin: 5px 0 10px 0;
+        font-size: 16px;
+    }
 
-input {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 18px;
-    padding: 10px;
-    margin-bottom: 10px;
-}
+    textarea {
+        height: 150px;
+    }
 
-textarea {
-    width: 100%;
-    box-sizing: border-box;
-    height: 180px;
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    margin-bottom: 10px;
-}
+    .note {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 15px 0;
+    }
 
-button {
-    font-size: 18px;
-    padding: 10px 16px;
-    margin: 5px 5px 10px 0;
-    background: #eeeeee;
-    color: black;
-    border: 1px solid #555555;
-}
+    .note-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
 
-.note {
-    border-top: 1px solid #999999;
-    padding: 15px 0;
-}
+    .note-date {
+        color: #777;
+        font-size: 12px;
+        margin: 5px 0 10px 0;
+    }
 
-.note-title {
-    font-size: 20px;
-    font-weight: bold;
-}
+    .note-content {
+        white-space: pre-wrap;
+        margin-bottom: 10px;
+    }
 
-.note-date {
-    font-size: 13px;
-    color: #555555;
-    margin-top: 5px;
-}
+    #editor {
+        display: none;
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 20px 0;
+    }
 
-.note-content {
-    font-size: 17px;
-    white-space: pre-wrap;
-    margin-top: 8px;
-    margin-bottom: 10px;
-}
+    #status {
+        margin: 15px 0;
+        padding: 10px;
+    }
 
-#status {
-    font-size: 15px;
-    margin: 10px 0;
-}
+    .error {
+        color: #b00000;
+    }
 
-.hidden {
-    display: none;
-}
-
+    .success {
+        color: #006600;
+    }
 </style>
+```
 
 </head>
 
-
 <body>
 
-
-<h1>My Kindle Notes</h1>
-
+<h1>My Notes</h1>
 
 <div id="status">
-Loading...
+    Loading notes...
 </div>
 
+<button onclick="showEditor()">+ New Note</button>
 
-<button onclick="showNewNote()">
-+ New Note
-</button>
+<div id="editor">
 
+```
+<h2>New Note</h2>
 
-<div id="editor" class="hidden">
+<input
+    type="text"
+    id="title"
+    placeholder="Title">
 
-    <h2>New Note</h2>
+<textarea
+    id="content"
+    placeholder="Write your note..."></textarea>
 
-    <input
-        type="text"
-        id="title"
-        placeholder="Title">
+<br>
 
-    <textarea
-        id="content"
-        placeholder="Write your note..."></textarea>
-
-    <br>
-
-    <button onclick="saveNote()">
-        SAVE
-    </button>
-
-    <button onclick="cancelNote()">
-        CANCEL
-    </button>
+<button onclick="saveNote()">SAVE</button>
+<button onclick="cancelNote()">CANCEL</button>
+```
 
 </div>
-
 
 <h2>Notes</h2>
 
-
-<div id="notes">
-</div>
-
-
+<div id="notes"></div>
 
 <script>
 
-
-/*
-==================================================
-API
-==================================================
-*/
-
-var API_URL =
-"https://gz2tmb3zh5rqxlftcdisr2igjy0tjosd.lambda-url.us-west-2.on.aws/";
+var API =
+    "https://gz2tmb3zh5rqxlftcdisr2igjy0tjosd.lambda-url.us-west-2.on.aws/";
 
 
+/* ============================
+   STATUS
+============================ */
 
-/*
-==================================================
-STATUS
-==================================================
-*/
+function setStatus(message, type) {
 
-function setStatus(message) {
+    var element =
+        document.getElementById("status");
 
-    document.getElementById("status")
-        .innerHTML = message;
+    element.className = type || "";
 
+    element.innerHTML = message;
 }
 
 
-
-/*
-==================================================
-LOAD NOTES
-==================================================
-*/
+/* ============================
+   LOAD NOTES
+============================ */
 
 function loadNotes() {
 
-    setStatus("Loading notes...");
-
+    setStatus("Loading notes...", "");
 
     var xhr =
         new XMLHttpRequest();
 
-
     xhr.open(
         "GET",
-        API_URL + "?action=list",
+        API + "?action=list",
         true
     );
 
+    xhr.onload = function() {
 
-    xhr.onreadystatechange =
-        function() {
+        console.log(
+            "LIST STATUS:",
+            xhr.status
+        );
 
-            if (xhr.readyState !== 4) {
+        console.log(
+            "LIST RESPONSE:",
+            xhr.responseText
+        );
+
+        if (xhr.status !== 200) {
+
+            setStatus(
+                "Error reading notes: HTTP " +
+                xhr.status +
+                "<br>" +
+                xhr.responseText,
+                "error"
+            );
+
+            return;
+        }
+
+        try {
+
+            var data =
+                JSON.parse(
+                    xhr.responseText
+                );
+
+            if (!data.success) {
+
+                setStatus(
+                    "API error: " +
+                    data.error,
+                    "error"
+                );
+
                 return;
             }
 
-
-            if (xhr.status === 200) {
-
-                try {
-
-                    var notes =
-                        JSON.parse(
-                            xhr.responseText
-                        );
-
-
-                    displayNotes(notes);
-
-
-                    setStatus(
-                        notes.length +
-                        " note(s)"
-                    );
-
-                }
-
-                catch (e) {
-
-                    setStatus(
-                        "Error reading notes"
-                    );
-
-                }
-
-            }
-
-            else {
-
-                setStatus(
-                    "Error HTTP " +
-                    xhr.status
-                );
-
-            }
-
-        };
-
-
-    xhr.onerror =
-        function() {
-
-            setStatus(
-                "Connection error"
+            renderNotes(
+                data.items
             );
 
-        };
+            setStatus(
+                data.items.length +
+                " note(s)",
+                "success"
+            );
+
+        } catch (error) {
+
+            setStatus(
+                "Invalid API response:<br>" +
+                xhr.responseText,
+                "error"
+            );
+        }
+    };
+
+
+    xhr.onerror = function() {
+
+        setStatus(
+            "Connection error while reading notes.",
+            "error"
+        );
+    };
 
 
     xhr.send();
-
 }
 
 
+/* ============================
+   DISPLAY NOTES
+============================ */
 
-/*
-==================================================
-DISPLAY NOTES
-==================================================
-*/
-
-function displayNotes(notes) {
+function renderNotes(items) {
 
     var container =
         document.getElementById("notes");
 
-
     container.innerHTML = "";
 
 
-    if (!notes ||
-        notes.length === 0) {
+    if (!items || items.length === 0) {
 
         container.innerHTML =
             "<p>No notes yet.</p>";
 
         return;
-
     }
-
-
-    /*
-    Newest first
-    */
-
-    notes.sort(
-        function(a, b) {
-
-            return String(
-                b.createdAt
-            ).localeCompare(
-                String(a.createdAt)
-            );
-
-        }
-    );
 
 
     for (
         var i = 0;
-        i < notes.length;
+        i < items.length;
         i++
     ) {
 
         var note =
-            notes[i];
-
+            items[i];
 
         var div =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         div.className =
             "note";
 
 
-        /*
-        TITLE
-        */
-
         var title =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         title.className =
             "note-title";
 
-        title.innerHTML =
-            escapeHtml(
-                note.title
-            );
+        title.textContent =
+            note.title || "(No title)";
 
-
-        /*
-        DATE
-        */
 
         var date =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         date.className =
             "note-date";
 
-        date.innerHTML =
-            escapeHtml(
-                note.createdAt || ""
-            );
+        date.textContent =
+            note.createdAt || "";
 
-
-        /*
-        CONTENT
-        */
 
         var content =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         content.className =
             "note-content";
 
-        content.innerHTML =
-            escapeHtml(
-                note.content
-            );
+        content.textContent =
+            note.content || "";
 
-
-        /*
-        DELETE BUTTON
-        */
 
         var deleteButton =
-            document.createElement(
-                "button"
-            );
+            document.createElement("button");
 
-        deleteButton.innerHTML =
+        deleteButton.textContent =
             "DELETE";
-
 
         deleteButton.onclick =
             (function(id) {
 
                 return function() {
-
                     deleteNote(id);
-
                 };
 
             })(note.id);
 
 
-        /*
-        ADD
-        */
-
         div.appendChild(title);
-
         div.appendChild(date);
-
         div.appendChild(content);
-
-        div.appendChild(
-            deleteButton
-        );
-
+        div.appendChild(deleteButton);
 
         container.appendChild(div);
-
     }
-
 }
 
 
+/* ============================
+   NEW NOTE
+============================ */
 
-/*
-==================================================
-NEW NOTE
-==================================================
-*/
-
-function showNewNote() {
+function showEditor() {
 
     document.getElementById(
         "editor"
-    ).className = "";
-
+    ).style.display = "block";
 
     document.getElementById(
         "title"
     ).value = "";
-
 
     document.getElementById(
         "content"
     ).value = "";
 
-
     document.getElementById(
         "title"
     ).focus();
-
 }
 
-
-
-/*
-==================================================
-CANCEL
-==================================================
-*/
 
 function cancelNote() {
 
     document.getElementById(
         "editor"
-    ).className = "hidden";
-
+    ).style.display = "none";
 }
 
 
-
-/*
-==================================================
-SAVE NOTE
-==================================================
-*/
+/* ============================
+   SAVE NOTE
+============================ */
 
 function saveNote() {
 
@@ -482,42 +370,45 @@ function saveNote() {
             "title"
         ).value;
 
-
     var content =
         document.getElementById(
             "content"
         ).value;
 
 
-    if (!title && !content) {
+    if (
+        title.trim() === "" &&
+        content.trim() === ""
+    ) {
 
-        alert(
-            "Please enter a note."
+        setStatus(
+            "Write something first.",
+            "error"
         );
 
         return;
-
     }
 
 
     setStatus(
-        "Saving..."
+        "Saving...",
+        ""
     );
 
 
-    /*
-    URL encode the note.
-    This avoids POST and CORS
-    preflight problems on Kindle.
-    */
-
     var url =
-        API_URL +
+        API +
         "?action=save" +
         "&title=" +
         encodeURIComponent(title) +
         "&content=" +
         encodeURIComponent(content);
+
+
+    console.log(
+        "SAVE URL:",
+        url
+    );
 
 
     var xhr =
@@ -531,55 +422,93 @@ function saveNote() {
     );
 
 
-    xhr.onreadystatechange =
-        function() {
+    xhr.onload = function() {
 
-            if (xhr.readyState !== 4) {
+        console.log(
+            "SAVE STATUS:",
+            xhr.status
+        );
+
+        console.log(
+            "SAVE RESPONSE:",
+            xhr.responseText
+        );
+
+
+        if (xhr.status !== 200) {
+
+            setStatus(
+                "Save error: HTTP " +
+                xhr.status +
+                "<br>" +
+                xhr.responseText,
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            var data =
+                JSON.parse(
+                    xhr.responseText
+                );
+
+
+            if (!data.success) {
+
+                setStatus(
+                    "Save error: " +
+                    data.error,
+                    "error"
+                );
+
                 return;
             }
 
 
-            if (xhr.status === 200) {
+            document.getElementById(
+                "editor"
+            ).style.display = "none";
 
-                cancelNote();
-
-                loadNotes();
-
-            }
-
-            else {
-
-                setStatus(
-                    "Error saving HTTP " +
-                    xhr.status
-                );
-
-            }
-
-        };
-
-
-    xhr.onerror =
-        function() {
 
             setStatus(
-                "Connection error"
+                "Note saved.",
+                "success"
             );
 
-        };
+
+            loadNotes();
+
+        } catch (error) {
+
+            setStatus(
+                "Invalid save response:<br>" +
+                xhr.responseText,
+                "error"
+            );
+        }
+    };
+
+
+    xhr.onerror = function() {
+
+        setStatus(
+            "Connection error while saving.",
+            "error"
+        );
+    };
 
 
     xhr.send();
-
 }
 
 
-
-/*
-==================================================
-DELETE NOTE
-==================================================
-*/
+/* ============================
+   DELETE
+============================ */
 
 function deleteNote(id) {
 
@@ -588,21 +517,14 @@ function deleteNote(id) {
             "Delete this note?"
         )
     ) {
-
         return;
-
     }
 
 
     setStatus(
-        "Deleting..."
+        "Deleting...",
+        ""
     );
-
-
-    var url =
-        API_URL +
-        "?action=delete&id=" +
-        encodeURIComponent(id);
 
 
     var xhr =
@@ -611,109 +533,100 @@ function deleteNote(id) {
 
     xhr.open(
         "GET",
-        url,
+        API +
+        "?action=delete&id=" +
+        encodeURIComponent(id),
         true
     );
 
 
-    xhr.onreadystatechange =
-        function() {
+    xhr.onload = function() {
 
-            if (xhr.readyState !== 4) {
+        console.log(
+            "DELETE STATUS:",
+            xhr.status
+        );
+
+        console.log(
+            "DELETE RESPONSE:",
+            xhr.responseText
+        );
+
+
+        if (xhr.status !== 200) {
+
+            setStatus(
+                "Delete error: HTTP " +
+                xhr.status +
+                "<br>" +
+                xhr.responseText,
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            var data =
+                JSON.parse(
+                    xhr.responseText
+                );
+
+
+            if (!data.success) {
+
+                setStatus(
+                    "Delete error: " +
+                    data.error,
+                    "error"
+                );
+
                 return;
             }
 
 
-            if (xhr.status === 200) {
-
-                loadNotes();
-
-            }
-
-            else {
-
-                setStatus(
-                    "Error deleting HTTP " +
-                    xhr.status
-                );
-
-            }
-
-        };
-
-
-    xhr.onerror =
-        function() {
-
             setStatus(
-                "Connection error"
+                "Note deleted.",
+                "success"
             );
 
-        };
+
+            loadNotes();
+
+        } catch (error) {
+
+            setStatus(
+                "Invalid delete response:<br>" +
+                xhr.responseText,
+                "error"
+            );
+        }
+    };
+
+
+    xhr.onerror = function() {
+
+        setStatus(
+            "Connection error while deleting.",
+            "error"
+        );
+    };
 
 
     xhr.send();
-
 }
 
 
-
-/*
-==================================================
-ESCAPE HTML
-==================================================
-*/
-
-function escapeHtml(text) {
-
-    if (
-        text === null ||
-        text === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(text)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-
-/*
-==================================================
-START
-==================================================
-*/
+/* ============================
+   START
+============================ */
 
 loadNotes();
 
-
 </script>
-
 
 </body>
 </html>
-```
+
